@@ -1,0 +1,49 @@
+name: daily-post
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "run (انتشار واقعی) | dry (آزمایشی، فقط پیش‌نمایش در چت خصوصی) | discover (یافتن شناسه چت)"
+        default: "run"
+      force:
+        description: "اجرای دوباره حتی اگر امروز پست منتشر شده (true/false)"
+        default: "false"
+  schedule:
+    - cron: "20 16 * * *"   # ۱۹:۵۰ تهران (پشتیبان cron-job.org؛ اجرای تکراری خودکار نادیده گرفته می‌شود)
+
+concurrency:
+  group: gamification-agent
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run agent
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ALERT_CHAT_ID: ${{ secrets.ALERT_CHAT_ID }}
+          TASK: ${{ github.event.inputs.task || 'run' }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          if [ "$FORCE" = "true" ]; then python main.py "$TASK" --force; else python main.py "$TASK"; fi
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "gamification-agent"
+          git config user.email "agent@users.noreply.github.com"
+          git add data reports
+          git diff --cached --quiet || (git commit -m "state $(date -u +%F-%H%M)" && git pull --rebase -q && git push -q)

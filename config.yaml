@@ -1,0 +1,68 @@
+# تنظیمات سیستم پژوهش و انتشار کانال Gamification Club
+timezone: Asia/Tehran
+channel_link: https://t.me/Gamification_club
+channel_handle: "@Gamification_club"
+
+# حداقل امتیاز (از ۱۰۰) برای انتشار. اگر خیلی کم پست می‌شود کمش کن، اگر ضعیف پست می‌شود بالا ببر.
+min_score: 70
+post_max_chars: 900          # سقف طول پست (کپشن تلگرام برای عکس‌دار ۱۰۲۴ است)
+post_min_chars: 250
+lookback_days: 150           # مقالات تا چند روز قبل بررسی شوند
+max_candidates_to_score: 30  # تعداد مطلب برای امتیازدهی در هر اجرا
+max_articles_to_write: 3     # حداکثر مقاله‌ای که برای نگارش امتحان می‌شود
+writes_per_article: 2        # حداکثر دفعات بازنویسی بعد از رد شدن در کنترل کیفیت
+use_source_images: true      # استفاده از عکس خود منبع (در صورت وجود) با ذکر لینک منبع
+max_image_mb: 5
+
+# وزن معیارها (مجموع ۱۰۰)
+weights:
+  relevance: 20
+  credibility: 20
+  depth_rarity: 20
+  practical: 15
+  shareability: 10
+  difference: 10
+  image: 5
+# شرط‌های سخت: هر کدام رد شود مطلب منتشر نمی‌شود
+gates:
+  min_relevance: 6
+  min_credibility: 6
+  max_overlap_with_previous: 6
+
+# ترتیب مدل‌های Gemini (اگر مدلی بازنشسته شد خودکار مدل بعدی/جدیدتر انتخاب می‌شود)
+models:
+  - gemini-2.5-flash
+  - gemini-2.5-flash-lite
+  - gemini-flash-latest
+
+# عبارت‌های جست‌وجو در پایگاه‌های علمی
+search_terms:
+  - gamification
+  - self-determination theory
+  - intrinsic motivation rewards
+  - loss aversion incentives
+  - habit formation behavior change
+  - nudge choice architecture
+  - customer loyalty program
+  - employee engagement motivation
+  - behavioral economics decision making
+  - consumer behavior experiment
+  - goal setting feedback motivation
+  - social comparison leaderboard
+crossref_max_terms: 4
+per_term_results: 8
+
+# منابع تخصصی (RSS). اگر فیدی خراب باشد در گزارش ثبت و رد می‌شود.
+rss_feeds:
+  - {name: Behavioral Scientist, url: "https://behavioralscientist.org/feed/"}
+  - {name: Nielsen Norman Group, url: "https://www.nngroup.com/feed/rss/"}
+  - {name: Yu-kai Chou Octalysis, url: "https://yukaichou.com/feed/"}
+  - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
+  - {name: Behavioural Insights Team, url: "https://www.bi.team/feed/"}
+  - {name: ideas42, url: "https://www.ideas42.org/feed/"}
+  - {name: Duolingo Blog, url: "https://blog.duolingo.com/rss/"}
+
+paths:
+  db: data/agent.db
+  reports: reports
+  font: assets/fonts/Vazirmatn-Bold.ttf
