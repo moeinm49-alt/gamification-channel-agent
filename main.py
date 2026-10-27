@@ -35,16 +35,31 @@ def main():
         return 0
 
     now = lambda: dt.datetime.now(dt.timezone.utc)
+    logfile = pathlib.Path(ROOT) / cfg["paths"]["reports"] / "last_run.log"
+    logfile.parent.mkdir(exist_ok=True)
+    logfile.write_text("", encoding="utf-8")
+    secrets = [x for x in (env("TELEGRAM_BOT_TOKEN"), env("GEMINI_API_KEY")) if x]
+
+    def log(msg):
+        msg = str(msg)
+        for sec in secrets:
+            msg = msg.replace(sec, "***")
+        line = f"{now().strftime('%H:%M:%S')} {msg}"
+        print(line, flush=True)
+        with open(logfile, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+
     db = DB(str(pathlib.Path(ROOT) / cfg["paths"]["db"]))
     try:
-        d = Deps(cfg=cfg, db=db, collector=Collector(cfg, now()), llm=Gemini(env("GEMINI_API_KEY"), cfg["models"]),
-                 tg=tg, now=now)
+        d = Deps(cfg=cfg, db=db, collector=Collector(cfg, now(), log=log),
+                 llm=Gemini(env("GEMINI_API_KEY"), cfg["models"], log=log), tg=tg, now=now, log=log)
         report = run(d, mode="live" if args.task == "run" else "dry", force=args.force)
         return 1 if report["status"] == "publish_failed" else 0
     except Exception as e:
         msg = f"خطای اجرا: {type(e).__name__}: {e}"
         tg.alert(msg.replace(env("TELEGRAM_BOT_TOKEN") or "\0", "***")[:1500])
-        traceback.print_exc()
+        log(msg)
+        log(traceback.format_exc()[-1500:])
         return 1
     finally:
         db.close()

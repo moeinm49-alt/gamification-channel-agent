@@ -55,7 +55,7 @@ class Gemini:
         self.calls += 1
         try:
             r = requests.post(f"{API}/models/{model}:generateContent", headers=self._headers(),
-                              json=payload, timeout=120)
+                              json=payload, timeout=90)
             try:
                 body = r.json()
             except ValueError:
@@ -89,11 +89,16 @@ class Gemini:
 
     def generate_json(self, prompt, system="", temperature=0.3):
         last = ""
+        t0 = time.time()
         for _round in range(2):
             for model in [m for m in self.models if m not in self.dead]:
                 p = prompt
                 for attempt in range(3):
+                    if time.time() - t0 > 240:
+                        raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
+                    t1 = time.time()
                     status, body = self._call(model, p, system, temperature)
+                    self.log(f"[مدل] {model} → HTTP {status} ({time.time() - t1:.1f}s)")
                     if status == 200:
                         obj = self._parse(self._text(body))
                         if obj is not None:

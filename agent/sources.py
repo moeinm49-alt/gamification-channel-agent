@@ -57,7 +57,7 @@ class Collector:
         last = ""
         for _ in range(2):
             try:
-                r = requests.get(url, params=params, headers={"User-Agent": UA}, timeout=25)
+                r = requests.get(url, params=params, headers={"User-Agent": UA}, timeout=15)
                 if r.status_code == 200:
                     return r.json() if as_json else r.content
                 last = f"HTTP {r.status_code}"
@@ -194,9 +194,17 @@ class Collector:
         for f in self.cfg.get("rss_feeds", []):
             jobs.append((f["name"], self.rss, f))
         items = []
+        t0 = time.time()
+        deadline = float(self.cfg.get("collect_deadline_s", 170))
         for name, fn, arg in jobs:
+            if time.time() - t0 > deadline:
+                self._record(name, [], "زمان جمع‌آوری تمام شد")
+                self.log(f"[منبع] {name}: رد شد (سقف زمان جمع‌آوری)")
+                continue
             try:
+                t1 = time.time()
                 got = fn(arg)
+                self.log(f"[منبع] {name}: {len(got)} مطلب ({time.time() - t1:.1f}s)")
                 self._record(name, got)
                 items += got
             except Exception as e:  # هر منبع مستقل است؛ خطای یکی بقیه را متوقف نمی‌کند
