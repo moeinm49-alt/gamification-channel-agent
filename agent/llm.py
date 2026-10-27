@@ -18,6 +18,7 @@ class Gemini:
         self.key = api_key
         self.models = list(models)
         self.dead = set()
+        self.no_think = set()
         self.log = log
         self.sleep = sleep
         self.discovered = False
@@ -35,7 +36,7 @@ class Gemini:
                 n = m["name"].split("/")[-1]
                 ok = "generateContent" in m.get("supportedGenerationMethods", [])
                 if ok and "flash" in n and not re.search(
-                        r"image|tts|live|audio|embed|exp|vision|robotics|computer|thinking", n):
+                        r"image|tts|live|audio|embed|exp|vision|robotics|computer|thinking|omni", n):
                     names.append(n)
             for n in sorted(names, reverse=True):
                 if n not in self.models:
@@ -45,24 +46,30 @@ class Gemini:
             self.log(f"[مدل] کشف مدل ناموفق: {type(e).__name__}")
 
     def _call(self, model, prompt, system, temperature):
-        payload = {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": temperature, "responseMimeType": "application/json",
-                                 "maxOutputTokens": 8192},
-        }
+        gen = {"temperature": temperature, "responseMimeType": "application/json", "maxOutputTokens": 8192}
+        if model not in self.no_think:
+            gen["thinkingConfig"] = {"thinkingBudget": 0}  # بدون «فکر کردن» طولانی؛ سریع‌تر و کم‌مصرف‌تر
+        payload = {"contents": [{"role": "user", "parts": [{"text": prompt}]}], "generationConfig": gen}
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
         self.calls += 1
         try:
             r = requests.post(f"{API}/models/{model}:generateContent", headers=self._headers(),
-                              json=payload, timeout=90)
+                              json=payload, timeout=120)
             try:
                 body = r.json()
             except ValueError:
                 body = {"raw": r.text[:300]}
             return r.status_code, body
         except requests.RequestException as e:
-            return 599, {"error": type(e).__name__}
+            return 599, {"error": {"message": type(e).__name__}}
+
+    @staticmethod
+    def _errmsg(body):
+        try:
+            return str(body["error"]["message"])[:220]
+        except (KeyError, TypeError):
+            return json.dumps(body, ensure_ascii=False)[:220]
 
     @staticmethod
     def _text(body):
@@ -93,12 +100,15 @@ class Gemini:
         for _round in range(2):
             for model in [m for m in self.models if m not in self.dead]:
                 p = prompt
-                for attempt in range(3):
-                    if time.time() - t0 > 240:
+                attempt = 0
+                while attempt < 3:
+                    if time.time() - t0 > 300:
                         raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
                     t1 = time.time()
                     status, body = self._call(model, p, system, temperature)
-                    self.log(f"[مدل] {model} → HTTP {status} ({time.time() - t1:.1f}s)")
+                    msg = self._errmsg(body) if status != 200 else ""
+                    self.log(f"[مدل] {model} → HTTP {status} ({time.time() - t1:.1f}s) {msg}")
+                    attempt += 1
                     if status == 200:
                         obj = self._parse(self._text(body))
                         if obj is not None:
@@ -106,19 +116,28 @@ class Gemini:
                         last = "invalid json"
                         p = prompt + "\n\nReturn ONLY one valid JSON object, nothing else."
                         continue
-                    msg = json.dumps(body, ensure_ascii=False)[:300]
+                    low = msg.lower()
+                    if status == 400 and "think" in low and model not in self.no_think:
+                        self.no_think.add(model)  # این مدل thinkingBudget را نمی‌پذیرد؛ بدون آن تلاش مجدد
+                        attempt -= 1
+                        continue
+                    if status in (400, 403) and "api key" in low:
+                        raise LLMError("کلید Gemini نامعتبر است یا دسترسی ندارد")
                     if status == 429:
                         last = "rate limit"
-                        self.sleep(min(20 * (attempt + 1), 60))
+                        if "perday" in low.replace(" ", "").replace("_", "") or "daily" in low:
+                            self.log(f"[مدل] سهمیه‌ی روزانه‌ی {model} تمام شده؛ مدل بعدی")
+                            self.dead.add(model)
+                            break
+                        m = re.search(r"retry in ([\d.]+)s", low)
+                        wait = min(float(m.group(1)) + 2, 60) if m else min(20 * attempt, 60)
+                        self.sleep(wait)
                         continue
-                    if status >= 500:
+                    if status >= 500 or status == 599:
                         last = f"HTTP {status}"
-                        self.sleep(5 * (attempt + 1))
+                        self.sleep(5 * attempt)
                         continue
-                    if status in (400, 403) and "api key" in msg.lower():
-                        raise LLMError("کلید Gemini نامعتبر است یا دسترسی ندارد")
                     last = f"HTTP {status} {model}"
-                    self.log(f"[مدل] {model} کنار گذاشته شد: HTTP {status}")
                     self.dead.add(model)
                     break
             if not self.discovered:
