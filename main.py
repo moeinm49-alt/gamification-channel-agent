@@ -15,12 +15,18 @@ from agent.telegram import Telegram
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("task", nargs="?", default="run", choices=["run", "dry", "discover"])
+    ap.add_argument("task", nargs="?", default="run", choices=["run", "dry", "discover", "ping"])
     ap.add_argument("--force", action="store_true", help="حتی اگر امروز پست منتشر شده، دوباره اجرا کن")
     args = ap.parse_args()
 
     cfg = load_config()
     tg = Telegram(env("TELEGRAM_BOT_TOKEN"), env("TELEGRAM_CHANNEL_ID") or "@Gamification_club", env("ALERT_CHAT_ID"))
+
+    if args.task == "ping":  # آزمایش مسیر ارسال پیام به چت خصوصی
+        print("alert_chat set:", bool(tg.alert_chat))
+        mid = tg.send_message(tg.alert_chat, "تست اتصال: اگر این پیام را می‌بینی، پیش‌نمایش‌ها هم به همین چت می‌رسند.")
+        print("sent message id:", mid)
+        return 0
 
     if args.task == "discover":  # پیدا کردن شناسه‌ی چت خصوصی برای دریافت هشدارها
         chats = {}

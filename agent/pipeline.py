@@ -276,6 +276,7 @@ def run(d, mode="live", force=False, workdir=None):
         if mode == "live":
             try:
                 mid, how = publish(d, post, img_path, button)
+                d.log(f"[تلگرام] پست در کانال منتشر شد (message_id={mid}, {how})")
                 db.set_post(pid, status="published", tg_message_id=mid, published_at=d.now().isoformat(timespec="seconds"))
                 db.set_article(aid, status="published")
                 report["status"] = "published"
@@ -289,7 +290,8 @@ def run(d, mode="live", force=False, workdir=None):
             if d.tg.alert_chat:
                 try:
                     d.tg.send_message(d.tg.alert_chat, "پیش‌نمایش آزمایشی (در کانال منتشر نشد):")
-                    publish(d, post, img_path, button, chat=d.tg.alert_chat)
+                    pm, how = publish(d, post, img_path, button, chat=d.tg.alert_chat)
+                    d.log(f"[تلگرام] پیش‌نمایش ارسال شد (message_id={pm}, {how})")
                 except TelegramError as e:
                     report["errors"].append(f"ارسال پیش‌نمایش ناموفق: {e}")
         report["button"] = button
