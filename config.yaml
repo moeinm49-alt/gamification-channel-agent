@@ -31,9 +31,9 @@ gates:
   max_overlap_with_previous: 6
 
 # ترتیب مدل‌های Gemini (اگر مدلی بازنشسته شد خودکار مدل بعدی/جدیدتر انتخاب می‌شود)
-models:
-  - gemini-flash-latest
+models:   # gemini-flash-latest در تست‌ها بارها 503/تایم‌اوت داد؛ نسخه‌ی lite سریع و پایدار بود
   - gemini-flash-lite-latest
+  - gemini-flash-latest
   - gemini-3.5-flash
   - gemini-3.5-flash-lite
 

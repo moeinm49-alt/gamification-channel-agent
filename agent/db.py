@@ -83,6 +83,11 @@ class DB:
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def image_used(self, url):
+        row = self.con.execute("SELECT 1 FROM posts WHERE status='published' AND image_json LIKE ? LIMIT 1",
+                               (f'%"url": "{url}"%',)).fetchone()
+        return row is not None
+
     def published_today(self, tz, now):
         zone = ZoneInfo(tz)
         today = now.astimezone(zone).date()

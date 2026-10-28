@@ -199,7 +199,7 @@ def run(d, mode="live", force=False, workdir=None):
             db.set_article(aid, status="rejected", reject_reason=reason)
             report["rejected"].append({"title": c.title, "reason": reason})
             continue
-        img_path, img_info = pick_image(c, w.get("card_text") or w["headline"], cfg, workdir, cfg["_root"])
+        img_path, img_info = pick_image(c, w.get("card_text") or w["headline"], cfg, workdir, cfg["_root"], db.image_used)
         report["image"] = img_info.get("kind", "none")
         pid = db.add_post(aid, w["headline"], w.get("core_finding", ""), post, qc,
                           "dry_run" if mode != "live" else "ready", started, img_info)

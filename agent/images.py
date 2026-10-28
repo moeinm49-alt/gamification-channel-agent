@@ -110,11 +110,13 @@ def make_card(text, label, out_path, font_path):
     return {"kind": "card", "text": text}
 
 
-def pick_image(cand, card_text, cfg, workdir, root):
+def pick_image(cand, card_text, cfg, workdir, root, is_used=None):
     out = pathlib.Path(workdir) / "post_image.jpg"
     if cfg.get("use_source_images", True) and cand.source_type == "blog":
         url = cand.image_url or find_page_image(cand.url)
-        info = download_image(url, str(out), cfg.get("max_image_mb", 5))
+        info = None
+        if url and not (is_used and is_used(url)):  # عکس تکراری (مثلاً بنر عمومی سایت) استفاده نمی‌شود
+            info = download_image(url, str(out), cfg.get("max_image_mb", 5))
         if info:
             return str(out), info
     font = str(pathlib.Path(root) / cfg["paths"]["font"])
