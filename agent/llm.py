@@ -18,7 +18,7 @@ class Gemini:
         self.key = api_key
         self.models = list(models)
         self.dead = set()
-        self.no_think = set()
+        self.no_think = {m for m in self.models if "lite" in m}  # lite مدل‌ها thinkingBudget را نمی‌پذیرند
         self.log = log
         self.sleep = sleep
         self.discovered = False

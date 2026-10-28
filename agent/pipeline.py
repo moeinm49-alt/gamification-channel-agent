@@ -64,6 +64,10 @@ def score_candidates(d, cands):
         items.append(f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
                      f"Text: {(c.abstract or '')[:450]}")
     out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2)
+    if isinstance(out, list):  # بعضی مدل‌ها مستقیم فهرست برمی‌گردانند
+        out = {"items": out}
+    if not isinstance(out, dict):
+        out = {}
     scored = {}
     need = ("relevance", "credibility", "depth_rarity", "practical", "shareability", "overlap_with_previous")
     for it in out.get("items", []):
@@ -129,6 +133,8 @@ def write_and_check(d, cand, text, full, avail):
             venue=cand.venue or cand.source_name, published=cand.published, authors=cand.authors,
             coverage=coverage, text=text, feedback=feedback, samples=prompts.SAMPLES, pages=pages)
         w = d.llm.generate_json(prompt, temperature=0.4)
+        if isinstance(w, list):
+            w = next((x for x in w if isinstance(x, dict)), None)
         if isinstance(w, dict) and w.get("worth_posting") is False:
             return None, None, [f"نویسنده مطلب را رد کرد: {w.get('reject_reason', '')}"], None
         if not valid_writer_output(w):
@@ -141,6 +147,10 @@ def write_and_check(d, cand, text, full, avail):
         qc = {"deterministic": issues}
         if not issues:
             v = d.llm.generate_json(prompts.VERIFY.format(coverage=coverage, text=text, post=post), temperature=0.1)
+            if isinstance(v, list):
+                v = next((x for x in v if isinstance(x, dict)), {})
+            if not isinstance(v, dict):
+                v = {}
             vi = [f"{i.get('type')}: {i.get('detail')}" for i in (v.get("issues") or [])]
             qc["verifier"] = v.get("verdict")
             qc["verifier_issues"] = vi
