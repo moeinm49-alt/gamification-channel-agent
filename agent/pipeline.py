@@ -97,7 +97,7 @@ def anchor_html(text, url):
 
 
 def short_label(c):
-    s = (c.venue or c.source_name or urlparse(c.url).netloc).strip()
+    s = (c.venue or ("مقاله‌ی اصلی" if c.source_type == "paper" else c.source_name) or urlparse(c.url).netloc).strip()
     return s if len(s) <= 36 else s[:35].rsplit(" ", 1)[0] + "…"
 
 
