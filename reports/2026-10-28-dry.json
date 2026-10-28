@@ -1,5 +1,5 @@
 {
- "started": "2026-10-28T19:28:19+00:00",
+ "started": "2026-10-28T20:07:24+00:00",
  "mode": "dry",
  "sources": {
   "OpenAlex": {
@@ -53,24 +53,24 @@
  "scored": 40,
  "rejected": [],
  "selected": {
-  "title": "What Drives Employees to Go Beyond? Behavioral Levels of Employee Engagement and Their Motivational Conditions",
-  "url": "https://doi.org/10.61801/ouaess.2026.1.80",
-  "venue": "Ovidius University Annals Economic Sciences Series",
-  "headline": "📊 انگیزه‌ی بیرونی یا مشارکت؛ کدوم یکی کارمند رو فراتر از وظیفه‌اش هل میده؟",
-  "post_chars": 729,
-  "evidence_type": "survey data",
+  "title": "การใชเศรษฐศาสตรพฤตกรรมเพอจงใจใหเกษตรกร ลกคา ธ.ก.ส. ในจงหวดรอยเอด ชำระหนตรงเวลา",
+  "url": "https://openalex.org/W7215587249",
+  "venue": "Journal of Social Science, Law and Politics",
+  "headline": "📊 چطور با اقتصاد رفتاری اقساط معوقه رو برگردونیم؟",
+  "post_chars": 746,
+  "evidence_type": "randomized experiment",
   "full_text": false
  },
- "score": 84.5,
- "reason": "Directly links Self-Determination Theory to employee engagement levels and discretionary effort behaviors.",
+ "score": 87.5,
+ "reason": "An RCT applying behavioural economics to financial compliance, rare and highly practical.",
  "image": "card",
  "status": "dry_run_ok",
  "errors": [],
  "button": {
-  "text": "📚 کتابخانه‌ی گیمیفیکیشن معارک",
-  "url": "https://moarek.ir/product-category/library/"
+  "text": "✍️ مقاله‌های کاربردی گیمیفیکیشن",
+  "url": "https://moarek.ir/blog/"
  },
- "finished": "2026-10-28T19:29:57+00:00",
- "seconds": 97,
- "llm_calls": 6
+ "finished": "2026-10-28T20:08:49+00:00",
+ "seconds": 85,
+ "llm_calls": 5
 }
