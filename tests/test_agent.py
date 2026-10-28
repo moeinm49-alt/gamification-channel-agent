@@ -46,7 +46,7 @@ class FakeLLM:
         self.calls += 1
         self.seen.append(prompt)
         if "Score candidate sources" in prompt:
-            return self.scores or {"items": [{"id": 0, "source_type": "primary_research", "relevance": 9, "credibility": 8,
+            return self.scores or {"items": [{"id": 0, "source_type": "primary_research", "mechanism": "reward timing", "relevance": 9, "credibility": 8,
                                               "depth_rarity": 8, "practical": 7, "shareability": 8,
                                               "overlap_with_previous": 1, "enough_text": True, "reason": "ok"}]}
         if "fact-checker" in prompt:
@@ -178,7 +178,7 @@ def test_end_to_end_live_publishes_once(env):
 
 def test_no_candidate_above_threshold_means_no_post(env):
     cfg, db, tmp = env
-    weak = {"items": [{"id": 0, "source_type": "news", "relevance": 4, "credibility": 4, "depth_rarity": 3, "practical": 3,
+    weak = {"items": [{"id": 0, "source_type": "news", "mechanism": "none", "relevance": 4, "credibility": 4, "depth_rarity": 3, "practical": 3,
                        "shareability": 3, "overlap_with_previous": 2, "enough_text": True, "reason": "weak"}]}
     tg = FakeTG()
     r = run(deps(cfg, db, FakeLLM(scores=weak), tg, [CAND]), "live", workdir=str(tmp))
@@ -224,3 +224,12 @@ def test_card_renders_persian(tmp_path):
     out = tmp_path / "c.jpg"
     make_card("پاداش غیرمنتظره پایداری را بالا برد", "J Test", str(out), str(pathlib.Path(__file__).resolve().parent.parent / "assets/fonts/Vazirmatn-Bold.ttf"))
     assert Image.open(out).size == (1280, 720)
+
+
+def test_no_mechanism_caps_relevance(env):
+    cfg, db, tmp = env
+    off = {"items": [{"id": 0, "source_type": "news", "mechanism": "none", "relevance": 9, "credibility": 9, "depth_rarity": 9,
+                      "practical": 9, "shareability": 9, "overlap_with_previous": 0, "enough_text": True, "reason": "x"}]}
+    tg = FakeTG()
+    r = run(deps(cfg, db, FakeLLM(scores=off), tg, [CAND]), "live", workdir=str(tmp))
+    assert r["status"] == "no_post" and tg.sent == []

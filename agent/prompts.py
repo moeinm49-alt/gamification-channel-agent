@@ -26,11 +26,14 @@ Channel: Persian Telegram channel on gamification, behavioural science, motivati
 Recent posts already published (avoid overlap):
 {recent}
 
+RELEVANCE RULES: relevance 8-10 only when the CENTRAL subject of the piece is a behavioural or motivational mechanism that a gamification designer, marketer, product or HR leader can use: motivation, rewards/incentives, habits, nudges, loyalty/retention, engagement, learning design, decision biases, consumer-behaviour experiments, game design applied to non-game contexts. Legal/regulatory/compliance, macro-economics, finance, general management news, generic AI news and technical engineering get relevance <= 4 even if well written. If you cannot name the behavioural mechanism at the centre, relevance <= 3.
+
 Candidates:
 {items}
 
 For each candidate return scores 0-10:
 - source_type: one of primary_research | review | official_report | expert_analysis | general_article | news
+- mechanism: the specific behavioural/motivational mechanism at the centre of the piece (e.g. 'loss aversion in loyalty programmes'), or 'none'
 - relevance: real relevance to the channel's audience (topic need not contain the word gamification)
 - credibility: source and evidence quality (method, sample, venue, primary vs secondary)
 - depth_rarity: depth of insight AND how rarely this would be found in Persian-language content
@@ -40,7 +43,7 @@ For each candidate return scores 0-10:
 - enough_text: true if the provided text is enough to write an accurate short post
 - reason: one short sentence
 
-Return JSON: {{"items":[{{"id":<int>,"source_type":"...","relevance":n,"credibility":n,"depth_rarity":n,"practical":n,"shareability":n,"overlap_with_previous":n,"enough_text":true,"reason":"..."}}]}}
+Return JSON: {{"items":[{{"id":<int>,"source_type":"...","mechanism":"...","relevance":n,"credibility":n,"depth_rarity":n,"practical":n,"shareability":n,"overlap_with_previous":n,"enough_text":true,"reason":"..."}}]}}
 """
 
 WRITE = """{style}

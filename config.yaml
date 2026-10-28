@@ -9,7 +9,8 @@ post_max_chars: 1000         # سقف طول پست (کپشن تلگرام بر�
 post_min_chars: 250
 source_text_limit: 9000     # حداکثر طول متن منبع که به مدل داده می‌شود
 lookback_days: 150           # مقالات تا چند روز قبل بررسی شوند
-max_candidates_to_score: 20  # تعداد مطلب برای امتیازدهی در هر اجرا
+max_candidates_to_score: 40  # تعداد مطلب برای امتیازدهی در هر اجرا
+score_batch: 20              # تعداد مطلب در هر فراخوانی مدل
 max_articles_to_write: 3     # حداکثر مقاله‌ای که برای نگارش امتحان می‌شود
 writes_per_article: 2        # حداکثر دفعات بازنویسی بعد از رد شدن در کنترل کیفیت
 use_source_images: true      # استفاده از عکس خود منبع (در صورت وجود) با ذکر لینک منبع
@@ -26,7 +27,7 @@ weights:
   image: 5
 # شرط‌های سخت: هر کدام رد شود مطلب منتشر نمی‌شود
 gates:
-  min_relevance: 6
+  min_relevance: 7
   min_credibility: 6
   max_overlap_with_previous: 6
 

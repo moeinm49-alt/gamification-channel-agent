@@ -59,24 +59,33 @@ def diversify(cands, cap):
 def score_candidates(d, cands):
     recent = d.db.recent_posts(40)
     recent_txt = "\n".join(f"- {r['headline']} | {r['core_finding']}" for r in recent) or "(none yet)"
-    items = []
-    for i, c in enumerate(cands):
-        items.append(f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
-                     f"Text: {(c.abstract or '')[:450]}")
-    out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2)
-    if isinstance(out, list):  # بعضی مدل‌ها مستقیم فهرست برمی‌گردانند
-        out = {"items": out}
-    if not isinstance(out, dict):
-        out = {}
-    scored = {}
     need = ("relevance", "credibility", "depth_rarity", "practical", "shareability", "overlap_with_previous")
-    for it in out.get("items", []):
+    size = int(d.cfg.get("score_batch", 20))
+    scored = {}
+    for off in range(0, len(cands), size):
+        chunk = cands[off:off + size]
+        items = [f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
+                 f"Text: {(c.abstract or '')[:450]}" for i, c in enumerate(chunk)]
         try:
-            i = int(it["id"])
-            if 0 <= i < len(cands) and all(k in it for k in need):
-                scored[i] = it
-        except (KeyError, ValueError, TypeError):
-            continue
+            out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2)
+        except LLMError:
+            if scored:  # دسته‌ی اول موفق بوده؛ با همان ادامه می‌دهیم
+                d.log("[امتیاز] دسته‌ی بعدی ناموفق بود؛ با نتایج موجود ادامه می‌دهیم")
+                break
+            raise
+        if isinstance(out, list):  # بعضی مدل‌ها مستقیم فهرست برمی‌گردانند
+            out = {"items": out}
+        if not isinstance(out, dict):
+            out = {}
+        for it in out.get("items", []):
+            try:
+                i = int(it["id"])
+                if 0 <= i < len(chunk) and all(k in it for k in need):
+                    if str(it.get("mechanism", "none")).strip().lower() in ("", "none", "n/a", "null"):
+                        it["relevance"] = min(float(it["relevance"]), 3)  # بدون سازوکار رفتاری مشخص، مرتبط نیست
+                    scored[off + i] = it
+            except (KeyError, ValueError, TypeError):
+                continue
     return scored
 
 
