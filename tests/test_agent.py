@@ -25,10 +25,11 @@ CAND = Candidate(url="https://doi.org/10.1/x", title="Unexpected rewards and per
 
 def good_writer():
     return {"worth_posting": True, "core_finding": "unexpected rewards raised persistence", "evidence_type": "field experiment",
-            "headline": "پاداش غیرمنتظره، پایداری بیشتر",
-            "paragraphs": ["در یک آزمایش میدانی با ۱۲۰۰ کارمند، پاداش‌های غیرمنتظره پایداری در انجام کار را ۱۲ درصد بیشتر کرد؛ اما اثر بعد از حذف پاداش از بین رفت و مطالعه فقط در یک شرکت انجام شده بود. "
-                           "این یافته نشان می‌دهد تأثیر پاداش‌های سورپرایزی موقتی است و برای نتیجه‌گیری درباره سازمان‌های دیگر شواهد بیشتری لازم است."],
-            "closing_line": "پاداشی که ناگهان می‌آید، لزوماً عادتی نمی‌سازد.",
+            "headline": "🎁 پاداش غیرمنتظره، پایداری بیشتر",
+            "paragraphs": ["توی یک آزمایش میدانی با ۱۲۰۰ کارمند، پاداش‌های غیرمنتظره پایداری آدم‌ها توی کار رو ۱۲ درصد بالا برد. اما وقتی پاداش‌ها حذف شد، اثرش هم از بین رفت و مطالعه فقط توی یک شرکت انجام شده بود.",
+                           "یعنی سورپرایز کار می‌کنه، ولی موقتیه ✅ برای سازمان‌های دیگه باید خودتون امتحانش کنید."],
+            "closing_line": "اگه از این جور نکته‌ها خوشت میاد، [[بیا توی کانال]] هر روز یکی‌شون رو می‌ذاریم.",
+            "site_page_id": 1, "button_text": "🎯 پاداش رو درست طراحی کن",
             "card_text": "پاداش غیرمنتظره پایداری را بالا برد، اما ماندگار نبود",
             "claims": [{"claim_fa": "۱۲ درصد", "evidence_quote_en": "showed a 12 percent increase in task persistence compared with the control group"},
                        {"claim_fa": "اثر از بین رفت", "evidence_quote_en": "the effect disappeared after rewards were removed"}]}
@@ -70,14 +71,14 @@ class FakeTG:
     def __init__(self, fail_photo=False):
         self.sent, self.fail_photo = [], fail_photo
 
-    def send_photo(self, chat, path, cap):
+    def send_photo(self, chat, path, cap, button=None):
         if self.fail_photo:
             raise TelegramError("boom")
-        self.sent.append(("photo", cap))
+        self.sent.append(("photo", cap, button))
         return 11
 
-    def send_message(self, chat, text, preview=False):
-        self.sent.append(("text", text))
+    def send_message(self, chat, text, preview=False, button=None):
+        self.sent.append(("text", text, button))
         return 12
 
     def alert(self, t):
@@ -93,8 +94,12 @@ def env(tmp_path):
     return cfg, db, tmp_path
 
 
+CATALOG = [{"url": "https://moarek.ir/a/", "title": "A", "desc": "a"}, {"url": "https://moarek.ir/b/", "title": "B", "desc": "b"}]
+
+
 def deps(cfg, db, llm, tg, cands, now=NOW):
-    return Deps(cfg=cfg, db=db, collector=FakeCollector(cands), llm=llm, tg=tg, now=lambda: now, log=lambda *_: None)
+    return Deps(cfg=cfg, db=db, collector=FakeCollector(cands), llm=llm, tg=tg, now=lambda: now,
+                log=lambda *_: None, catalog=CATALOG)
 
 
 def test_abstract_and_numbers():
@@ -121,14 +126,32 @@ def test_qc_catches_fake_number_and_quote(env):
     assert any("نقل" in x for x in deterministic_qc(html, w3, CAND, SRC, cfg))
 
 
-def test_qc_blocks_cliche_emoji_and_length(env):
+def test_qc_style_rules(env):
     cfg, _, _ = env
     w = good_writer()
-    w["paragraphs"][0] += " نکته جالب اینجاست 🚀 #تست"
+    w["headline"] = "پاداش بدون ایموجی"
+    assert any("ایموجی" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+    w = good_writer()
+    w["paragraphs"][0] += " نکته جالب اینجاست و پیشنهاد می‌شود #تست 🚀🚀🚀🚀"
     issues = deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg)
-    assert len(issues) >= 3
+    assert len(issues) >= 4  # کلیشه، لحن رسمی، هشتگ، ایموجی زیاد
+    w = good_writer()
     w["paragraphs"] = ["الف " * 400]
     assert any("طول" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+
+
+def test_layout_links_and_button(env):
+    cfg, _, _ = env
+    post = assemble(good_writer(), CAND, cfg)
+    assert post.startswith("<b>🎁")
+    assert '<a href="https://t.me/Gamification_club">بیا توی کانال</a>' in post
+    assert 'href="https://linkedin.com/in/moeinmoareknezhad">لینکدین</a>' in post
+    assert '🔗 منبع: <a href="https://doi.org/10.1/x">J Test</a>' in post
+    from agent.pipeline import choose_button
+    assert choose_button(good_writer(), CATALOG) == {"text": "🎯 پاداش رو درست طراحی کن", "url": "https://moarek.ir/b/"}
+    bad = good_writer()
+    bad["site_page_id"] = 99
+    assert choose_button(bad, CATALOG)["url"] in ("https://moarek.ir/a/", "https://moarek.ir/b/")
 
 
 def test_html_is_escaped(env):
@@ -144,6 +167,7 @@ def test_end_to_end_live_publishes_once(env):
     r = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r["status"] == "published" and len(tg.sent) == 1
     assert tg.sent[0][0] == "photo" and plain_len(tg.sent[0][1]) <= 1024
+    assert tg.sent[0][2]["url"] == "https://moarek.ir/b/"
     # اجرای دوباره در همان روز: انتشار تکراری نباید رخ دهد
     r2 = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r2["status"] == "skipped_already_posted" and len(tg.sent) == 1

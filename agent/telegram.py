@@ -1,3 +1,4 @@
+import json
 import time
 
 import requests
@@ -37,15 +38,25 @@ class Telegram:
             self.sleep(3 * (attempt + 1))
         raise TelegramError(self._clean(last))
 
-    def send_message(self, chat, html_text, preview=False):
-        res = self._call("sendMessage", {"chat_id": chat, "text": html_text, "parse_mode": "HTML",
-                                         "disable_web_page_preview": "false" if preview else "true"})
-        return res["message_id"]
+    @staticmethod
+    def _markup(button):
+        if not button:
+            return None
+        return json.dumps({"inline_keyboard": [[{"text": button["text"], "url": button["url"]}]]}, ensure_ascii=False)
 
-    def send_photo(self, chat, path, caption_html):
+    def send_message(self, chat, html_text, preview=False, button=None):
+        data = {"chat_id": chat, "text": html_text, "parse_mode": "HTML",
+                "disable_web_page_preview": "false" if preview else "true"}
+        if button:
+            data["reply_markup"] = self._markup(button)
+        return self._call("sendMessage", data)["message_id"]
+
+    def send_photo(self, chat, path, caption_html, button=None):
+        data = {"chat_id": chat, "caption": caption_html, "parse_mode": "HTML"}
+        if button:
+            data["reply_markup"] = self._markup(button)
         with open(path, "rb") as f:
-            res = self._call("sendPhoto", {"chat_id": chat, "caption": caption_html, "parse_mode": "HTML"},
-                             files={"photo": f})
+            res = self._call("sendPhoto", data, files={"photo": f})
         return res["message_id"]
 
     def alert(self, text):

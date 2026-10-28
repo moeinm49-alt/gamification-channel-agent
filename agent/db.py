@@ -31,6 +31,10 @@ class DB:
         self.con = sqlite3.connect(path)
         self.con.row_factory = sqlite3.Row
         self.con.executescript(SCHEMA)
+        cols = {r["name"] for r in self.con.execute("PRAGMA table_info(posts)")}
+        if "button_url" not in cols:
+            self.con.execute("ALTER TABLE posts ADD COLUMN button_url TEXT DEFAULT ''")
+            self.con.commit()
 
     def close(self):
         self.con.commit()
@@ -63,12 +67,12 @@ class DB:
         self.con.commit()
 
     # ---- پست‌ها
-    def add_post(self, article_id, headline, core_finding, text_html, qc, status, now, image=None):
+    def add_post(self, article_id, headline, core_finding, text_html, qc, status, now, image=None, button_url=""):
         cur = self.con.execute(
-            "INSERT INTO posts(article_id,headline,core_finding,text_html,qc_json,status,created_at,image_json)"
-            " VALUES(?,?,?,?,?,?,?,?)",
+            "INSERT INTO posts(article_id,headline,core_finding,text_html,qc_json,status,created_at,image_json,button_url)"
+            " VALUES(?,?,?,?,?,?,?,?,?)",
             (article_id, headline, core_finding, text_html, json.dumps(qc, ensure_ascii=False),
-             status, iso(now), json.dumps(image or {}, ensure_ascii=False)))
+             status, iso(now), json.dumps(image or {}, ensure_ascii=False), button_url))
         self.con.commit()
         return cur.lastrowid
 
@@ -87,6 +91,10 @@ class DB:
         row = self.con.execute("SELECT 1 FROM posts WHERE status='published' AND image_json LIKE ? LIMIT 1",
                                (f'%"url": "{url}"%',)).fetchone()
         return row is not None
+
+    def recent_button_urls(self, n=6):
+        rows = self.con.execute("SELECT button_url FROM posts WHERE status='published' ORDER BY id DESC LIMIT ?", (n,)).fetchall()
+        return [r["button_url"] for r in rows if r["button_url"]]
 
     def published_today(self, tz, now):
         zone = ZoneInfo(tz)

@@ -2,11 +2,13 @@ import html
 import json
 import pathlib
 import random
+import re
 import tempfile
+from urllib.parse import urlparse
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from . import prompts
+from . import prompts, sitepages
 from .images import pick_image
 from .llm import LLMError
 from .qc import deterministic_qc
@@ -24,6 +26,7 @@ class Deps:
     tg: Any
     now: Callable
     log: Callable = print
+    catalog: Any = None
 
 
 def esc(s):
@@ -73,37 +76,65 @@ def score_candidates(d, cands):
     return scored
 
 
+ANCHOR = re.compile(r"\[\[(.{2,45}?)\]\]")
+
+
+def anchor_html(text, url):
+    return ANCHOR.sub(lambda m: f'<a href="{esc(url)}">{m.group(1)}</a>', esc(text), count=1)
+
+
+def short_label(c):
+    s = (c.venue or c.source_name or urlparse(c.url).netloc).strip()
+    return s if len(s) <= 36 else s[:35].rsplit(" ", 1)[0] + "…"
+
+
 def assemble(w, cand, cfg):
     parts = [f"<b>{esc(w['headline'])}</b>"] + [esc(p) for p in w["paragraphs"]]
-    label = cand.title if len(cand.title) <= 80 else cand.title[:77] + "…"
-    meta = ", ".join(x for x in (cand.venue, (cand.published or "")[:4]) if x)
-    parts.append(f'منبع: <a href="{esc(cand.url)}">{esc(label)}</a>' + (f" ({esc(meta)})" if meta else ""))
-    parts.append(f'{esc(w["closing_line"])} <a href="{esc(cfg["channel_link"])}">{esc(cfg["channel_handle"])}</a>')
+    parts.append(f'🔗 منبع: <a href="{esc(cand.url)}">{esc(short_label(cand))}</a>')
+    parts.append(anchor_html(w["closing_line"], cfg["channel_link"]) + "\n"
+                 + anchor_html(cfg["linkedin"]["text"], cfg["linkedin"]["url"]))
     return "\n\n".join(parts)
 
 
 def valid_writer_output(w):
-    return (isinstance(w, dict) and isinstance(w.get("headline"), str) and w["headline"].strip()
-            and isinstance(w.get("paragraphs"), list) and w["paragraphs"]
-            and all(isinstance(p, str) for p in w["paragraphs"])
-            and isinstance(w.get("closing_line"), str) and w["closing_line"].strip())
+    return bool(isinstance(w, dict) and isinstance(w.get("headline"), str) and w["headline"].strip()
+                and isinstance(w.get("paragraphs"), list) and w["paragraphs"]
+                and all(isinstance(p, str) for p in w["paragraphs"])
+                and isinstance(w.get("closing_line"), str) and len(ANCHOR.findall(w["closing_line"])) == 1)
 
 
-def write_and_check(d, cand, text, full):
+def choose_button(w, avail):
+    """صفحه‌ی مرتبط سایت و متن دکمه؛ اگر خروجی مدل نامعتبر بود، صفحه‌ای که اخیراً استفاده نشده."""
+    page = None
+    try:
+        page = avail[int(w.get("site_page_id"))]
+    except (TypeError, ValueError, IndexError):
+        page = random.choice(avail) if avail else None
+    if not page:
+        return None
+    text = str(w.get("button_text") or "").strip()
+    if not text or len(text) > 40:
+        text = "📖 بیشتر بخونید"
+    return {"text": text, "url": page["url"]}
+
+
+def write_and_check(d, cand, text, full, avail):
     cfg = d.cfg
+    pages = "\n".join(f"[{i}] {p['title']} — {p.get('desc', '')[:90]}" for i, p in enumerate(avail))
     coverage = "full text" if full else "abstract/summary only (do not claim anything beyond it)"
     feedback, last_issues = "", []
     for _ in range(int(cfg.get("writes_per_article", 2))):
         prompt = prompts.WRITE.format(
             style=prompts.STYLE.format(max_chars=cfg["post_max_chars"]), title=cand.title,
             venue=cand.venue or cand.source_name, published=cand.published, authors=cand.authors,
-            coverage=coverage, text=text, feedback=feedback)
+            coverage=coverage, text=text, feedback=feedback, samples=prompts.SAMPLES, pages=pages)
         w = d.llm.generate_json(prompt, temperature=0.4)
         if isinstance(w, dict) and w.get("worth_posting") is False:
-            return None, None, [f"نویسنده مطلب را رد کرد: {w.get('reject_reason', '')}"]
+            return None, None, [f"نویسنده مطلب را رد کرد: {w.get('reject_reason', '')}"], None
         if not valid_writer_output(w):
-            last_issues = ["خروجی نویسنده ساختار معتبر نداشت"]
-            feedback = "\nYour previous output had an invalid structure. Follow the JSON schema exactly.\n"
+            last_issues = ["خروجی نویسنده ساختار معتبر نداشت (مثلاً closing_line باید دقیقاً یک [[لینک]] داشته باشد)"]
+            feedback = ("\nYour previous output had an invalid structure. Follow the JSON schema exactly; "
+                        "closing_line must contain exactly one [[anchor]].\n")
             continue
         post = assemble(w, cand, cfg)
         issues = deterministic_qc(post, w, cand, text, cfg)
@@ -114,22 +145,22 @@ def write_and_check(d, cand, text, full):
             qc["verifier"] = v.get("verdict")
             qc["verifier_issues"] = vi
             if v.get("verdict") == "pass":
-                return w, post, qc
+                return w, post, qc, choose_button(w, avail)
             issues = vi or ["verifier failed the post"]
         last_issues = issues
         feedback = ("\nYour previous attempt was REJECTED by quality control for these reasons. "
                     "Fix them or set worth_posting=false:\n- " + "\n- ".join(issues) + "\n")
-    return None, None, last_issues
+    return None, None, last_issues, None
 
 
-def publish(d, post_html, image_path):
-    ch = d.tg.channel
+def publish(d, post_html, image_path, button=None, chat=None):
+    chat = chat or d.tg.channel
     if image_path:
         try:
-            return d.tg.send_photo(ch, image_path, post_html), "photo"
+            return d.tg.send_photo(chat, image_path, post_html, button=button), "photo"
         except TelegramError as e:
             d.log(f"[تلگرام] ارسال عکس ناموفق، ارسال متن بدون عکس: {e}")
-    return d.tg.send_message(ch, post_html), "text"
+    return d.tg.send_message(chat, post_html, button=button), "text"
 
 
 def run(d, mode="live", force=False, workdir=None):
@@ -181,6 +212,12 @@ def run(d, mode="live", force=False, workdir=None):
         report["reason"] = f"هیچ مطلبی به حد نصاب {cfg['min_score']} نرسید (بهترین امتیاز: {best})"
         return finish(d, report, started)
 
+    catalog = d.catalog
+    if catalog is None:
+        catalog = sitepages.load_catalog(cfg, cfg["_root"], started, d.log)
+    used = set(db.recent_button_urls(6))
+    avail = [p for p in catalog if p["url"] not in used] or catalog
+
     for total, i, aid, it in ranked[: int(cfg["max_articles_to_write"])]:
         c = pool[i]
         text, full = d.collector.fetch_text(c, int(cfg.get("source_text_limit", 9000)))
@@ -190,7 +227,7 @@ def run(d, mode="live", force=False, workdir=None):
             continue
         db.set_article(aid, has_full_text=int(full))
         try:
-            w, post, qc = write_and_check(d, c, text, full)
+            w, post, qc, button = write_and_check(d, c, text, full, avail)
         except LLMError as e:
             report["status"], report["reason"] = "llm_unavailable", f"مدل زبانی در دسترس نبود: {e}"
             return finish(d, report, started)
@@ -202,7 +239,8 @@ def run(d, mode="live", force=False, workdir=None):
         img_path, img_info = pick_image(c, w.get("card_text") or w["headline"], cfg, workdir, cfg["_root"], db.image_used)
         report["image"] = img_info.get("kind", "none")
         pid = db.add_post(aid, w["headline"], w.get("core_finding", ""), post, qc,
-                          "dry_run" if mode != "live" else "ready", started, img_info)
+                          "dry_run" if mode != "live" else "ready", started, img_info,
+                          (button or {}).get("url", ""))
         report["selected"] = {"title": c.title, "url": c.url, "venue": c.venue, "headline": w["headline"],
                               "post_chars": plain_len(post), "evidence_type": w.get("evidence_type"),
                               "full_text": full}
@@ -210,7 +248,7 @@ def run(d, mode="live", force=False, workdir=None):
         report["reason"] = it.get("reason", "")
         if mode == "live":
             try:
-                mid, how = publish(d, post, img_path)
+                mid, how = publish(d, post, img_path, button)
                 db.set_post(pid, status="published", tg_message_id=mid, published_at=d.now().isoformat(timespec="seconds"))
                 db.set_article(aid, status="published")
                 report["status"] = "published"
@@ -221,16 +259,13 @@ def run(d, mode="live", force=False, workdir=None):
                 report["errors"].append(f"ارسال به تلگرام ناموفق: {e}")
         else:
             report["status"] = "dry_run_ok"
-            preview = "پیش‌نمایش آزمایشی (در کانال منتشر نشد)\n\n" + post
-            try:
-                if img_path:
-                    d.tg.send_photo(d.tg.alert_chat, img_path, preview[:1024]) if d.tg.alert_chat else None
-                    if d.tg.alert_chat and len(preview) > 1024:
-                        d.tg.send_message(d.tg.alert_chat, preview)
-                elif d.tg.alert_chat:
-                    d.tg.send_message(d.tg.alert_chat, preview)
-            except TelegramError as e:
-                report["errors"].append(f"ارسال پیش‌نمایش ناموفق: {e}")
+            if d.tg.alert_chat:
+                try:
+                    d.tg.send_message(d.tg.alert_chat, "پیش‌نمایش آزمایشی (در کانال منتشر نشد):")
+                    publish(d, post, img_path, button, chat=d.tg.alert_chat)
+                except TelegramError as e:
+                    report["errors"].append(f"ارسال پیش‌نمایش ناموفق: {e}")
+        report["button"] = button
         return finish(d, report, started)
 
     report["status"] = "no_post"

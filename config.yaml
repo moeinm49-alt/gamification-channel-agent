@@ -5,7 +5,7 @@ channel_handle: "@Gamification_club"
 
 # حداقل امتیاز (از ۱۰۰) برای انتشار. اگر خیلی کم پست می‌شود کمش کن، اگر ضعیف پست می‌شود بالا ببر.
 min_score: 70
-post_max_chars: 900          # سقف طول پست (کپشن تلگرام برای عکس‌دار ۱۰۲۴ است)
+post_max_chars: 1000         # سقف طول پست (کپشن تلگرام برای عکس‌دار ۱۰۲۴ است)
 post_min_chars: 250
 source_text_limit: 9000     # حداکثر طول متن منبع که به مدل داده می‌شود
 lookback_days: 150           # مقالات تا چند روز قبل بررسی شوند
@@ -62,7 +62,25 @@ rss_feeds:
   - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
   - {name: Duolingo Blog, url: "https://blog.duolingo.com/rss/"}
 
+site:
+  url: https://moarek.ir
+  refresh_days: 7
+  max_pages: 90
+  seed_pages:   # صفحاتی که حتماً در فهرست دکمه‌ها هستند (بقیه از sitemap سایت خوانده می‌شود)
+    - {url: "https://moarek.ir/gamification-training/", title: "آموزش گیمیفیکیشن", desc: "صفحه اصلی دوره و مسیر آموزش گیمیفیکیشن از صفر"}
+    - {url: "https://moarek.ir/gamification-lessons/gamification-definition/", title: "درس اول: گیمیفیکیشن چیست؟", desc: "اولین درس آموزش گیمیفیکیشن، تعریف و مفاهیم پایه"}
+    - {url: "https://moarek.ir/consulting/", title: "مشاوره گیمیفیکیشن", desc: "مشاوره طراحی سیستم گیمیفیکیشن برای کسب‌وکارها"}
+    - {url: "https://moarek.ir/product-category/library/", title: "کتابخانه معارک", desc: "کتاب‌ها و محصولات آموزشی گیمیفیکیشن"}
+    - {url: "https://moarek.ir/gamification-book/", title: "معرفی و مقایسه کتاب‌های گیمیفیکیشن", desc: "مرور ۸ کتاب گیمیفیکیشن و مسیر مطالعه"}
+    - {url: "https://moarek.ir/gamification-marketing-mistakes/", title: "اشتباهات رایج گیمیفیکیشن در بازاریابی", desc: "چرا بیشتر کمپین‌های بازی‌وار بازاریابی خرید و وفاداری نمی‌سازند"}
+    - {url: "https://moarek.ir/influence-on-the-minds-of-others/", title: "تأثیرگذاری بر ذهن دیگران", desc: "مقاله درباره روان‌شناسی تأثیرگذاری و ترغیب"}
+
+linkedin:
+  url: https://linkedin.com/in/moeinmoareknezhad
+  text: "من رو توی [[لینکدین]] هم دنبال کن"
+
 paths:
+  site_pages: data/site_pages.json
   db: data/agent.db
   reports: reports
   font: assets/fonts/Vazirmatn-Bold.ttf

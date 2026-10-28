@@ -1,9 +1,10 @@
 import re
 
-from .textutil import EMOJI, SourceIndex, numbers_in, plain_len, strip_html
+from .textutil import EMOJI_BASE, SourceIndex, numbers_in, plain_len, strip_html
 
 CLICHES = ["نکته جالب اینجاست", "در دنیای امروز", "با ما همراه باشید", "برای مطالب بیشتر", "عضو شوید",
            "کلیک کنید", "انقلابی", "باورنکردنی", "راز موفقیت", "شگفت‌انگیز", "شگفت انگیز", "امروزه"]
+FORMAL = ["می‌باشد", "می باشد", "گردد", "نمایند", "در راستای", "پیشنهاد می‌شود", "بدین منظور", "لازم به ذکر"]
 
 
 def deterministic_qc(post_html, writer, cand, source_text, cfg):
@@ -19,13 +20,22 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
         issues.append("لینک منبع در پست نیست")
     if cfg["channel_link"] not in post_html:
         issues.append("لینک کانال در پست نیست")
-    if EMOJI.search(plain):
-        issues.append("ایموجی نباید باشد")
+    if cfg["linkedin"]["url"] not in post_html:
+        issues.append("لینک لینکدین در پست نیست")
+    head = str(writer.get("headline", "")).strip()
+    if not EMOJI_BASE.match(head):
+        issues.append("تیتر باید با یک ایموجی مرتبط شروع شود")
+    body = head + " " + " ".join(str(p) for p in writer.get("paragraphs", []))
+    if len(EMOJI_BASE.findall(body)) > 4:
+        issues.append("تعداد ایموجی‌ها زیاد است (حداکثر ۱ در تیتر و ۳ در متن)")
     if "#" in plain:
         issues.append("هشتگ نباید باشد")
     for c in CLICHES:
         if c in plain:
             issues.append(f"عبارت کلیشه‌ای/اغراق‌آمیز «{c}» حذف شود")
+    for f in FORMAL:
+        if f in body:
+            issues.append(f"لحن رسمی: عبارت «{f}» را خودمونی بنویس")
     meta = f"{cand.title} {cand.venue} {cand.published} {cand.authors}"
     idx = SourceIndex(source_text, meta)
     body_plain = strip_html(re.sub(r"<a [^>]*>.*?</a>", " ", post_html, flags=re.S))

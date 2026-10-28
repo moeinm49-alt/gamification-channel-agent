@@ -6,6 +6,7 @@ _DIG = str.maketrans("۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩", "01234567890123
 _TAG = re.compile(r"<[^>]+>")
 _WS = re.compile(r"\s+")
 EMOJI = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\U0001F000-\U0001F2FF\u2B00-\u2BFF\uFE0F\u200d]")
+EMOJI_BASE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\U0001F000-\U0001F2FF\u2B00-\u2BFF]")
 WORDNUM = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6",
            "seven": "7", "eight": "8", "nine": "9", "ten": "10", "twice": "2",
            "double": "2", "half": "0.5", "triple": "3"}
