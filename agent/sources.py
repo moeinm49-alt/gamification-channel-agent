@@ -96,8 +96,12 @@ class Collector:
             best = w.get("best_oa_location") or {}
             authors = ", ".join(a["author"]["display_name"] for a in (w.get("authorships") or [])[:4]
                                 if a.get("author"))
+            landing = loc.get("landing_page_url") or best.get("landing_page_url") or ""
+            url = f"https://doi.org/{doi}" if doi else landing  # لینک رسمی مقاله؛ رکورد OpenAlex منبع اصلی نیست
+            if not url:
+                continue
             out.append(Candidate(
-                url=f"https://doi.org/{doi}" if doi else w.get("id", ""), title=title,
+                url=url, title=title,
                 source_name="OpenAlex", source_type="paper", abstract=abstract,
                 published=w.get("publication_date") or "", doi=doi, authors=authors, venue=venue,
                 license=best.get("license") or "", is_oa=bool((w.get("open_access") or {}).get("is_oa"))))
