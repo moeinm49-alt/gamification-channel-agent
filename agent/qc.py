@@ -31,9 +31,6 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
     nb = len(re.findall(r"\*\*(.+?)\*\*", " ".join(str(p) for p in writer.get("paragraphs", []))))
     if nb < 1 or nb > 5:
         issues.append("چند کلمه‌ی کلیدی (۲ تا ۴ مورد) داخل متن با **دو ستاره** بولد شود")
-    closing = re.sub(r"\[\[|\]\]", "", str(writer.get("closing_line", "")))
-    if len(closing) > 60:
-        issues.append(f"جمله‌ی دعوت به کانال طولانی است ({len(closing)} کاراکتر)؛ حداکثر ۵۰ کاراکتر و کوتاه")
     if "#" in plain:
         issues.append("هشتگ نباید باشد")
     for c in CLICHES:

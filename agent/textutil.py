@@ -12,6 +12,10 @@ WORDNUM = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six"
            "double": "2", "half": "0.5", "triple": "3"}
 
 
+def to_ascii_digits(s):
+    return (s or "").translate(_DIG)
+
+
 def strip_html(s):
     s = _TAG.sub(" ", s or "")
     s = _html.unescape(s)

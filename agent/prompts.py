@@ -65,7 +65,7 @@ Text available: {coverage}
 {text}
 </source>
 
-PAGES OF THE OWNER'S WEBSITE moarek.ir (for the button under the post). Pick the single most relevant page by id; if none is closely related pick the closest broad one (training/consulting). Never invent a page.
+PAGES OF THE OWNER'S WEBSITE moarek.ir (for the button under the post). Pick the id of the single most relevant page for THIS post's theme. Never invent a page.
 {pages}
 {feedback}
 Return JSON with exactly these keys:
@@ -76,10 +76,8 @@ Return JSON with exactly these keys:
  "evidence_type": "e.g. randomized experiment, field study, review, case study, expert opinion",
  "headline": "ONE relevant emoji + short, specific, conversational Persian headline (no clickbait)",
  "paragraphs": ["2-4 short conversational Persian paragraphs, including (only if supported) a clearly-labelled suggestion and (if it matters) the key limitation"],
- "closing_line": "a SHORT friendly Persian call to action (max 50 characters in total) inviting the reader to the channel, loosely tied to the post's theme. It MUST contain exactly one anchor span of 2-3 words wrapped in double square brackets, e.g. از این نکته‌ها بیشتر می‌خوای؟ [[بیا توی کانال]]  or  بازی‌وارسازی رو جدی بگیر، [[بیا توی کانال]]. No begging, no 'عضو شوید', no long explanation.",
  "card_text": "the single key sentence in Persian, max 80 characters, for an image card",
  "site_page_id": <int id from the pages list>,
- "button_text": "catchy Persian button label, max 32 characters, may start with one emoji, tied to the chosen page",
  "claims": [{{"claim_fa": "a factual claim you made", "evidence_quote_en": "EXACT consecutive words copied from the source text that support it (at least 6 words)"}}]
 }}
 Every factual claim and every number in the post must appear in "claims" with an exact quote. Copy quotes character for character from the source.

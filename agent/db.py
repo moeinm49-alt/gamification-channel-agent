@@ -32,9 +32,10 @@ class DB:
         self.con.row_factory = sqlite3.Row
         self.con.executescript(SCHEMA)
         cols = {r["name"] for r in self.con.execute("PRAGMA table_info(posts)")}
-        if "button_url" not in cols:
-            self.con.execute("ALTER TABLE posts ADD COLUMN button_url TEXT DEFAULT ''")
-            self.con.commit()
+        for col in ("button_url", "button_json", "image_path"):
+            if col not in cols:
+                self.con.execute(f"ALTER TABLE posts ADD COLUMN {col} TEXT DEFAULT ''")
+        self.con.commit()
 
     def close(self):
         self.con.commit()
@@ -91,6 +92,18 @@ class DB:
         row = self.con.execute("SELECT 1 FROM posts WHERE status='published' AND image_json LIKE ? LIMIT 1",
                                (f'%"url": "{url}"%',)).fetchone()
         return row is not None
+
+    def count_button_uses(self, url):
+        return self.con.execute("SELECT COUNT(*) c FROM posts WHERE button_url=? AND status='published'", (url,)).fetchone()["c"]
+
+    def published_count(self):
+        return self.con.execute("SELECT COUNT(*) c FROM posts WHERE status='published'").fetchone()["c"]
+
+    def ready_post(self):
+        return self.con.execute("SELECT * FROM posts WHERE status='ready' ORDER BY id DESC LIMIT 1").fetchone()
+
+    def last_published(self):
+        return self.con.execute("SELECT headline, published_at FROM posts WHERE status='published' ORDER BY id DESC LIMIT 1").fetchone()
 
     def recent_button_urls(self, n=6):
         rows = self.con.execute("SELECT button_url FROM posts WHERE status='published' ORDER BY id DESC LIMIT ?", (n,)).fetchall()

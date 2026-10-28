@@ -28,8 +28,7 @@ def good_writer():
             "headline": "🎁 پاداش غیرمنتظره، پایداری بیشتر",
             "paragraphs": ["توی یک آزمایش میدانی با ۱۲۰۰ کارمند، پاداش‌های غیرمنتظره پایداری آدم‌ها توی کار رو **۱۲ درصد** بالا برد. اما وقتی پاداش‌ها حذف شد، اثرش هم از بین رفت و مطالعه فقط توی یک شرکت انجام شده بود.",
                            "یعنی سورپرایز کار می‌کنه، ولی موقتیه ✅ برای سازمان‌های دیگه باید خودتون امتحانش کنید."],
-            "closing_line": "از این نکته‌ها بیشتر می‌خوای؟ [[بیا توی کانال]]",
-            "site_page_id": 1, "button_text": "🎯 پاداش رو درست طراحی کن",
+            "site_page_id": 1,
             "card_text": "پاداش غیرمنتظره پایداری را بالا برد، اما ماندگار نبود",
             "claims": [{"claim_fa": "۱۲ درصد", "evidence_quote_en": "showed a 12 percent increase in task persistence compared with the control group"},
                        {"claim_fa": "اثر از بین رفت", "evidence_quote_en": "the effect disappeared after rewards were removed"}]}
@@ -66,10 +65,10 @@ class FakeCollector:
 
 
 class FakeTG:
-    channel, alert_chat = "@chan", ""
+    channel, alert_chat = "@chan", "1"
 
     def __init__(self, fail_photo=False):
-        self.sent, self.fail_photo = [], fail_photo
+        self.sent, self.fail_photo, self.alerts, self.updates = [], fail_photo, [], []
 
     def send_photo(self, chat, path, cap, button=None):
         if self.fail_photo:
@@ -82,19 +81,31 @@ class FakeTG:
         return 12
 
     def alert(self, t):
-        return None
+        self.alerts.append(t)
+
+    def get_updates(self, offset=None):
+        ups, self.updates = self.updates, []
+        return ups
+
+    def set_commands(self, c):
+        return True
+
+    def say(self, text, uid=1, chat="1"):
+        self.updates.append({"update_id": uid, "message": {"chat": {"id": chat}, "text": text}})
 
 
 @pytest.fixture
 def env(tmp_path):
     cfg = load_config()
     cfg["_root"] = str(pathlib.Path(__file__).resolve().parent.parent)
-    cfg["paths"] = dict(cfg["paths"], reports=str(tmp_path / "rep"))
+    cfg["paths"] = dict(cfg["paths"], reports=str(tmp_path / "rep"), settings=str(tmp_path / "settings.json"),
+                        ready_dir=str(tmp_path / "ready"))
     db = DB(str(tmp_path / "t.db"))
     return cfg, db, tmp_path
 
 
-CATALOG = [{"url": "https://moarek.ir/a/", "title": "A", "desc": "a"}, {"url": "https://moarek.ir/b/", "title": "B", "desc": "b"}]
+CATALOG = [{"url": "https://moarek.ir/a/", "title": "A", "desc": "a", "texts": ["a1", "a2"]},
+           {"url": "https://moarek.ir/b/", "title": "B", "desc": "b", "texts": ["b1", "b2"]}]
 
 
 def deps(cfg, db, llm, tg, cands, now=NOW):
@@ -136,9 +147,6 @@ def test_qc_style_rules(env):
     issues = deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg)
     assert len(issues) >= 4  # کلیشه، لحن رسمی، هشتگ، ایموجی زیاد
     w = good_writer()
-    w["closing_line"] = "اگه از این جور نکته‌های کاربردی و تازه خوشت میاد و می‌خوای هر روز بخونی، [[بیا توی کانال]]"
-    assert any("طولانی" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
-    w = good_writer()
     w["paragraphs"] = [x.replace("**", "") for x in w["paragraphs"]]
     assert any("بولد" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
     w = good_writer()
@@ -150,15 +158,16 @@ def test_layout_links_and_button(env):
     cfg, _, _ = env
     post = assemble(good_writer(), CAND, cfg)
     assert post.startswith("<b>🎁")
-    assert '<b>📣 از این نکته‌ها بیشتر می‌خوای؟ <a href="https://t.me/Gamification_club">بیا توی کانال</a></b>' in post
+    assert '<b>📣 هر روز یک یافته‌ی کاربردی از دنیای رفتار و انگیزش، در <a href="https://t.me/Gamification_club">Gamification Club</a></b>' in post
     assert "<b>۱۲ درصد</b>" in post and "**" not in post
     assert '<b>💼 من رو توی <a href="https://linkedin.com/in/moeinmoareknezhad">لینکدین</a> هم دنبال کن</b>' in post
     assert '🔗 منبع: <a href="https://doi.org/10.1/x">J Test</a>' in post
     from agent.pipeline import choose_button
-    assert choose_button(good_writer(), CATALOG) == {"text": "🎯 پاداش رو درست طراحی کن", "url": "https://moarek.ir/b/"}
+    _, db, _ = env
+    assert choose_button(good_writer(), CATALOG, db) == {"text": "b1", "url": "https://moarek.ir/b/"}
     bad = good_writer()
     bad["site_page_id"] = 99
-    assert choose_button(bad, CATALOG)["url"] in ("https://moarek.ir/a/", "https://moarek.ir/b/")
+    assert choose_button(bad, CATALOG, db)["url"] in ("https://moarek.ir/a/", "https://moarek.ir/b/")
 
 
 def test_html_is_escaped(env):
@@ -174,7 +183,7 @@ def test_end_to_end_live_publishes_once(env):
     r = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r["status"] == "published" and len(tg.sent) == 1
     assert tg.sent[0][0] == "photo" and plain_len(tg.sent[0][1]) <= 1024
-    assert tg.sent[0][2]["url"] == "https://moarek.ir/b/"
+    assert [b["url"] for b in tg.sent[0][2]] == ["https://moarek.ir/b/", "https://t.me/moarekContact"]
     # اجرای دوباره در همان روز: انتشار تکراری نباید رخ دهد
     r2 = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r2["status"] == "skipped_already_posted" and len(tg.sent) == 1
@@ -212,7 +221,7 @@ def test_dry_run_does_not_mark_published(env):
     cfg, db, tmp = env
     tg = FakeTG()
     r = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "dry", workdir=str(tmp))
-    assert r["status"] == "dry_run_ok" and tg.sent == []
+    assert r["status"] == "dry_run_ok" and len(tg.sent) == 2  # عنوان + پیش‌نمایش، فقط به چت خصوصی
     assert not db.published_today(cfg["timezone"], NOW)
     r2 = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r2["status"] == "published"
@@ -240,3 +249,87 @@ def test_no_mechanism_caps_relevance(env):
     tg = FakeTG()
     r = run(deps(cfg, db, FakeLLM(scores=off), tg, [CAND]), "live", workdir=str(tmp))
     assert r["status"] == "no_post" and tg.sent == []
+
+
+# ---------------- زمان‌بندی و کنترل ----------------
+from agent import control
+from agent.scheduler import tick
+
+
+def at(h, m):  # ساعت تهران ۲۸ اکتبر ۲۰۲۶ -> UTC
+    return dt.datetime(2026, 10, 28, h, m, tzinfo=dt.timezone(dt.timedelta(hours=3, minutes=30))).astimezone(dt.timezone.utc)
+
+
+def test_parse_time(env):
+    cfg, _, _ = env
+    assert control.parse_time("18:45", cfg)[0] == "19:00"
+    assert control.parse_time("۱۸:۳۰", cfg)[0] == "18:30"
+    assert control.parse_time("18:10", cfg)[0] == "18:00"
+    assert control.parse_time("05:00", cfg)[0] is None
+    assert control.parse_time("abc", cfg)[0] is None
+
+
+def test_daily_timeline(env):
+    cfg, db, tmp = env
+    tg = FakeTG()
+    llm = FakeLLM()
+
+    def go(h, m):
+        return tick(deps(cfg, db, llm, tg, [CAND], at(h, m)), workdir=str(tmp))
+
+    assert go(15, 2)["status"] == "too_early"                      # خیلی زود
+    r = go(17, 2)                                                   # ۹۰ دقیقه قبل: آماده‌سازی
+    assert r["status"] == "prepared_waiting" and tg.sent == []
+    calls = llm.calls
+    assert go(17, 32)["status"] == "prepared_waiting" and llm.calls == calls  # دوباره تولید نمی‌شود
+    r = go(18, 32)                                                  # سر ساعت: انتشار
+    assert r["status"] == "published" and len(tg.sent) == 1
+    assert tg.sent[0][2][1]["url"] == "https://t.me/moarekContact"
+    assert go(19, 2)["status"] == "already_posted" and len(tg.sent) == 1
+
+
+def test_late_start_prepares_and_publishes_same_tick(env):
+    cfg, db, tmp = env
+    tg = FakeTG()
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
+    assert r["status"] == "published" and len(tg.sent) == 1
+
+
+def test_past_cutoff_posts_nothing(env):
+    cfg, db, tmp = env
+    tg = FakeTG()
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(23, 45)), workdir=str(tmp))
+    assert r["status"] == "past_cutoff" and tg.sent == []
+
+
+def test_commands_change_time_and_pause(env):
+    cfg, db, tmp = env
+    tg = FakeTG()
+    tg.say("/time 19:00", 1)
+    tg.say("/pause", 2)
+    tg.say("/time 20:00", 3, chat="999")  # از چت غیرمجاز: نادیده گرفته می‌شود
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
+    st = control.load(cfg)
+    assert st["post_time"] == "19:00" and st["paused"] is True and r["status"] == "paused"
+    assert any("19:00" in a for a in tg.alerts) and tg.sent == []
+    tg.say("/resume", 4)
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
+    assert r["status"] == "published"
+
+
+def test_now_command_publishes_immediately(env):
+    cfg, db, tmp = env
+    tg = FakeTG()
+    tg.say("/now", 1)
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 2)), workdir=str(tmp))  # صبح زود، ولی /now
+    assert r["status"] == "published"
+
+
+def test_stale_ready_post_expires_next_day(env):
+    cfg, db, tmp = env
+    tg = FakeTG(fail_photo=False)
+    tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(17, 2)), workdir=str(tmp))
+    assert db.ready_post() is not None
+    nxt = at(17, 2) + dt.timedelta(days=1)
+    tick(deps(cfg, db, FakeLLM(), tg, [], nxt), workdir=str(tmp))
+    assert db.ready_post() is None

@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "run (انتشار واقعی) | dry (آزمایشی، فقط پیش‌نمایش در چت خصوصی) | discover (یافتن شناسه چت)"
-        default: "run"
+        description: "tick (اجرای عادی زمان‌بندی) | run (آماده‌سازی و انتشار فوری) | dry (پیش‌نمایش در چت خصوصی) | discover | ping"
+        default: "tick"
       force:
         description: "اجرای دوباره حتی اگر امروز پست منتشر شده (true/false)"
         default: "false"
   schedule:
-    - cron: "20 16,17,18 * * *"   # ۱۹:۵۰ تهران و دو تلاش مجدد؛ بعد از اولین انتشار موفق، اجراهای بعدی همان روز خودکار رد می‌شوند
+    - cron: "2,32 4-20 * * *"   # هر ۳۰ دقیقه، از ۰۷:۳۲ تا ۰۰:۰۲ به وقت تهران؛ هر اجرا فقط در صورت لزوم کاری انجام می‌دهد
 
 concurrency:
   group: gamification-agent
@@ -37,7 +37,7 @@ jobs:
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ALERT_CHAT_ID: ${{ secrets.ALERT_CHAT_ID }}
-          TASK: ${{ github.event.inputs.task || 'run' }}
+          TASK: ${{ github.event.inputs.task || 'tick' }}
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
           if [ "$FORCE" = "true" ]; then python main.py "$TASK" --force; else python main.py "$TASK"; fi

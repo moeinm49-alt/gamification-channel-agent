@@ -39,10 +39,13 @@ class Telegram:
         raise TelegramError(self._clean(last))
 
     @staticmethod
-    def _markup(button):
-        if not button:
+    def _markup(buttons):
+        """هر دکمه در یک ردیف جدا (دکمه‌ی تکی هم پذیرفته می‌شود)."""
+        if not buttons:
             return None
-        return json.dumps({"inline_keyboard": [[{"text": button["text"], "url": button["url"]}]]}, ensure_ascii=False)
+        if isinstance(buttons, dict):
+            buttons = [buttons]
+        return json.dumps({"inline_keyboard": [[{"text": b["text"], "url": b["url"]}] for b in buttons]}, ensure_ascii=False)
 
     def send_message(self, chat, html_text, preview=False, button=None):
         data = {"chat_id": chat, "text": html_text, "parse_mode": "HTML",
@@ -67,5 +70,12 @@ class Telegram:
         except TelegramError:
             return None
 
-    def get_updates(self):
-        return self._call("getUpdates", {"limit": 100})
+    def get_updates(self, offset=None):
+        data = {"limit": 100}
+        if offset:
+            data["offset"] = offset
+        return self._call("getUpdates", data)
+
+    def set_commands(self, commands):
+        return self._call("setMyCommands", {"commands": json.dumps(
+            [{"command": c, "description": d} for c, d in commands], ensure_ascii=False)})

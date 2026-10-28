@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from . import prompts, sitepages
+from . import prompts
 from .images import pick_image
 from .llm import LLMError
 from .qc import deterministic_qc
@@ -108,10 +108,11 @@ def body_html(p):
     return BOLD.sub(lambda m: f"<b>{m.group(1)}</b>", esc(p)).replace("*", "")
 
 
-def assemble(w, cand, cfg):
+def assemble(w, cand, cfg, cta_idx=0):
     parts = [f"<b>{esc(w['headline'])}</b>"] + [body_html(p) for p in w["paragraphs"]]
     parts.append(f'🔗 منبع: <a href="{esc(cand.url)}">{esc(short_label(cand))}</a>')
-    cta = anchor_html(w["closing_line"], cfg["channel_link"])
+    variants = cfg["cta_variants"]
+    cta = anchor_html(variants[cta_idx % len(variants)], cfg["channel_link"])
     li = anchor_html(cfg["linkedin"]["text"], cfg["linkedin"]["url"])
     parts.append(f'<b>{cfg["channel_emoji"]} {cta}</b>\n<b>{cfg["linkedin"]["emoji"]} {li}</b>')
     return "\n\n".join(parts)
@@ -120,23 +121,19 @@ def assemble(w, cand, cfg):
 def valid_writer_output(w):
     return bool(isinstance(w, dict) and isinstance(w.get("headline"), str) and w["headline"].strip()
                 and isinstance(w.get("paragraphs"), list) and w["paragraphs"]
-                and all(isinstance(p, str) for p in w["paragraphs"])
-                and isinstance(w.get("closing_line"), str) and len(ANCHOR.findall(w["closing_line"])) == 1)
+                and all(isinstance(p, str) for p in w["paragraphs"]))
 
 
-def choose_button(w, avail):
-    """صفحه‌ی مرتبط سایت و متن دکمه؛ اگر خروجی مدل نامعتبر بود، صفحه‌ای که اخیراً استفاده نشده."""
-    page = None
+def choose_button(w, avail, db):
+    """صفحه‌ی مرتبط (انتخاب مدل) + متن دکمه‌ی چرخشی؛ اگر خروجی مدل نامعتبر بود، صفحه‌ای که اخیراً استفاده نشده."""
     try:
         page = avail[int(w.get("site_page_id"))]
     except (TypeError, ValueError, IndexError):
         page = random.choice(avail) if avail else None
     if not page:
         return None
-    text = str(w.get("button_text") or "").strip()
-    if not text or len(text) > 40:
-        text = "📖 بیشتر بخونید"
-    return {"text": text, "url": page["url"]}
+    texts = page.get("texts") or [page.get("title", "بیشتر بخوانید")]
+    return {"text": texts[db.count_button_uses(page["url"]) % len(texts)], "url": page["url"]}
 
 
 def write_and_check(d, cand, text, full, avail):
@@ -155,11 +152,10 @@ def write_and_check(d, cand, text, full, avail):
         if isinstance(w, dict) and w.get("worth_posting") is False:
             return None, None, [f"نویسنده مطلب را رد کرد: {w.get('reject_reason', '')}"], None
         if not valid_writer_output(w):
-            last_issues = ["خروجی نویسنده ساختار معتبر نداشت (مثلاً closing_line باید دقیقاً یک [[لینک]] داشته باشد)"]
-            feedback = ("\nYour previous output had an invalid structure. Follow the JSON schema exactly; "
-                        "closing_line must contain exactly one [[anchor]].\n")
+            last_issues = ["خروجی نویسنده ساختار معتبر نداشت"]
+            feedback = "\nYour previous output had an invalid structure. Follow the JSON schema exactly.\n"
             continue
-        post = assemble(w, cand, cfg)
+        post = assemble(w, cand, cfg, d.db.published_count())
         issues = deterministic_qc(post, w, cand, text, cfg)
         qc = {"deterministic": issues}
         if not issues:
@@ -172,7 +168,7 @@ def write_and_check(d, cand, text, full, avail):
             qc["verifier"] = v.get("verdict")
             qc["verifier_issues"] = vi
             if v.get("verdict") == "pass":
-                return w, post, qc, choose_button(w, avail)
+                return w, post, qc, choose_button(w, avail, d.db)
             issues = vi or ["verifier failed the post"]
         last_issues = issues
         feedback = ("\nYour previous attempt was REJECTED by quality control for these reasons. "
@@ -180,14 +176,18 @@ def write_and_check(d, cand, text, full, avail):
     return None, None, last_issues, None
 
 
-def publish(d, post_html, image_path, button=None, chat=None):
+def all_buttons(cfg, button):
+    return [b for b in (button, cfg["buttons"]["support"]) if b]
+
+
+def publish(d, post_html, image_path, buttons=None, chat=None):
     chat = chat or d.tg.channel
     if image_path:
         try:
-            return d.tg.send_photo(chat, image_path, post_html, button=button), "photo"
+            return d.tg.send_photo(chat, image_path, post_html, button=buttons), "photo"
         except TelegramError as e:
             d.log(f"[تلگرام] ارسال عکس ناموفق، ارسال متن بدون عکس: {e}")
-    return d.tg.send_message(chat, post_html, button=button), "text"
+    return d.tg.send_message(chat, post_html, button=buttons), "text"
 
 
 def run(d, mode="live", force=False, workdir=None):
@@ -198,7 +198,7 @@ def run(d, mode="live", force=False, workdir=None):
               "image": "none", "status": "", "errors": []}
     workdir = workdir or tempfile.mkdtemp()
 
-    if mode == "live" and not force and db.published_today(cfg["timezone"], started):
+    if mode in ("live", "ready") and not force and db.published_today(cfg["timezone"], started):
         report["status"] = "skipped_already_posted"
         report["reason"] = "امروز قبلاً پست منتشر شده است"
         return finish(d, report, started)
@@ -239,10 +239,8 @@ def run(d, mode="live", force=False, workdir=None):
         report["reason"] = f"هیچ مطلبی به حد نصاب {cfg['min_score']} نرسید (بهترین امتیاز: {best})"
         return finish(d, report, started)
 
-    catalog = d.catalog
-    if catalog is None:
-        catalog = sitepages.load_catalog(cfg, cfg["_root"], started, d.log)
-    used = set(db.recent_button_urls(6))
+    catalog = d.catalog if d.catalog is not None else cfg["buttons"]["pages"]
+    used = set(db.recent_button_urls(3))
     avail = [p for p in catalog if p["url"] not in used] or catalog
 
     for total, i, aid, it in ranked[: int(cfg["max_articles_to_write"])]:
@@ -266,7 +264,7 @@ def run(d, mode="live", force=False, workdir=None):
         img_path, img_info = pick_image(c, w.get("card_text") or w["headline"], cfg, workdir, cfg["_root"], db.image_used)
         report["image"] = img_info.get("kind", "none")
         pid = db.add_post(aid, w["headline"], w.get("core_finding", ""), post, qc,
-                          "dry_run" if mode != "live" else "ready", started, img_info,
+                          {"dry": "dry_run", "live": "pending", "ready": "ready"}[mode], started, img_info,
                           (button or {}).get("url", ""))
         report["selected"] = {"title": c.title, "url": c.url, "venue": c.venue, "headline": w["headline"],
                               "post_chars": plain_len(post), "evidence_type": w.get("evidence_type"),
@@ -275,7 +273,7 @@ def run(d, mode="live", force=False, workdir=None):
         report["reason"] = it.get("reason", "")
         if mode == "live":
             try:
-                mid, how = publish(d, post, img_path, button)
+                mid, how = publish(d, post, img_path, all_buttons(cfg, button))
                 d.log(f"[تلگرام] پست در کانال منتشر شد (message_id={mid}, {how})")
                 db.set_post(pid, status="published", tg_message_id=mid, published_at=d.now().isoformat(timespec="seconds"))
                 db.set_article(aid, status="published")
@@ -285,12 +283,22 @@ def run(d, mode="live", force=False, workdir=None):
                 db.set_post(pid, status="failed", error=str(e)[:300])
                 report["status"] = "publish_failed"
                 report["errors"].append(f"ارسال به تلگرام ناموفق: {e}")
+        elif mode == "ready":
+            ready_dir = pathlib.Path(cfg["_root"]) / cfg["paths"]["ready_dir"]
+            ready_dir.mkdir(parents=True, exist_ok=True)
+            rel = ""
+            if img_path:
+                rel = f"{cfg['paths']['ready_dir']}/post_{pid}.jpg"
+                (pathlib.Path(cfg["_root"]) / rel).write_bytes(pathlib.Path(img_path).read_bytes())
+            db.set_post(pid, status="ready", button_json=json.dumps(button or {}, ensure_ascii=False), image_path=rel)
+            report["status"] = "prepared"
+            report["post_id"] = pid
         else:
             report["status"] = "dry_run_ok"
             if d.tg.alert_chat:
                 try:
                     d.tg.send_message(d.tg.alert_chat, "پیش‌نمایش آزمایشی (در کانال منتشر نشد):")
-                    pm, how = publish(d, post, img_path, button, chat=d.tg.alert_chat)
+                    pm, how = publish(d, post, img_path, all_buttons(cfg, button), chat=d.tg.alert_chat)
                     d.log(f"[تلگرام] پیش‌نمایش ارسال شد (message_id={pm}, {how})")
                 except TelegramError as e:
                     report["errors"].append(f"ارسال پیش‌نمایش ناموفق: {e}")
@@ -311,7 +319,7 @@ def finish(d, report, started):
     root = pathlib.Path(d.cfg["_root"]) / d.cfg["paths"]["reports"]
     root.mkdir(parents=True, exist_ok=True)
     day = started.astimezone().date().isoformat() if False else started.date().isoformat()
-    suffix = "" if report["mode"] == "live" else "-dry"
+    suffix = "-dry" if report["mode"] == "dry" else ""
     (root / f"{day}{suffix}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = summarize(report)
     d.log(summary)
@@ -336,3 +344,31 @@ def summarize(r):
     for e in r["errors"]:
         lines.append(f"خطا: {e}")
     return "\n".join(lines)
+
+
+def publish_ready(d, row):
+    """انتشار پستی که از قبل آماده و ذخیره شده است."""
+    cfg, db = d.cfg, d.db
+    button = json.loads(row["button_json"]) if row["button_json"] else None
+    img = None
+    if row["image_path"]:
+        p = pathlib.Path(cfg["_root"]) / row["image_path"]
+        img = str(p) if p.exists() else None
+    try:
+        mid, how = publish(d, row["text_html"], img, all_buttons(cfg, button))
+    except TelegramError as e:
+        d.log(f"[تلگرام] انتشار پست آماده ناموفق: {e}")
+        d.tg.alert(f"انتشار پست آماده ناموفق بود (تلاش بعدی در اجرای بعدی): {e}")
+        return {"status": "publish_failed", "error": str(e)}
+    now = d.now().isoformat(timespec="seconds")
+    db.set_post(row["id"], status="published", tg_message_id=mid, published_at=now)
+    db.set_article(row["article_id"], status="published")
+    if img:
+        pathlib.Path(img).unlink(missing_ok=True)
+    d.log(f"[تلگرام] پست در کانال منتشر شد (message_id={mid}, {how})")
+    d.tg.alert(f"منتشر شد در کانال: {row['headline']}")
+    root = pathlib.Path(cfg["_root"]) / cfg["paths"]["reports"]
+    root.mkdir(parents=True, exist_ok=True)
+    rep = {"status": "published", "headline": row["headline"], "message_id": mid, "published_at": now}
+    (root / f"{d.now().date().isoformat()}-publish.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
+    return rep
