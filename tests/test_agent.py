@@ -26,9 +26,9 @@ CAND = Candidate(url="https://doi.org/10.1/x", title="Unexpected rewards and per
 def good_writer():
     return {"worth_posting": True, "core_finding": "unexpected rewards raised persistence", "evidence_type": "field experiment",
             "headline": "🎁 پاداش غیرمنتظره، پایداری بیشتر",
-            "paragraphs": ["توی یک آزمایش میدانی با ۱۲۰۰ کارمند، پاداش‌های غیرمنتظره پایداری آدم‌ها توی کار رو ۱۲ درصد بالا برد. اما وقتی پاداش‌ها حذف شد، اثرش هم از بین رفت و مطالعه فقط توی یک شرکت انجام شده بود.",
+            "paragraphs": ["توی یک آزمایش میدانی با ۱۲۰۰ کارمند، پاداش‌های غیرمنتظره پایداری آدم‌ها توی کار رو **۱۲ درصد** بالا برد. اما وقتی پاداش‌ها حذف شد، اثرش هم از بین رفت و مطالعه فقط توی یک شرکت انجام شده بود.",
                            "یعنی سورپرایز کار می‌کنه، ولی موقتیه ✅ برای سازمان‌های دیگه باید خودتون امتحانش کنید."],
-            "closing_line": "اگه از این جور نکته‌ها خوشت میاد، [[بیا توی کانال]] هر روز یکی‌شون رو می‌ذاریم.",
+            "closing_line": "از این نکته‌ها بیشتر می‌خوای؟ [[بیا توی کانال]]",
             "site_page_id": 1, "button_text": "🎯 پاداش رو درست طراحی کن",
             "card_text": "پاداش غیرمنتظره پایداری را بالا برد، اما ماندگار نبود",
             "claims": [{"claim_fa": "۱۲ درصد", "evidence_quote_en": "showed a 12 percent increase in task persistence compared with the control group"},
@@ -136,6 +136,12 @@ def test_qc_style_rules(env):
     issues = deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg)
     assert len(issues) >= 4  # کلیشه، لحن رسمی، هشتگ، ایموجی زیاد
     w = good_writer()
+    w["closing_line"] = "اگه از این جور نکته‌های کاربردی و تازه خوشت میاد و می‌خوای هر روز بخونی، [[بیا توی کانال]]"
+    assert any("طولانی" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+    w = good_writer()
+    w["paragraphs"] = [x.replace("**", "") for x in w["paragraphs"]]
+    assert any("بولد" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+    w = good_writer()
     w["paragraphs"] = ["الف " * 400]
     assert any("طول" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
 
@@ -144,8 +150,9 @@ def test_layout_links_and_button(env):
     cfg, _, _ = env
     post = assemble(good_writer(), CAND, cfg)
     assert post.startswith("<b>🎁")
-    assert '<a href="https://t.me/Gamification_club">بیا توی کانال</a>' in post
-    assert 'href="https://linkedin.com/in/moeinmoareknezhad">لینکدین</a>' in post
+    assert '<b>📣 از این نکته‌ها بیشتر می‌خوای؟ <a href="https://t.me/Gamification_club">بیا توی کانال</a></b>' in post
+    assert "<b>۱۲ درصد</b>" in post and "**" not in post
+    assert '<b>💼 من رو توی <a href="https://linkedin.com/in/moeinmoareknezhad">لینکدین</a> هم دنبال کن</b>' in post
     assert '🔗 منبع: <a href="https://doi.org/10.1/x">J Test</a>' in post
     from agent.pipeline import choose_button
     assert choose_button(good_writer(), CATALOG) == {"text": "🎯 پاداش رو درست طراحی کن", "url": "https://moarek.ir/b/"}

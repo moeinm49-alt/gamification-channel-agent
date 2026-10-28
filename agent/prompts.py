@@ -13,6 +13,7 @@ Hard rules:
 - Keep what the source FOUND separate from your own suggestion. Frame suggestions as suggestions («به نظرم»، «می‌شه این‌طوری امتحان کرد») and only when the source supports them; otherwise give none. Never invent a practical tip.
 - Keep the key limitation if it changes how a reader should interpret the result (sample, setting, correlation vs causation, effect size), in one plain sentence.
 - Never invent numbers, names, quotes or results. Every number you write must literally appear in the source text. Use Persian digits.
+- Bold: inside the paragraphs wrap 2-4 KEY terms or short phrases (1-4 words each) in **double asterisks** so a skimming reader catches the point (e.g. **۱۵ برابر**, **انگیزه‌ی درونی**). Never bold whole sentences and never use asterisks in the headline.
 - Emoji: the headline starts with exactly ONE relevant emoji. In the body use 0-3 meaningful emojis in total (like ❌ ✅ 👇 or →-style contrast), never decorative spam.
 - No hashtags, no hype ("guaranteed", "secret", "revolutionary", "shocking"), no generic advice such as «به نیاز کاربران توجه کنید».
 - Do not explain basics to this expert audience. Do not summarise the whole source: choose the one thing that matters most.
@@ -75,7 +76,7 @@ Return JSON with exactly these keys:
  "evidence_type": "e.g. randomized experiment, field study, review, case study, expert opinion",
  "headline": "ONE relevant emoji + short, specific, conversational Persian headline (no clickbait)",
  "paragraphs": ["2-4 short conversational Persian paragraphs, including (only if supported) a clearly-labelled suggestion and (if it matters) the key limitation"],
- "closing_line": "one friendly Persian sentence inviting the reader to the channel, tied to THIS post's theme. It MUST contain exactly one anchor span of 2-4 words wrapped in double square brackets, e.g. اگه از این جور نکته‌های کاربردی خوشت میاد، [[بیا توی کانال]] هر روز یکی‌شون رو می‌ذاریم. No begging, no 'عضو شوید'.",
+ "closing_line": "a SHORT friendly Persian call to action (max 50 characters in total) inviting the reader to the channel, loosely tied to the post's theme. It MUST contain exactly one anchor span of 2-3 words wrapped in double square brackets, e.g. از این نکته‌ها بیشتر می‌خوای؟ [[بیا توی کانال]]  or  بازی‌وارسازی رو جدی بگیر، [[بیا توی کانال]]. No begging, no 'عضو شوید', no long explanation.",
  "card_text": "the single key sentence in Persian, max 80 characters, for an image card",
  "site_page_id": <int id from the pages list>,
  "button_text": "catchy Persian button label, max 32 characters, may start with one emoji, tied to the chosen page",
@@ -84,7 +85,7 @@ Return JSON with exactly these keys:
 Every factual claim and every number in the post must appear in "claims" with an exact quote. Copy quotes character for character from the source.
 """
 
-VERIFY = """You are a strict scientific fact-checker and Persian copy editor. Check the POST (Persian, Telegram HTML) against the SOURCE. The last lines of the post (source link, channel invitation, LinkedIn line) are a fixed template: ignore them except that the invitation must not contain factual claims.
+VERIFY = """You are a strict scientific fact-checker and Persian copy editor. Check the POST (Persian, Telegram HTML) against the SOURCE. The last lines of the post (source link, bold channel call-to-action, bold LinkedIn line) are a fixed template: ignore them except that the invitation must not contain factual claims.
 
 Fail the post if ANY of these is true:
 - a claim or number is not supported by the source;

@@ -101,11 +101,19 @@ def short_label(c):
     return s if len(s) <= 36 else s[:35].rsplit(" ", 1)[0] + "…"
 
 
+BOLD = re.compile(r"\*\*(.+?)\*\*")
+
+
+def body_html(p):
+    return BOLD.sub(lambda m: f"<b>{m.group(1)}</b>", esc(p)).replace("*", "")
+
+
 def assemble(w, cand, cfg):
-    parts = [f"<b>{esc(w['headline'])}</b>"] + [esc(p) for p in w["paragraphs"]]
+    parts = [f"<b>{esc(w['headline'])}</b>"] + [body_html(p) for p in w["paragraphs"]]
     parts.append(f'🔗 منبع: <a href="{esc(cand.url)}">{esc(short_label(cand))}</a>')
-    parts.append(anchor_html(w["closing_line"], cfg["channel_link"]) + "\n"
-                 + anchor_html(cfg["linkedin"]["text"], cfg["linkedin"]["url"]))
+    cta = anchor_html(w["closing_line"], cfg["channel_link"])
+    li = anchor_html(cfg["linkedin"]["text"], cfg["linkedin"]["url"])
+    parts.append(f'<b>{cfg["channel_emoji"]} {cta}</b>\n<b>{cfg["linkedin"]["emoji"]} {li}</b>')
     return "\n\n".join(parts)
 
 

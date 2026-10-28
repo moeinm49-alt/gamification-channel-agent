@@ -2,6 +2,7 @@
 timezone: Asia/Tehran
 channel_link: https://t.me/Gamification_club
 channel_handle: "@Gamification_club"
+channel_emoji: "📣"
 
 # حداقل امتیاز (از ۱۰۰) برای انتشار. اگر خیلی کم پست می‌شود کمش کن، اگر ضعیف پست می‌شود بالا ببر.
 min_score: 70
@@ -77,6 +78,7 @@ site:
     - {url: "https://moarek.ir/influence-on-the-minds-of-others/", title: "تأثیرگذاری بر ذهن دیگران", desc: "مقاله درباره روان‌شناسی تأثیرگذاری و ترغیب"}
 
 linkedin:
+  emoji: "💼"
   url: https://linkedin.com/in/moeinmoareknezhad
   text: "من رو توی [[لینکدین]] هم دنبال کن"
 
