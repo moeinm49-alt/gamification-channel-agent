@@ -55,7 +55,7 @@ class Gemini:
         self.calls += 1
         try:
             r = requests.post(f"{API}/models/{model}:generateContent", headers=self._headers(),
-                              json=payload, timeout=120)
+                              json=payload, timeout=75)
             try:
                 body = r.json()
             except ValueError:
@@ -67,9 +67,16 @@ class Gemini:
     @staticmethod
     def _errmsg(body):
         try:
-            return str(body["error"]["message"])[:220]
-        except (KeyError, TypeError):
-            return json.dumps(body, ensure_ascii=False)[:220]
+            err = body["error"]
+            out = str(err.get("message", ""))[:120]
+            for det in err.get("details", []) or []:
+                for v in det.get("violations", []) or []:
+                    out += f" | quota={v.get('quotaId', '')}"
+                if det.get("retryDelay"):
+                    out += f" | retryDelay={det['retryDelay']}"
+            return out[:400]
+        except (KeyError, TypeError, AttributeError):
+            return json.dumps(body, ensure_ascii=False)[:300]
 
     @staticmethod
     def _text(body):
@@ -117,20 +124,24 @@ class Gemini:
                         p = prompt + "\n\nReturn ONLY one valid JSON object, nothing else."
                         continue
                     low = msg.lower()
-                    if status == 400 and "think" in low and model not in self.no_think:
-                        self.no_think.add(model)  # این مدل thinkingBudget را نمی‌پذیرد؛ بدون آن تلاش مجدد
+                    if status == 400 and "api key" not in low and model not in self.no_think:
+                        self.no_think.add(model)  # شاید thinkingBudget را نمی‌پذیرد؛ یک بار بدون آن تلاش می‌کنیم
                         attempt -= 1
                         continue
                     if status in (400, 403) and "api key" in low:
                         raise LLMError("کلید Gemini نامعتبر است یا دسترسی ندارد")
                     if status == 429:
                         last = "rate limit"
-                        if "perday" in low.replace(" ", "").replace("_", "") or "daily" in low:
+                        flat = low.replace(" ", "").replace("_", "")
+                        if "perday" in flat or "daily" in low:
                             self.log(f"[مدل] سهمیه‌ی روزانه‌ی {model} تمام شده؛ مدل بعدی")
                             self.dead.add(model)
                             break
-                        m = re.search(r"retry in ([\d.]+)s", low)
-                        wait = min(float(m.group(1)) + 2, 60) if m else min(20 * attempt, 60)
+                        m = re.search(r"retrydelay=([\d.]+)s", flat) or re.search(r"retry in ([\d.]+)s", low)
+                        wait = float(m.group(1)) + 2 if m else 25 * attempt
+                        if wait > 70:
+                            self.log(f"[مدل] {model}: انتظار {wait:.0f}s لازم است؛ مدل بعدی")
+                            break
                         self.sleep(wait)
                         continue
                     if status >= 500 or status == 599:

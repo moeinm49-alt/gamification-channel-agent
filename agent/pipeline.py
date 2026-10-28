@@ -8,6 +8,7 @@ from typing import Any, Callable
 
 from . import prompts
 from .images import pick_image
+from .llm import LLMError
 from .qc import deterministic_qc
 from .sources import Candidate
 from .telegram import TelegramError
@@ -58,7 +59,7 @@ def score_candidates(d, cands):
     items = []
     for i, c in enumerate(cands):
         items.append(f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
-                     f"Text: {(c.abstract or '')[:600]}")
+                     f"Text: {(c.abstract or '')[:450]}")
     out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2)
     scored = {}
     need = ("relevance", "credibility", "depth_rarity", "practical", "shareability", "overlap_with_previous")
@@ -156,7 +157,11 @@ def run(d, mode="live", force=False, workdir=None):
         return finish(d, report, started)
 
     pool = diversify(fresh, int(cfg["max_candidates_to_score"]))
-    scored = score_candidates(d, pool)
+    try:
+        scored = score_candidates(d, pool)
+    except LLMError as e:
+        report["status"], report["reason"] = "llm_unavailable", f"مدل زبانی در دسترس نبود: {e}"
+        return finish(d, report, started)
     report["scored"] = len(scored)
     g = cfg["gates"]
     ranked = []
@@ -178,13 +183,17 @@ def run(d, mode="live", force=False, workdir=None):
 
     for total, i, aid, it in ranked[: int(cfg["max_articles_to_write"])]:
         c = pool[i]
-        text, full = d.collector.fetch_text(c)
+        text, full = d.collector.fetch_text(c, int(cfg.get("source_text_limit", 9000)))
         if len(text) < 400:
             db.set_article(aid, status="rejected", reject_reason="متن ناکافی")
             report["rejected"].append({"title": c.title, "reason": "متن ناکافی"})
             continue
         db.set_article(aid, has_full_text=int(full))
-        w, post, qc = write_and_check(d, c, text, full)
+        try:
+            w, post, qc = write_and_check(d, c, text, full)
+        except LLMError as e:
+            report["status"], report["reason"] = "llm_unavailable", f"مدل زبانی در دسترس نبود: {e}"
+            return finish(d, report, started)
         if not post:
             reason = "; ".join(qc)[:400]
             db.set_article(aid, status="rejected", reject_reason=reason)
@@ -242,7 +251,7 @@ def finish(d, report, started):
     (root / f"{day}{suffix}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = summarize(report)
     d.log(summary)
-    if report["status"] in ("published", "no_post", "publish_failed", "dry_run_ok"):
+    if report["status"] in ("published", "no_post", "publish_failed", "dry_run_ok", "llm_unavailable"):
         d.tg.alert(summary)
     return report
 

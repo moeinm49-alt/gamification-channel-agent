@@ -7,8 +7,9 @@ channel_handle: "@Gamification_club"
 min_score: 70
 post_max_chars: 900          # سقف طول پست (کپشن تلگرام برای عکس‌دار ۱۰۲۴ است)
 post_min_chars: 250
+source_text_limit: 9000     # حداکثر طول متن منبع که به مدل داده می‌شود
 lookback_days: 150           # مقالات تا چند روز قبل بررسی شوند
-max_candidates_to_score: 30  # تعداد مطلب برای امتیازدهی در هر اجرا
+max_candidates_to_score: 20  # تعداد مطلب برای امتیازدهی در هر اجرا
 max_articles_to_write: 3     # حداکثر مقاله‌ای که برای نگارش امتحان می‌شود
 writes_per_article: 2        # حداکثر دفعات بازنویسی بعد از رد شدن در کنترل کیفیت
 use_source_images: true      # استفاده از عکس خود منبع (در صورت وجود) با ذکر لینک منبع
@@ -59,8 +60,6 @@ rss_feeds:
   - {name: Nielsen Norman Group, url: "https://www.nngroup.com/feed/rss/"}
   - {name: Yu-kai Chou Octalysis, url: "https://yukaichou.com/feed/"}
   - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
-  - {name: Behavioural Insights Team, url: "https://www.bi.team/feed/"}
-  - {name: ideas42, url: "https://www.ideas42.org/feed/"}
   - {name: Duolingo Blog, url: "https://blog.duolingo.com/rss/"}
 
 paths:
