@@ -112,7 +112,7 @@ def assemble(w, cand, cfg, cta_idx=0):
     parts = [f"<b>{esc(w['headline'])}</b>"] + [body_html(p) for p in w["paragraphs"]]
     parts.append(f'🔗 منبع: <a href="{esc(cand.url)}">{esc(short_label(cand))}</a>')
     variants = cfg["cta_variants"]
-    cta = anchor_html(variants[cta_idx % len(variants)], cfg["channel_link"])
+    cta = f'<a href="{esc(cfg["channel_link"])}">{esc(variants[cta_idx % len(variants)])}</a>'  # کل جمله لینک است
     li = anchor_html(cfg["linkedin"]["text"], cfg["linkedin"]["url"])
     parts.append(f'<b>{cfg["channel_emoji"]} {cta}</b>\n<b>{cfg["linkedin"]["emoji"]} {li}</b>')
     return "\n\n".join(parts)
@@ -177,7 +177,7 @@ def write_and_check(d, cand, text, full, avail):
 
 
 def all_buttons(cfg, button):
-    return [b for b in (button, cfg["buttons"]["support"]) if b]
+    return [button] if button else []  # فقط یک دکمه زیر هر پست
 
 
 def publish(d, post_html, image_path, buttons=None, chat=None):

@@ -159,7 +159,7 @@ def test_layout_links_and_button(env):
     cfg, _, _ = env
     post = assemble(good_writer(), CAND, cfg)
     assert post.startswith("<b>🎁")
-    assert '<b>📣 هر روز یک یافته‌ی کاربردی از دنیای رفتار و انگیزش، در <a href="https://t.me/Gamification_club">Gamification Club</a></b>' in post
+    assert '<b>📣 <a href="https://t.me/Gamification_club">تحلیل‌های کاربردی گیمیفیکیشن و علوم رفتاری، هر روز در کانال Gamification Club</a></b>' in post
     assert "<b>۱۲ درصد</b>" in post and "**" not in post
     assert '<b>💼 من رو توی <a href="https://linkedin.com/in/moeinmoareknezhad">لینکدین</a> هم دنبال کن</b>' in post
     assert '🔗 منبع: <a href="https://doi.org/10.1/x">J Test</a>' in post
@@ -184,7 +184,7 @@ def test_end_to_end_live_publishes_once(env):
     r = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r["status"] == "published" and len(tg.sent) == 1
     assert tg.sent[0][0] == "photo" and plain_len(tg.sent[0][1]) <= 1024
-    assert [b["url"] for b in tg.sent[0][2]] == ["https://moarek.ir/b/", "https://t.me/moarekContact"]
+    assert [b["url"] for b in tg.sent[0][2]] == ["https://moarek.ir/b/"]  # فقط یک دکمه
     # اجرای دوباره در همان روز: انتشار تکراری نباید رخ دهد
     r2 = run(deps(cfg, db, FakeLLM(), tg, [CAND]), "live", workdir=str(tmp))
     assert r2["status"] == "skipped_already_posted" and len(tg.sent) == 1
@@ -285,7 +285,7 @@ def test_daily_timeline(env):
     assert go(17, 32)["status"] == "prepared_waiting" and llm.calls == calls  # دوباره تولید نمی‌شود
     r = go(18, 32)                                                  # سر ساعت: انتشار
     assert r["status"] == "published" and len(tg.sent) == 1
-    assert tg.sent[0][2][1]["url"] == "https://t.me/moarekContact"
+    assert len(tg.sent[0][2]) == 1
     assert go(19, 2)["status"] == "already_posted" and len(tg.sent) == 1
 
 
