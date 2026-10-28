@@ -1,5 +1,5 @@
 {
- "started": "2026-10-28T07:31:57+00:00",
+ "started": "2026-10-28T07:38:30+00:00",
  "mode": "dry",
  "sources": {
   "OpenAlex": {
@@ -36,33 +36,33 @@
   }
  },
  "collected": 239,
- "new": 238,
+ "new": 237,
  "scored": 40,
  "rejected": [
   {
-   "title": "AI Patient Adherence: The Motivation Problem Reminders Miss",
-   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 480, 53; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+   "title": "Beyond Points and Stories: Gamification That Motivates From Within",
+   "reason": "نقل‌قول‌های پشتیبان ادعاها در متن منبع پیدا نشدند؛ فقط ادعاهایی بنویس که عبارت دقیقشان در منبع هست"
   }
  ],
  "selected": {
-  "title": "Gamification and Game-Based Learning in Interprofessional Health Professions Education: A Systematic Review and Narrative Synthesis.",
-  "url": "https://doi.org/10.2147/amep.s646247",
+  "title": "The psychological mechanisms of fitness app gamification in promoting college students' exercise engagement: Multiple mediating roles of basic psychological needs and self-efficacy.",
+  "url": "https://doi.org/10.1016/j.actpsy.2026.107999",
   "venue": "",
-  "headline": "🩺 بازی‌سازی تو آموزش کادر درمان چقدر توی بالین موثره؟",
-  "post_chars": 587,
-  "evidence_type": "review",
+  "headline": "📱 چرا بعضی اپ‌های ورزشی واقعاً ما رو پای ورزش نگه می‌دارن؟",
+  "post_chars": 564,
+  "evidence_type": "survey study using structural equation modeling",
   "full_text": false
  },
- "score": 89.5,
- "reason": "Comprehensive systematic review of gamification and game-based learning outcomes.",
+ "score": 88.5,
+ "reason": "Directly links fitness app gamification affordances to basic psychological needs and self-efficacy via structural equation modeling.",
  "image": "card",
  "status": "dry_run_ok",
  "errors": [],
  "button": {
-  "text": "🎮 یادگیری اصول گیمیفیکیشن",
+  "text": "🎯 یادگیری اصول گیمیفیکیشن",
   "url": "https://moarek.ir/gamification-training/"
  },
- "finished": "2026-10-28T07:32:57+00:00",
- "seconds": 60,
- "llm_calls": 8
+ "finished": "2026-10-28T07:39:20+00:00",
+ "seconds": 50,
+ "llm_calls": 7
 }
