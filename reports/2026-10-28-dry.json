@@ -1,5 +1,5 @@
 {
- "started": "2026-10-28T07:28:48+00:00",
+ "started": "2026-10-28T07:31:57+00:00",
  "mode": "dry",
  "sources": {
   "OpenAlex": {
@@ -37,27 +37,32 @@
  },
  "collected": 239,
  "new": 238,
- "scored": 20,
- "rejected": [],
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "AI Patient Adherence: The Motivation Problem Reminders Miss",
+   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 480, 53; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+  }
+ ],
  "selected": {
-  "title": "When Compliance Workarounds Backfire",
-  "url": "https://sloanreview.mit.edu/article/when-compliance-workarounds-backfire/",
-  "venue": "MIT Sloan Management Review",
-  "headline": "⚠️ تله‌ی قانونی شرکت‌های پلتفرمی؛ وقتی دور زدن قانون کار دستشان می‌دهد",
-  "post_chars": 646,
-  "evidence_type": "case study",
-  "full_text": true
+  "title": "Gamification and Game-Based Learning in Interprofessional Health Professions Education: A Systematic Review and Narrative Synthesis.",
+  "url": "https://doi.org/10.2147/amep.s646247",
+  "venue": "",
+  "headline": "🩺 بازی‌سازی تو آموزش کادر درمان چقدر توی بالین موثره؟",
+  "post_chars": 587,
+  "evidence_type": "review",
+  "full_text": false
  },
- "score": 87.5,
- "reason": "Exceptional MIT SMR piece on how compliance workarounds and algorithmic management backfire.",
- "image": "source",
+ "score": 89.5,
+ "reason": "Comprehensive systematic review of gamification and game-based learning outcomes.",
+ "image": "card",
  "status": "dry_run_ok",
  "errors": [],
  "button": {
-  "text": "📌 خدمات مشاوره معرک",
-  "url": "https://moarek.ir/consulting/"
+  "text": "🎮 یادگیری اصول گیمیفیکیشن",
+  "url": "https://moarek.ir/gamification-training/"
  },
- "finished": "2026-10-28T07:30:11+00:00",
- "seconds": 82,
- "llm_calls": 4
+ "finished": "2026-10-28T07:32:57+00:00",
+ "seconds": 60,
+ "llm_calls": 8
 }
