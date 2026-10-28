@@ -1,5 +1,5 @@
 {
- "started": "2026-10-28T07:01:19+00:00",
+ "started": "2026-10-28T07:28:48+00:00",
  "mode": "dry",
  "sources": {
   "OpenAlex": {
@@ -40,20 +40,24 @@
  "scored": 20,
  "rejected": [],
  "selected": {
-  "title": "Human in the Loop Jobs: Designing Work People Want (2026)",
-  "url": "https://yukaichou.com/gamification-analysis/human-in-the-loop-jobs/",
-  "venue": "Yu-kai Chou Octalysis",
-  "headline": "طراحی انگیزشی نقش‌های نظارت بر هوش مصنوعی",
-  "post_chars": 747,
-  "evidence_type": "expert framework and synthesis",
+  "title": "When Compliance Workarounds Backfire",
+  "url": "https://sloanreview.mit.edu/article/when-compliance-workarounds-backfire/",
+  "venue": "MIT Sloan Management Review",
+  "headline": "⚠️ تله‌ی قانونی شرکت‌های پلتفرمی؛ وقتی دور زدن قانون کار دستشان می‌دهد",
+  "post_chars": 646,
+  "evidence_type": "case study",
   "full_text": true
  },
- "score": 83.5,
- "reason": "Yu-kai Chou addressing human-in-the-loop job design using feedback, progression, and ownership; perfect match for employee engagement.",
+ "score": 87.5,
+ "reason": "Exceptional MIT SMR piece on how compliance workarounds and algorithmic management backfire.",
  "image": "source",
  "status": "dry_run_ok",
  "errors": [],
- "finished": "2026-10-28T07:09:34+00:00",
- "seconds": 495,
- "llm_calls": 13
+ "button": {
+  "text": "📌 خدمات مشاوره معرک",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-10-28T07:30:11+00:00",
+ "seconds": 82,
+ "llm_calls": 4
 }
