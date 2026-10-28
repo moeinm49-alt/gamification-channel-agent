@@ -40,6 +40,10 @@ def _tick(d, st, workdir):
     today = local.date().isoformat()
     post_now = bool(st.get("post_now"))
 
+    start = cfg["schedule"].get("start_date")
+    if start and today < start and not post_now:
+        d.log(f"[زمان‌بندی] شروع انتشار خودکار از {start}")
+        return {"status": "not_started"}
     if st["paused"]:
         d.log("[زمان‌بندی] انتشار متوقف است (/resume)")
         return {"status": "paused"}

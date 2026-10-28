@@ -98,6 +98,7 @@ class FakeTG:
 def env(tmp_path):
     cfg = load_config()
     cfg["_root"] = str(pathlib.Path(__file__).resolve().parent.parent)
+    cfg["schedule"] = dict(cfg["schedule"], start_date="")
     cfg["paths"] = dict(cfg["paths"], reports=str(tmp_path / "rep"), settings=str(tmp_path / "settings.json"),
                         ready_dir=str(tmp_path / "ready"))
     db = DB(str(tmp_path / "t.db"))
@@ -333,3 +334,11 @@ def test_stale_ready_post_expires_next_day(env):
     nxt = at(17, 2) + dt.timedelta(days=1)
     tick(deps(cfg, db, FakeLLM(), tg, [], nxt), workdir=str(tmp))
     assert db.ready_post() is None
+
+
+def test_start_date_blocks_early_days(env):
+    cfg, db, tmp = env
+    cfg["schedule"]["start_date"] = "2026-10-29"
+    tg = FakeTG()
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
+    assert r["status"] == "not_started" and tg.sent == []
