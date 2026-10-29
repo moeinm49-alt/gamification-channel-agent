@@ -1,0 +1,64 @@
+{
+ "started": "2026-10-29T17:20:46+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 25,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 30,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 0,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 228,
+ "new": 226,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "The AI Upskilling Program People Actually Finish (2026)",
+  "url": "https://yukaichou.com/gamification-analysis/ai-upskilling-program/",
+  "venue": "Yu-kai Chou Octalysis",
+  "headline": "📉 چرا کورس‌های آموزشی آنلاین بی‌سر و صدا رها میشن؟",
+  "post_chars": 744,
+  "evidence_type": "review",
+  "full_text": true
+ },
+ "score": 90.5,
+ "reason": "Tackles low completion rates in online training and provides behavioral design patterns for upskilling programs.",
+ "image": "source",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 7,
+ "button": {
+  "text": "✍️ مقاله‌های کاربردی گیمیفیکیشن",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-10-29T17:22:52+00:00",
+ "seconds": 125,
+ "llm_calls": 4
+}
