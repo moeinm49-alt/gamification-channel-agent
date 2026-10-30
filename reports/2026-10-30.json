@@ -1,0 +1,64 @@
+{
+ "started": "2026-10-30T16:57:57+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 30,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 237,
+ "new": 234,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "AI Adoption Telemetry: What Usage Dashboards Miss (2026)",
+  "url": "https://yukaichou.com/gamification-analysis/ai-adoption-telemetry/",
+  "venue": "Yu-kai Chou Octalysis",
+  "headline": "📊 داشبورد سنجش هوش مصنوعی‌تون بهتون دروغ می‌گه",
+  "post_chars": 860,
+  "evidence_type": "field study and randomized trial",
+  "full_text": true
+ },
+ "score": 88.5,
+ "reason": "Yu-kai Chou analyses reading production signals for motivation instead of surveys, highly relevant.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 8,
+ "button": {
+  "text": "🤝 مشاوره‌ی گیمیفیکیشن برای کسب‌وکارت",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-10-30T16:59:58+00:00",
+ "seconds": 120,
+ "llm_calls": 5
+}
