@@ -37,11 +37,11 @@ def good_writer():
 class FakeLLM:
     calls = 0
 
-    def __init__(self, writer=None, verdict="pass", scores=None):
-        self.writer, self.verdict, self.scores = writer or good_writer(), verdict, scores
+    def __init__(self, writer=None, verdict="pass", scores=None, polish=None):
+        self.writer, self.verdict, self.scores, self.polish = writer or good_writer(), verdict, scores, polish
         self.seen = []
 
-    def generate_json(self, prompt, system="", temperature=0.3):
+    def generate_json(self, prompt, system="", temperature=0.3, models=None):
         self.calls += 1
         self.seen.append(prompt)
         if "Score candidate sources" in prompt:
@@ -50,6 +50,11 @@ class FakeLLM:
                                               "overlap_with_previous": 1, "enough_text": True, "reason": "ok"}]}
         if "fact-checker" in prompt:
             return {"verdict": self.verdict, "issues": [] if self.verdict == "pass" else [{"type": "hype", "detail": "bad"}]}
+        if "copy editor" in prompt:
+            if self.polish is not None:
+                return self.polish
+            w = self.writer
+            return {"headline": w.get("headline", ""), "paragraphs": w.get("paragraphs", []), "changes": []}
         return self.writer
 
 
@@ -342,3 +347,39 @@ def test_start_date_blocks_early_days(env):
     tg = FakeTG()
     r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
     assert r["status"] == "not_started" and tg.sent == []
+
+
+# ---------------- کیفیت زبان ----------------
+from agent.textutil import fa_fix, repeated_words
+
+
+def test_fa_fix_typography():
+    out = fa_fix("چیز دیگه ای می کنه؛ کتاب ها رو بزرگ تر نمی خونه. ۰.۴۷۵ و كتاب")
+    assert "دیگه\u200cای" in out and "می\u200cکنه" in out and "کتاب\u200cها" in out
+    assert "بزرگ\u200cتر" in out and "نمی\u200cخونه" in out and "۰٫۴۷۵" in out and "ك" not in out
+    assert fa_fix("، ای کاش") == "، ای کاش"  # «ای» ندا دست نمی‌خورد
+
+
+def test_repetition_and_long_sentence_qc(env):
+    cfg, _, _ = env
+    w = good_writer()
+    w["paragraphs"][0] += " نشون نشون نشون نشون"
+    assert any("تکراری" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+    w = good_writer()
+    w["paragraphs"] = [" ".join(["کلمه"] * 40) + "."]
+    assert any("بلند" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+
+
+def test_polish_applied_when_safe_and_rejected_when_it_changes_numbers(env):
+    cfg, db, tmp = env
+    good = good_writer()
+    better = {"headline": "🎁 پاداش غیرمنتظره چی کار می‌کنه؟", "paragraphs": [p.replace("توی", "تو") for p in good["paragraphs"]], "changes": ["x"]}
+    tg = FakeTG()
+    r = run(deps(cfg, db, FakeLLM(polish=better), tg, [CAND]), "live", workdir=str(tmp))
+    assert r["status"] == "published" and "چی کار می‌کنه" in tg.sent[0][1]
+    # ویراستاری که عدد را عوض کند نادیده گرفته می‌شود
+    cfg2, db2, tmp2 = env[0], DB(str(tmp / "t2.db")), tmp
+    bad = dict(better, paragraphs=[p.replace("۱۲", "۹۹") for p in good["paragraphs"]])
+    tg2 = FakeTG()
+    r2 = run(deps(cfg2, db2, FakeLLM(polish=bad), tg2, [CAND]), "live", workdir=str(tmp2))
+    assert r2["status"] == "published" and "۹۹" not in tg2.sent[0][1] and "۱۲" in tg2.sent[0][1]

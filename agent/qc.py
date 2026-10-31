@@ -1,6 +1,6 @@
 import re
 
-from .textutil import EMOJI_BASE, SourceIndex, numbers_in, plain_len, strip_html
+from .textutil import EMOJI_BASE, SourceIndex, numbers_in, plain_len, repeated_words, strip_html
 
 CLICHES = ["نکته جالب اینجاست", "در دنیای امروز", "با ما همراه باشید", "برای مطالب بیشتر", "عضو شوید",
            "کلیک کنید", "انقلابی", "باورنکردنی", "راز موفقیت", "شگفت‌انگیز", "شگفت انگیز", "امروزه"]
@@ -31,6 +31,16 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
     nb = len(re.findall(r"\*\*(.+?)\*\*", " ".join(str(p) for p in writer.get("paragraphs", []))))
     if nb < 1 or nb > 5:
         issues.append("چند کلمه‌ی کلیدی (۲ تا ۴ مورد) داخل متن با **دو ستاره** بولد شود")
+    rep = repeated_words(body)
+    if rep:
+        issues.append(f"کلمه‌ی تکراری زیاد: {', '.join(rep)}؛ با کلمه‌های دیگر جایگزین کن")
+    for para in writer.get("paragraphs", []):
+        for sent in re.split(r"[.؟!؛\n]", str(para)):
+            if len(sent.split()) > 32:
+                issues.append("جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن")
+                break
+    if re.search(r"[A-Za-z]{3,}[ء-غف-يپچژکگی]|[ء-غف-يپچژکگی][A-Za-z]{3,}", body):
+        issues.append("کلمه‌ی فارسی و لاتین به‌هم چسبیده؛ فاصله یا نیم‌فاصله‌ی درست بگذار")
     if "#" in plain:
         issues.append("هشتگ نباید باشد")
     for c in CLICHES:

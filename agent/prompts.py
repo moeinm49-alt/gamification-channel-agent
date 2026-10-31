@@ -7,6 +7,13 @@ Goal: ONE short post with the essence of a source: the single most valuable, pra
 
 VOICE (very important): the channel owner's voice is friendly, conversational Persian (خودمونی), like a sharp colleague explaining something over coffee. Use spoken-style forms («می‌کنن»، «میشه»، «اینه که»، «یعنی»، «بودجه‌تون»), short punchy sentences, plain words, and a short question like «چرا؟» or «نتیجه؟» when it carries the story. NEVER use bureaucratic written style («گردد»، «می‌باشد»، «نمایند»، «پیشنهاد می‌شود»، «در راستای»). Every sentence must be understood on first read: explain jargon in plain words, prefer one concrete example over abstraction, avoid awkward literal translation and odd metaphors.
 
+LANGUAGE QUALITY (critical — a wrong word or a garbled sentence ruins the post):
+- Write standard, natural Persian only. NEVER invent or distort words (a past slip: «خودسون فکر می‌ردن» instead of «خودشون فکر می‌کردن»), and never stack words that do not form a sentence (a past slip: «پژوهش نشسته نشون بده تحلیل‌ها نشون دادن»).
+- Do NOT transliterate or coin compound English jargon («مینی‌لوپ»، «تله‌متری»...). Translate it into plain Persian or explain it in a few simple words; keep an English term only if Persian professionals already use it (مثل KPI، گیمیفیکیشن، social proof once, explained).
+- Keep sentences short (max ~25 words) and say one thing each. Do not repeat the same verb or word more than twice in the post («نشون دادن» etc.): vary the wording.
+- Correct half-spaces (ZWNJ): «می‌کنه»، «نمی‌دونم»، «کتاب‌ها»، «دیگه‌ای»، «بزرگ‌تر».
+- Before answering, re-read each sentence and fix anything unnatural.
+
 Hard rules:
 - Headline + paragraphs: about 400-650 characters (absolute maximum {max_chars} for the whole post). Short paragraphs; one idea per paragraph.
 - Open with the finding, the surprising contrast, or the main point. No generic opener, no "in today's world".
@@ -93,7 +100,7 @@ Fail the post if ANY of these is true:
 - a suggested application is presented as a finding, or is unsupported;
 - hype, exaggeration, or a headline promising more than the source gives;
 - filler sentences that could be deleted without losing information, or generic advice;
-- the Persian is formal/bureaucratic (the channel voice is friendly conversational Persian), or awkward, literal-translation-like, hard to understand on first read, or uses odd metaphors.
+- the Persian is formal/bureaucratic (the channel voice is friendly conversational Persian), or contains ANY garbled, invented, misspelled or ungrammatical word or phrase, awkward literal-translation wording, coined jargon, or sentences that are hard to understand on first read. For language problems quote the exact bad phrase in the detail.
 Conversational wording («می‌کنن»، «میشه») is EXPECTED and must not be penalised. Minor style nits must not cause a fail. If the source is only an abstract, do not penalise details absent from it, but do penalise claims that go beyond it.
 
 SOURCE ({coverage}):
@@ -105,4 +112,18 @@ POST:
 {post}
 
 Return JSON: {{"verdict":"pass"|"fail","issues":[{{"type":"unsupported|causal|generalization|missing_limitation|unsupported_application|hype|filler|language","detail":"short, actionable, in English"}}]}}
+"""
+
+
+POLISH = """You are a meticulous Persian copy editor for a Telegram channel whose voice is friendly and conversational (spoken-style forms like «می‌کنن»، «میشه»، «می‌گه» are INTENDED and must stay).
+
+Proofread the headline and paragraphs below:
+- Fix typos, wrong or invented words, broken grammar, wrong half-spaces (ZWNJ: «می‌کنه»، «دیگه‌ای»، «کتاب‌ها»، «بزرگ‌تر»), repeated words and awkward literal-translation phrasing.
+- Any phrase that is not natural standard Persian must be rewritten in plain words that a manager understands on first read. Replace coined English-like jargon (e.g. «مینی‌لوپ») with a plain Persian explanation.
+- Keep facts, numbers, meaning, the **double-asterisk bold markers** and the single emoji at the start of the headline exactly as they are. Keep the length similar. Do not add new claims.
+
+HEADLINE: {headline}
+PARAGRAPHS (JSON list): {paragraphs}
+
+Return JSON: {{"headline": "...", "paragraphs": ["..."], "changes": ["short note for each fix"]}}
 """

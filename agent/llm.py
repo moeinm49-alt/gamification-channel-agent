@@ -101,13 +101,17 @@ class Gemini:
                     return None
         return None
 
-    def generate_json(self, prompt, system="", temperature=0.3):
+    def generate_json(self, prompt, system="", temperature=0.3, models=None):
+        """models: ترتیب ترجیحی مدل‌ها برای همین فراخوانی؛ بقیه‌ی مدل‌ها به‌عنوان جایگزین بعدش می‌آیند."""
         last = ""
         t0 = time.time()
+        pref = list(models or [])
         for _round in range(2):
-            for model in [m for m in self.models if m not in self.dead]:
+            order = pref + [m for m in self.models if m not in pref]
+            for model in [m for m in order if m not in self.dead]:
                 p = prompt
                 attempt = 0
+                flaky = 0
                 while attempt < 3:
                     if time.time() - t0 > 300:
                         raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
@@ -146,6 +150,9 @@ class Gemini:
                         continue
                     if status >= 500 or status == 599:
                         last = f"HTTP {status}"
+                        flaky += 1
+                        if flaky >= 2:  # دو بار پشت‌سرهم کند/خراب بود؛ سراغ مدل بعدی
+                            break
                         self.sleep(5 * attempt)
                         continue
                     last = f"HTTP {status} {model}"

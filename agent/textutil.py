@@ -71,3 +71,23 @@ class SourceIndex:
         grams = [tuple(toks[i:i + 4]) for i in range(len(toks) - 3)]
         hit = sum(1 for g in grams if g in self.grams)
         return hit / len(grams) >= min_ratio
+
+
+_FA = r"[ء-غف-يپچژکگی]"
+_END = r"(?=[\s،.؟!؛:)»\"]|$)"
+
+
+def fa_fix(s):
+    """اصلاح‌های مطمئن نگارشی: ی/ک عربی، نیم‌فاصله‌ی «می‌»، «ها»، «ای»، «تر»، اعشار فارسی."""
+    s = (s or "").replace("ي", "ی").replace("ك", "ک")
+    s = re.sub(rf"(?<!{_FA})(ن?می) (?={_FA})", "\\1\u200c", s)
+    s = re.sub(rf"(?<={_FA}) (ها|های|ای|تر|ترین|تری){_END}", "\u200c\\1", s)
+    s = re.sub(r"(?<=[۰-۹])\.(?=[۰-۹])", "٫", s)
+    return s
+
+
+def repeated_words(s, min_len=3, limit=4):
+    from collections import Counter
+    words = re.findall(r"[ء-غف-يپچژکگی\u200c]{%d,}" % min_len, s or "")
+    stop = {"این", "برای", "کرد", "رو", "که", "توی", "یعنی", "اما", "ولی", "هم", "باید", "خیلی", "یک"}
+    return sorted(w for w, c in Counter(words).items() if c >= limit and w not in stop)

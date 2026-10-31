@@ -11,6 +11,7 @@ from typing import Any, Callable
 from . import prompts
 from .images import pick_image
 from .llm import LLMError
+from .textutil import EMOJI_BASE, fa_fix, numbers_in
 from .qc import deterministic_qc
 from .sources import Candidate
 from .telegram import TelegramError
@@ -67,7 +68,7 @@ def score_candidates(d, cands):
         items = [f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
                  f"Text: {(c.abstract or '')[:450]}" for i, c in enumerate(chunk)]
         try:
-            out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2)
+            out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2, models=d.cfg.get("models_fast"))
         except LLMError:
             if scored:  # دسته‌ی اول موفق بوده؛ با همان ادامه می‌دهیم
                 d.log("[امتیاز] دسته‌ی بعدی ناموفق بود؛ با نتایج موجود ادامه می‌دهیم")
@@ -136,6 +137,39 @@ def choose_button(w, avail, db):
     return {"text": texts[db.count_button_uses(page["url"]) % len(texts)], "url": page["url"]}
 
 
+def autofix(w):
+    w["headline"] = fa_fix(w["headline"])
+    w["paragraphs"] = [fa_fix(p) for p in w["paragraphs"]]
+    return w
+
+
+def polish(d, w):
+    """ویراستاری نهایی با مدل قوی؛ اگر عددها یا ساختار تغییر کند، نتیجه کنار گذاشته می‌شود."""
+    try:
+        out = d.llm.generate_json(prompts.POLISH.format(
+            headline=w["headline"], paragraphs=json.dumps(w["paragraphs"], ensure_ascii=False)),
+            temperature=0.2, models=d.cfg.get("models_quality"))
+    except LLMError as e:
+        d.log(f"[ویرایش] مدل در دسترس نبود؛ بدون ویراستاری ادامه می‌دهیم ({e})")
+        return w
+    if isinstance(out, list):
+        out = next((x for x in out if isinstance(x, dict)), None)
+    try:
+        head, paras = str(out["headline"]).strip(), [str(p).strip() for p in out["paragraphs"]]
+    except (KeyError, TypeError):
+        return w
+    old = " ".join(w["paragraphs"]) + " " + w["headline"]
+    new = " ".join(paras) + " " + head
+    if (not head or not paras or numbers_in(old) != numbers_in(new)
+            or new.count("**") < 2 or not EMOJI_BASE.match(head)):
+        d.log("[ویرایش] نتیجه‌ی ویراستاری ساختار/عددها را تغییر داد؛ نادیده گرفته شد")
+        return w
+    if out.get("changes"):
+        d.log(f"[ویرایش] {len(out['changes'])} اصلاح: {'; '.join(map(str, out['changes']))[:300]}")
+    w = dict(w, headline=head, paragraphs=paras)
+    return autofix(w)
+
+
 def write_and_check(d, cand, text, full, avail):
     cfg = d.cfg
     pages = "\n".join(f"[{i}] {p['title']} — {p.get('desc', '')[:90]}" for i, p in enumerate(avail))
@@ -146,7 +180,7 @@ def write_and_check(d, cand, text, full, avail):
             style=prompts.STYLE.format(max_chars=cfg["post_max_chars"]), title=cand.title,
             venue=cand.venue or cand.source_name, published=cand.published, authors=cand.authors,
             coverage=coverage, text=text, feedback=feedback, samples=prompts.SAMPLES, pages=pages)
-        w = d.llm.generate_json(prompt, temperature=0.4)
+        w = d.llm.generate_json(prompt, temperature=0.4, models=cfg.get("models_quality"))
         if isinstance(w, list):
             w = next((x for x in w if isinstance(x, dict)), None)
         if isinstance(w, dict) and w.get("worth_posting") is False:
@@ -155,11 +189,13 @@ def write_and_check(d, cand, text, full, avail):
             last_issues = ["خروجی نویسنده ساختار معتبر نداشت"]
             feedback = "\nYour previous output had an invalid structure. Follow the JSON schema exactly.\n"
             continue
+        w = polish(d, autofix(w))
         post = assemble(w, cand, cfg, d.db.published_count())
         issues = deterministic_qc(post, w, cand, text, cfg)
         qc = {"deterministic": issues}
         if not issues:
-            v = d.llm.generate_json(prompts.VERIFY.format(coverage=coverage, text=text, post=post), temperature=0.1)
+            v = d.llm.generate_json(prompts.VERIFY.format(coverage=coverage, text=text, post=post), temperature=0.1,
+                                    models=cfg.get("models_quality"))
             if isinstance(v, list):
                 v = next((x for x in v if isinstance(x, dict)), {})
             if not isinstance(v, dict):
