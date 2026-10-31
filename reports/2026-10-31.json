@@ -1,0 +1,69 @@
+{
+ "started": "2026-10-31T15:49:55+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 30,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 237,
+ "new": 233,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Behavioral Choice Architecture in Digital Finance: A Comparative Bibliometric Review of Nudges, Sludges, and Responsible FinTech Across Emerging and Developed Economies",
+   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 67; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+  }
+ ],
+ "selected": {
+  "title": "The Role of Behavioral Economics in Understanding Consumer Decision-Making in Digital Marketplaces",
+  "url": "https://doi.org/10.69481/rbeuc",
+  "venue": "",
+  "headline": "🛒 کدوم اصل رفتاری توی خریدهای آنلاین از همه قوی‌تر عمل می‌کنه؟",
+  "post_chars": 775,
+  "evidence_type": "sequential explanatory mixed-methods design",
+  "full_text": false
+ },
+ "score": 83.5,
+ "reason": "Directly hits core behavioural economics principles in digital marketplaces with actionable concepts for marketers and product designers.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 9,
+ "button": {
+  "text": "📚 کتابخانه‌ی گیمیفیکیشن معرک",
+  "url": "https://moarek.ir/product-category/library/"
+ },
+ "finished": "2026-10-31T15:50:44+00:00",
+ "seconds": 48,
+ "llm_calls": 6
+}
