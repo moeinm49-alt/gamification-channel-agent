@@ -1,0 +1,66 @@
+{
+ "started": "2026-10-31T18:15:12+00:00",
+ "mode": "dry",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 30,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 0,
+   "errors": [
+    "RuntimeError: HTTP 403"
+   ]
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 227,
+ "new": 221,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Gamification and the Development of Metacognitive Processes: A Systematic Literature Review",
+   "reason": "چند کلمه‌ی کلیدی (۲ تا ۴ مورد) داخل متن با **دو ستاره** بولد شود; کلمه‌ی تکراری زیاد: کاربر؛ با کلمه‌های دیگر جایگزین کن"
+  },
+  {
+   "title": "AI and Relationships: The Comfort Is Real, the Connection Is One-Sided",
+   "reason": "کلمه‌ی تکراری زیاد: مصنوعی, هوش؛ با کلمه‌های دیگر جایگزین کن"
+  },
+  {
+   "title": "Sweet Success: Using Candy Land to Explore Gamification in Medical Education",
+   "reason": "جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 15"
+  }
+ ],
+ "selected": null,
+ "score": null,
+ "reason": "مطالب برتر در کنترل کیفیت یا کفایت متن رد شدند",
+ "image": "none",
+ "status": "no_post",
+ "errors": [],
+ "finished": "2026-10-31T18:19:30+00:00",
+ "seconds": 257,
+ "llm_calls": 28
+}
