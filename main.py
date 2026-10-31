@@ -16,7 +16,7 @@ from agent.telegram import Telegram
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping"])
+    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest"])
     ap.add_argument("--force", action="store_true", help="حتی اگر امروز پست منتشر شده، دوباره اجرا کن")
     args = ap.parse_args()
 
@@ -27,6 +27,30 @@ def main():
         print("alert_chat set:", bool(tg.alert_chat))
         mid = tg.send_message(tg.alert_chat, "تست اتصال: اگر این پیام را می‌بینی، پیش‌نمایش‌ها هم به همین چت می‌رسند.")
         print("sent message id:", mid)
+        return 0
+
+    if args.task == "langtest":  # سنجش ویراستاری روی دو نمونه‌ی ضعیف
+        from agent import prompts
+        samples = [
+            ("📊 داشبورد سنجش هوش مصنوعی‌تون بهتون دروغ می‌گه",
+             ["خیلی از سازمان‌ها فکر می‌کنن با بالا رفتن آمار استفاده از هوش مصنوعی، کارها داره عمیق‌تر پیش می‌ره؛ ولی داده‌ها چیز دیگه ای می‌گن. در یک بررسی روی کارمندان مشخص شد که هرچند بیشتر افراد ابزارها رو لمس می‌کنن، اما اکثریت اون‌ها کمتر از ۱ درصد از ساعات کاری‌شون رو عملاً داخل این ابزارها می‌گذرانن.",
+              "ماجرا وقتی جالب‌تر می‌شه که بدونیم در یک آزمایش تصادفی، توسعه‌دهندگان با وجود استفاده از هوش مصنوعی ۱۹ درصد کندتر کار رو تموم کردن، در حالی که خودسون فکر می‌ردن ۲۰ درصد سریع‌تر شدن!",
+              "به نظرم داشبوردها دارن نمایشی از کار رو ثبت می‌کنن، نه عمق واقعی رو. وقتی خروجی دیگه معیار درستی برای تلاش انسانی نیست، باید دید کاربر چقدر واقعاً درگیر مینی‌لوپ‌های کاری می‌شه."]),
+            ("🛒 کدوم اصل رفتاری توی خریدهای آنلاین از همه قوی‌تر عمل می‌کنه؟",
+             ["توی یک تحقیق جدید روی ۱۶۳ جوان شاغل، مشخص شد که اثبات اجتماعی یا همون social proof قوی‌ترین و تاثیرگذارترین اصل رفتاری روی تصمیم‌گیری خرید آدم‌هاست. بعد از اون هم گریز از ضرر و بار بیش از حد انتخاب قرار دارن.",
+              "نکته مهم اینه که پژوهش نشسته نشون بده تحلیل‌ها نشون دادن مصرف‌کننده‌ها همزمان با راحتی خرید، آسیب‌پذیری بالایی نسبت به خرید تکانشی و از دست رفتن استقلال دارن. یعنی طراحی رفتاری پلتفرم‌ها هم مزیت داره و هم ریسک جدی."])]
+        import json as _j
+        llm = Gemini(env("GEMINI_API_KEY"), cfg["models"], log=print)
+        res = []
+        for head, paras in samples:
+            for label, models in (("lite", cfg["models_fast"]), ("quality", cfg["models_quality"])):
+                try:
+                    out = llm.generate_json(prompts.POLISH.format(headline=head, paragraphs=_j.dumps(paras, ensure_ascii=False)),
+                                            temperature=0.2, models=models)
+                except Exception as e:
+                    out = {"error": str(e)[:200]}
+                res.append({"model_pref": label, "out": out})
+        pathlib.Path(ROOT, cfg["paths"]["reports"], "lang_test.json").write_text(_j.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
         return 0
 
     if args.task == "discover":  # پیدا کردن شناسه‌ی چت خصوصی برای دریافت هشدارها
