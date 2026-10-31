@@ -1,75 +1,56 @@
-18:15:13 [منبع] OpenAlex: 7 مطلب (0.9s)
-18:15:15 [منبع] Europe PMC: 8 مطلب (1.2s)
-18:15:16 [منبع] OpenAlex: 8 مطلب (1.1s)
-18:15:17 [منبع] Europe PMC: 8 مطلب (0.7s)
-18:15:18 [منبع] OpenAlex: 8 مطلب (0.4s)
-18:15:19 [منبع] Europe PMC: 0 مطلب (0.7s)
-18:15:20 [منبع] OpenAlex: 8 مطلب (0.4s)
-18:15:21 [منبع] Europe PMC: 1 مطلب (0.8s)
-18:15:21 [منبع] OpenAlex: 8 مطلب (0.3s)
-18:15:22 [منبع] Europe PMC: 0 مطلب (0.4s)
-18:15:23 [منبع] OpenAlex: 8 مطلب (0.2s)
-18:15:24 [منبع] Europe PMC: 1 مطلب (0.8s)
-18:15:24 [منبع] OpenAlex: 8 مطلب (0.3s)
-18:15:25 [منبع] Europe PMC: 0 مطلب (0.4s)
-18:15:26 [منبع] OpenAlex: 8 مطلب (0.4s)
-18:15:26 [منبع] Europe PMC: 0 مطلب (0.5s)
-18:15:27 [منبع] OpenAlex: 8 مطلب (0.7s)
-18:15:28 [منبع] Europe PMC: 5 مطلب (0.4s)
-18:15:29 [منبع] OpenAlex: 8 مطلب (0.5s)
-18:15:30 [منبع] Europe PMC: 0 مطلب (0.7s)
-18:15:31 [منبع] OpenAlex: 8 مطلب (0.4s)
-18:15:32 [منبع] Europe PMC: 1 مطلب (0.6s)
-18:15:32 [منبع] OpenAlex: 8 مطلب (0.2s)
-18:15:33 [منبع] Europe PMC: 0 مطلب (0.8s)
-18:15:34 [منبع] Crossref: 6 مطلب (0.2s)
-18:15:34 [منبع] Crossref: 8 مطلب (0.3s)
-18:15:36 [منبع] Crossref: 8 مطلب (1.8s)
-18:15:37 [منبع] Crossref: 8 مطلب (0.3s)
-18:15:41 [منبع] Behavioral Scientist خطا: HTTP 403
-18:15:42 [منبع] Nielsen Norman Group: 20 مطلب (0.4s)
-18:15:42 [منبع] Yu-kai Chou Octalysis: 25 مطلب (0.1s)
-18:15:42 [منبع] MIT Sloan Management Review: 20 مطلب (0.2s)
-18:15:43 [منبع] Duolingo Blog: 15 مطلب (0.2s)
-18:15:49 [مدل] gemini-flash-lite-latest → HTTP 200 (5.6s) 
-18:15:55 [مدل] gemini-flash-lite-latest → HTTP 200 (5.7s) 
-18:16:01 [مدل] gemini-3.5-flash → HTTP 200 (6.4s) 
-18:16:04 [مدل] gemini-3.5-flash → HTTP 200 (3.3s) 
-18:16:04 [ویرایش] 4 اصلاح: اصلاح نیم‌فاصله در «نشان میده» و «دقیقاً» و افزودن تنوین به «دقیقاً» و «حتماً» برای رعایت درست‌نویسی.; افزودن واژه «رفتار» به «خود کاربر» در پاراگراف اول برای شفاف‌تر شدن و روانی جمله.; جایگزینی واژه فرانسوی/فرنگی «مکانیزم» با واژه فارسی و روان «سازوکار» در پاراگراف دوم.; تغییر ترکیب مبهم «مکانیزم د
-18:16:13 [مدل] gemini-3.5-flash → HTTP 200 (8.6s) 
-18:16:15 [مدل] gemini-3.5-flash → HTTP 200 (2.4s) 
-18:16:15 [ویرایش] 2 اصلاح: تغییر واژه غیرفارسی/گرته‌برداری‌شده «مکانیزم» به واژه دقیق و متداول «سازوکار» در پاراگراف سوم.; حفظ دقیق لحن محاوره‌ای، تمامی نشانه‌های برجسته‌سازی (**bold**)، ایموجی و ساختار متن اصلی مطابق دستورالعمل.
-18:16:20 [مدل] gemini-3.5-flash → HTTP 200 (4.4s) 
-18:16:23 [مدل] gemini-3.5-flash → HTTP 200 (3.3s) 
-18:16:23 [ویرایش] 5 اصلاح: اصلاح نیم‌فاصله‌ها در افعال و واژه‌ها (می‌شه -> نمی‌شه، می‌دن، می‌بره، آدم‌ها).; جایگزینی ترکیب گرته‌برداری‌شده و مبهم «خالق مدل» با «طراح مدل».; جایگزینی کلمه انگلیسی غیرمعمول «انگیزه» با معادل دقیق‌تر فارسی آن در مدل اکتاگون و روان‌سازی عبارت «جوهره اصلی اینه که...» به «اصل قضیه اینه که...».; اصلا
-18:16:24 [مدل] gemini-3.5-flash → HTTP 503 (1.0s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:16:30 [مدل] gemini-3.5-flash → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:16:31 [مدل] gemini-flash-latest → HTTP 503 (0.9s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:16:36 [مدل] gemini-flash-latest → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:16:38 [مدل] gemini-flash-lite-latest → HTTP 200 (2.1s) 
-18:16:38 [مدل] gemini-3.5-flash → HTTP 429 (0.2s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerMinutePerProjectPerModel-FreeTier | retryDelay=21s
-18:17:05 [مدل] gemini-3.5-flash → HTTP 200 (3.6s) 
-18:17:05 [ویرایش] 8 اصلاح: اصلاح تیتر: «خالی از لطفن» به «خالی از لطف نیستن» تغییر کرد تا با معنی مثبت متن همخوانی داشته باشد.; اصلاح تعبیر «انگیزهٔ پنجم اکتاولیس» به «انگیزانندهٔ پنجم مدل اکتاولیس» (Core Drive 5 in Octalysis framework) برای روان‌تر شدن و درک بهتر مدیران.; اصلاح نیم‌فاصله در «انگیزهٔ» / «انگیزانندهٔ».; تغییر 
-18:17:09 [مدل] gemini-3.5-flash → HTTP 200 (4.2s) 
-18:17:09 [مدل] gemini-3.5-flash → HTTP 429 (0.1s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerDayPerProjectPerModel-FreeTier | retryDelay=45770s
-18:17:09 [مدل] سهمیه‌ی روزانه‌ی gemini-3.5-flash تمام شده؛ مدل بعدی
-18:17:09 [مدل] gemini-flash-latest → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:17:15 [مدل] gemini-flash-latest → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:17:16 [مدل] gemini-flash-lite-latest → HTTP 200 (1.4s) 
-18:17:16 [ویرایش] 3 اصلاح: اصلاح غلط املایی «چاکی» به «چاپی»; روان‌سازی عبارت «گیمیفای‌شده» به «بازی‌وارسازی‌شده» یا معادل روان‌تر آن; اصلاح «مطالعه» به «بررسی» و «مکانیک‌های بازی» به «ابزارهای بازی» برای فهم بهتر مدیران
-18:17:17 [مدل] gemini-flash-latest → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:17:22 [مدل] gemini-flash-latest → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:17:24 [مدل] gemini-flash-lite-latest → HTTP 200 (2.1s) 
-18:17:26 [مدل] gemini-flash-lite-latest → HTTP 200 (2.2s) 
-18:17:27 [مدل] gemini-flash-latest → HTTP 429 (0.2s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerMinutePerProjectPerModel-FreeTier | retryDelay=32s
-18:18:04 [مدل] gemini-flash-latest → HTTP 503 (3.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
-18:19:29 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
-18:19:30 [مدل] gemini-flash-lite-latest → HTTP 200 (1.1s) 
-18:19:30 [ویرایش] 2 اصلاح: متن از نظر نگارشی بررسی و نیم‌فاصله‌ها اصلاح شدند.; لحن صمیمی و گفتاری متن حفظ شد.
-18:19:30 گزارش اجرا (dry): no_post
-منابع: 8 | یافت‌شده: 227 | جدید: 221 | امتیازدهی‌شده: 40 | ردشده: 3
-دلیل: مطالب برتر در کنترل کیفیت یا کفایت متن رد شدند
-رد: Gamification and the Development of Metacognitive Processes: ← چند کلمه‌ی کلیدی (۲ تا ۴ مورد) داخل متن با **دو ستاره** بولد شود; کلمه‌ی تکراری زیاد: کاربر؛ با کلمه‌های دیگر جایگزین کن
-رد: AI and Relationships: The Comfort Is Real, the Connection Is ← کلمه‌ی تکراری زیاد: مصنوعی, هوش؛ با کلمه‌های دیگر جایگزین کن
-رد: Sweet Success: Using Candy Land to Explore Gamification in M ← جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 15
-منابع دارای خطا: Behavioral Scientist
+18:23:37 [منبع] OpenAlex: 7 مطلب (0.2s)
+18:23:38 [منبع] Europe PMC: 8 مطلب (0.9s)
+18:23:39 [منبع] OpenAlex: 8 مطلب (0.2s)
+18:23:40 [منبع] Europe PMC: 8 مطلب (0.7s)
+18:23:41 [منبع] OpenAlex: 8 مطلب (0.6s)
+18:23:41 [منبع] Europe PMC: 0 مطلب (0.5s)
+18:23:42 [منبع] OpenAlex: 8 مطلب (0.2s)
+18:23:43 [منبع] Europe PMC: 1 مطلب (0.7s)
+18:23:44 [منبع] OpenAlex: 8 مطلب (0.5s)
+18:23:44 [منبع] Europe PMC: 0 مطلب (0.4s)
+18:23:45 [منبع] OpenAlex: 8 مطلب (0.2s)
+18:23:46 [منبع] Europe PMC: 1 مطلب (0.8s)
+18:23:47 [منبع] OpenAlex: 8 مطلب (0.3s)
+18:23:47 [منبع] Europe PMC: 0 مطلب (0.5s)
+18:23:48 [منبع] OpenAlex: 8 مطلب (0.3s)
+18:23:49 [منبع] Europe PMC: 0 مطلب (0.4s)
+18:23:50 [منبع] OpenAlex: 8 مطلب (0.5s)
+18:23:50 [منبع] Europe PMC: 5 مطلب (0.4s)
+18:23:51 [منبع] OpenAlex: 8 مطلب (0.3s)
+18:23:52 [منبع] Europe PMC: 0 مطلب (0.4s)
+18:23:52 [منبع] OpenAlex: 8 مطلب (0.3s)
+18:23:53 [منبع] Europe PMC: 1 مطلب (0.4s)
+18:23:53 [منبع] OpenAlex: 8 مطلب (0.2s)
+18:23:54 [منبع] Europe PMC: 0 مطلب (0.5s)
+18:23:55 [منبع] Crossref: 6 مطلب (0.3s)
+18:23:55 [منبع] Crossref: 8 مطلب (0.2s)
+18:23:57 [منبع] Crossref: 8 مطلب (1.8s)
+18:23:59 [منبع] Crossref: 8 مطلب (1.7s)
+18:24:00 [منبع] Behavioral Scientist: 10 مطلب (0.4s)
+18:24:01 [منبع] Nielsen Norman Group: 20 مطلب (0.4s)
+18:24:01 [منبع] Yu-kai Chou Octalysis: 25 مطلب (0.1s)
+18:24:02 [منبع] MIT Sloan Management Review: 20 مطلب (0.2s)
+18:24:02 [منبع] Duolingo Blog: 15 مطلب (0.3s)
+18:24:08 [مدل] gemini-flash-lite-latest → HTTP 200 (5.7s) 
+18:24:14 [مدل] gemini-flash-lite-latest → HTTP 200 (5.6s) 
+18:24:19 [مدل] gemini-flash-lite-latest → HTTP 200 (5.5s) 
+18:24:21 [مدل] gemini-3.5-flash → HTTP 503 (1.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+18:24:26 [مدل] gemini-3.5-flash → HTTP 429 (0.1s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerDayPerProjectPerModel-FreeTier | retryDelay=45333s
+18:24:26 [مدل] سهمیه‌ی روزانه‌ی gemini-3.5-flash تمام شده؛ مدل بعدی
+18:24:29 [مدل] gemini-flash-latest → HTTP 503 (2.8s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+18:25:49 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
+18:25:51 [مدل] gemini-flash-lite-latest → HTTP 200 (2.0s) 
+18:25:54 [مدل] gemini-flash-latest → HTTP 503 (2.8s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+18:26:01 [مدل] gemini-flash-latest → HTTP 503 (2.2s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+18:26:03 [مدل] gemini-flash-lite-latest → HTTP 200 (1.1s) 
+18:26:03 [ویرایش] 3 اصلاح: روان‌تر کردن عنوان و حذف کلمات اضافی;  اصلاح نشانه‌گذاری‌ها و تبدیل «ده» به «ده» در فعل «نشون می‌ده»;  اصلاح نیم‌فاصله‌ها و یکدست‌سازی لحن گفتگو
+18:26:05 [مدل] gemini-flash-latest → HTTP 503 (2.9s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+18:27:26 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
+18:27:26 [مدل] gemini-flash-lite-latest → HTTP 200 (0.7s) 
+18:27:27 [تلگرام] پیش‌نمایش ارسال شد (message_id=37, photo)
+18:27:27 گزارش اجرا (dry): dry_run_ok
+منابع: 8 | یافت‌شده: 237 | جدید: 228 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🌱 حس خوب و رفتار واقعی مصرف‌کننده (امتیاز 84.0)
+https://doi.org/10.1111/pops.70216
+تصویر: card | متن کامل: False
+دلیل: A strong field experiment testing real-world consumer choices using 'warm glow' emotional incentives.
