@@ -120,6 +120,7 @@ POLISH = """You are a meticulous Persian copy editor for a Telegram channel whos
 Proofread the headline and paragraphs below:
 - Fix typos, wrong or invented words, broken grammar, wrong half-spaces (ZWNJ: «می‌کنه»، «دیگه‌ای»، «کتاب‌ها»، «بزرگ‌تر»), repeated words and awkward literal-translation phrasing.
 - Any phrase that is not natural standard Persian must be rewritten in plain words that a manager understands on first read. Replace coined English-like jargon (e.g. «مینی‌لوپ») with a plain Persian explanation.
+- NEVER swap a technical term for a different concept (keep «خرید تکانشی»، «گریز از ضرر»، «استقلال»، «همبستگی» etc.); only fix errors and awkwardness, and explain jargon where needed. Do not delete the limitation sentence.
 - Keep facts, numbers, meaning, the **double-asterisk bold markers** and the single emoji at the start of the headline exactly as they are. Keep the length similar. Do not add new claims.
 
 HEADLINE: {headline}
