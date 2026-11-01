@@ -46,6 +46,9 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
     for c in CLICHES:
         if c in plain:
             issues.append(f"عبارت کلیشه‌ای/اغراق‌آمیز «{c}» حذف شود")
+    weak = re.findall(r"\S+‌اند\b|می‌(?:شود|کند|دهد|تواند|گردد)\b|\bدارد\b|\bنیازمند\b|\bصرفاً\b", body)
+    if len(weak) >= 3:
+        issues.append(f"لحن ترکیبی/رسمی (مثلاً {'، '.join(sorted(set(weak))[:4])}): همه‌ی متن را یک‌دست خودمونی کن")
     for f in FORMAL:
         if f in body:
             issues.append(f"لحن رسمی: عبارت «{f}» را خودمونی بنویس")

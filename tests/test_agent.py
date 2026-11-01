@@ -427,3 +427,10 @@ def test_recent_source_is_penalised_so_other_type_wins(env):
     later = NOW + dt.timedelta(days=1)
     r = run(deps(cfg, db, FakeLLM(scores=scores), tg, [other_blog, CAND], later), "live", workdir=str(tmp))
     assert r["status"] == "published" and r["selected"]["url"] == CAND.url  # مقاله‌ی علمی، نه وبلاگ تکراری
+
+
+def test_mixed_formal_register_is_flagged(env):
+    cfg, _, _ = env
+    w = good_writer()
+    w["paragraphs"][0] += " نویسندگان معرفی کرده‌اند که این روش نیازمند بررسی است و تأثیر دارد و می‌شود دید."
+    assert any("لحن" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
