@@ -105,6 +105,12 @@ class DB:
     def last_published(self):
         return self.con.execute("SELECT headline, published_at FROM posts WHERE status='published' ORDER BY id DESC LIMIT 1").fetchone()
 
+    def recent_sources(self, n=3):
+        rows = self.con.execute(
+            "SELECT a.source_name, a.source_type, a.venue FROM posts p JOIN articles a ON a.id=p.article_id "
+            "WHERE p.status='published' ORDER BY p.id DESC LIMIT ?", (n,)).fetchall()
+        return [dict(r) for r in rows]
+
     def recent_button_urls(self, n=6):
         rows = self.con.execute("SELECT button_url FROM posts WHERE status='published' ORDER BY id DESC LIMIT ?", (n,)).fetchall()
         return [r["button_url"] for r in rows if r["button_url"]]

@@ -392,3 +392,38 @@ def test_button_texts_are_short_enough():
         assert len(page["texts"]) >= 4
         for t in page["texts"]:
             assert len(t) <= limit, (t, len(t))
+
+
+# ---------------- تنوع منبع و املای نام‌ها ----------------
+from agent.pipeline import autofix, diversify
+
+
+def test_glossary_fixes_name_spelling(env):
+    cfg, _, _ = env
+    w = autofix({"headline": "🎯 تحلیل یوکای چاو", "paragraphs": ["بر اساس نظر یوکای چاو و یو کای چو"]}, cfg)
+    assert "یوکای چو" in w["headline"] and "چاو" not in w["headline"] + w["paragraphs"][0]
+
+
+def test_diversify_balances_papers_and_blogs():
+    mk = lambda i, t, n: Candidate(url=f"u{i}", title=f"t{i}", source_name=n, source_type=t)
+    cands = [mk(i, "blog", "A") for i in range(10)] + [mk(100 + i, "paper", "OpenAlex") for i in range(10)]
+    out = diversify(cands, 8)
+    assert sum(c.source_type == "paper" for c in out) == 4
+
+
+def test_recent_source_is_penalised_so_other_type_wins(env):
+    cfg, db, tmp = env
+    blog = Candidate(url="https://yk.example/post", title="Blog post about rewards", source_name="Yu-kai Chou Octalysis blog",
+                     source_type="blog", abstract=SRC, published="2026-10-20", venue="Yu-kai Chou Octalysis")
+    aid = db.upsert_article(blog.to_dict(), NOW)  # قبلاً از همین وبلاگ پست منتشر شده
+    db.set_article(aid, status="published")
+    db.add_post(aid, "h", "f", "<b>x</b>", {}, "published", NOW)
+    other_blog = Candidate(url="https://yk.example/post2", title="Another post on loyalty", source_name="Yu-kai Chou Octalysis blog",
+                           source_type="blog", abstract=SRC, published="2026-10-21", venue="Yu-kai Chou Octalysis")
+    same = {"source_type": "x", "mechanism": "reward timing", "relevance": 9, "credibility": 9, "depth_rarity": 9,
+            "practical": 9, "shareability": 9, "overlap_with_previous": 1, "enough_text": True, "reason": "ok"}
+    scores = {"items": [dict(same, id=0), dict(same, id=1)]}
+    tg = FakeTG()
+    later = NOW + dt.timedelta(days=1)
+    r = run(deps(cfg, db, FakeLLM(scores=scores), tg, [other_blog, CAND], later), "live", workdir=str(tmp))
+    assert r["status"] == "published" and r["selected"]["url"] == CAND.url  # مقاله‌ی علمی، نه وبلاگ تکراری

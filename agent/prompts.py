@@ -12,6 +12,8 @@ LANGUAGE QUALITY (critical — a wrong word or a garbled sentence ruins the post
 - Do NOT transliterate or coin compound English jargon («مینی‌لوپ»، «تله‌متری»...). Translate it into plain Persian or explain it in a few simple words; keep an English term only if Persian professionals already use it (مثل KPI، گیمیفیکیشن، social proof once, explained).
 - Keep sentences short (max ~25 words) and say one thing each. Do not repeat the same verb or word more than twice in the post («نشون دادن» etc.): vary the wording.
 - Correct half-spaces (ZWNJ): «می‌کنه»، «نمی‌دونم»، «کتاب‌ها»، «دیگه‌ای»، «بزرگ‌تر».
+- NAMES: write people's and organisations' names exactly as in this glossary when they appear; for any name NOT in the glossary keep the original Latin spelling instead of guessing a Persian transliteration (a past slip: «یوکای چاو» instead of «یوکای چو»). Glossary:
+{glossary}
 - Before answering, re-read each sentence and fix anything unnatural.
 
 Hard rules:

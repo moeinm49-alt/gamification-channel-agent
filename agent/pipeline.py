@@ -42,18 +42,33 @@ def weighted_total(item, weights, image_score):
     return round(sum(w * max(0, min(10, float(s[k]))) / 10 for k, w in weights.items()), 1)
 
 
+def src_key(source_type, source_name, venue):
+    """کلید منبع برای تنوع: مقاله‌ها با نام مجله، وبلاگ‌ها با نام وب‌سایت."""
+    return venue if source_type == "paper" and venue else source_name
+
+
 def diversify(cands, cap):
-    """انتخاب متنوع: به‌نوبت از هر منبع، تا یک منبع همه‌ی سهمیه را نگیرد."""
-    groups = {}
-    for c in cands:
-        groups.setdefault(c.source_name, []).append(c)
-    for g in groups.values():
-        random.shuffle(g)
-    out = []
-    while len(out) < cap and any(groups.values()):
+    """انتخاب متنوع: نیمی مقاله‌ی علمی، نیمی وبلاگ/تحلیل، و در هر دسته به‌نوبت از همه‌ی منابع."""
+    def round_robin(items):
+        groups = {}
+        for c in items:
+            groups.setdefault(c.source_name, []).append(c)
         for g in groups.values():
-            if g and len(out) < cap:
-                out.append(g.pop())
+            random.shuffle(g)
+        out = []
+        while any(groups.values()):
+            for g in groups.values():
+                if g:
+                    out.append(g.pop())
+        return out
+
+    papers = round_robin([c for c in cands if c.source_type == "paper"])
+    blogs = round_robin([c for c in cands if c.source_type != "paper"])
+    out = []
+    while len(out) < cap and (papers or blogs):
+        for lst in (papers, blogs):
+            if lst and len(out) < cap:
+                out.append(lst.pop(0))
     return out
 
 
@@ -137,9 +152,16 @@ def choose_button(w, avail, db):
     return {"text": texts[db.count_button_uses(page["url"]) % len(texts)], "url": page["url"]}
 
 
-def autofix(w):
-    w["headline"] = fa_fix(w["headline"])
-    w["paragraphs"] = [fa_fix(p) for p in w["paragraphs"]]
+def apply_glossary(text, cfg):
+    for g in cfg.get("glossary", []):
+        for bad in g.get("wrong", []):
+            text = text.replace(bad, g["fa"])
+    return text
+
+
+def autofix(w, cfg):
+    w["headline"] = apply_glossary(fa_fix(w["headline"]), cfg)
+    w["paragraphs"] = [apply_glossary(fa_fix(p), cfg) for p in w["paragraphs"]]
     return w
 
 
@@ -167,7 +189,7 @@ def polish(d, w):
     if out.get("changes"):
         d.log(f"[ویرایش] {len(out['changes'])} اصلاح: {'; '.join(map(str, out['changes']))[:300]}")
     w = dict(w, headline=head, paragraphs=paras)
-    return autofix(w)
+    return autofix(w, d.cfg)
 
 
 def write_and_check(d, cand, text, full, avail):
@@ -177,7 +199,7 @@ def write_and_check(d, cand, text, full, avail):
     feedback, last_issues = "", []
     for _ in range(int(cfg.get("writes_per_article", 2))):
         prompt = prompts.WRITE.format(
-            style=prompts.STYLE.format(max_chars=cfg["post_max_chars"]), title=cand.title,
+            style=prompts.STYLE.format(max_chars=cfg["post_max_chars"], glossary="\n".join(f"- {g['en']} → {g['fa']}" for g in cfg.get("glossary", []))), title=cand.title,
             venue=cand.venue or cand.source_name, published=cand.published, authors=cand.authors,
             coverage=coverage, text=text, feedback=feedback, samples=prompts.SAMPLES, pages=pages)
         w = d.llm.generate_json(prompt, temperature=0.4, models=cfg.get("models_quality"))
@@ -189,7 +211,7 @@ def write_and_check(d, cand, text, full, avail):
             last_issues = ["خروجی نویسنده ساختار معتبر نداشت"]
             feedback = "\nYour previous output had an invalid structure. Follow the JSON schema exactly.\n"
             continue
-        w = polish(d, autofix(w))
+        w = polish(d, autofix(w, cfg))
         post = assemble(w, cand, cfg, d.db.published_count())
         issues = deterministic_qc(post, w, cand, text, cfg)
         qc = {"deterministic": issues}
@@ -259,18 +281,27 @@ def run(d, mode="live", force=False, workdir=None):
     report["scored"] = len(scored)
     g = cfg["gates"]
     ranked = []
+    recent_src = db.recent_sources(3)
     for i, it in scored.items():
         c = pool[i]
-        total = weighted_total(it, cfg["weights"], 10 if c.image_url else 6)
+        raw = weighted_total(it, cfg["weights"], 10 if c.image_url else 6)
+        # تنوع منبع: تکرار منبع در ۳ پست آخر جریمه دارد و عوض شدن نوع منبع (مقاله ↔ وبلاگ) امتیاز می‌گیرد
+        key = src_key(c.source_type, c.source_name, c.venue)
+        recent_keys = [src_key(r["source_type"], r["source_name"], r["venue"]) for r in recent_src]
+        total = raw - cfg.get("repeat_source_penalty", 20) * recent_keys.count(key)
+        if recent_src and c.source_type != recent_src[0]["source_type"]:
+            total += cfg.get("switch_type_bonus", 6)
+        total = round(total, 1)
         gate_fail = (it["relevance"] < g["min_relevance"] or it["credibility"] < g["min_credibility"]
                      or it["overlap_with_previous"] > g["max_overlap_with_previous"] or not it.get("enough_text", True))
         aid = db.upsert_article(c.to_dict(), started)
+        it["raw_score"] = raw
         db.set_article(aid, score=total, score_json=json.dumps(it, ensure_ascii=False), status="scored")
         if total >= cfg["min_score"] and not gate_fail:
             ranked.append((total, i, aid, it))
     ranked.sort(key=lambda x: -x[0])
     if not ranked:
-        best = max((weighted_total(it, cfg["weights"], 6) for it in scored.values()), default=0)
+        best = max((it.get("raw_score", 0) for it in scored.values()), default=0)
         report["status"] = "no_post"
         report["reason"] = f"هیچ مطلبی به حد نصاب {cfg['min_score']} نرسید (بهترین امتیاز: {best})"
         return finish(d, report, started)
