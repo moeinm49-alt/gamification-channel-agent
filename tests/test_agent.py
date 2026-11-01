@@ -434,3 +434,10 @@ def test_mixed_formal_register_is_flagged(env):
     w = good_writer()
     w["paragraphs"][0] += " نویسندگان معرفی کرده‌اند که این روش نیازمند بررسی است و تأثیر دارد و می‌شود دید."
     assert any("لحن" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+
+
+def test_absolute_words_are_flagged(env):
+    cfg, _, _ = env
+    w = good_writer()
+    w["paragraphs"][0] += " این روش همیشه جواب میده."
+    assert any("قطعی" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
