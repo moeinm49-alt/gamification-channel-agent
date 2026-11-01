@@ -383,3 +383,12 @@ def test_polish_applied_when_safe_and_rejected_when_it_changes_numbers(env):
     tg2 = FakeTG()
     r2 = run(deps(cfg2, db2, FakeLLM(polish=bad), tg2, [CAND]), "live", workdir=str(tmp2))
     assert r2["status"] == "published" and "۹۹" not in tg2.sent[0][1] and "۱۲" in tg2.sent[0][1]
+
+
+def test_button_texts_are_short_enough():
+    cfg = load_config()
+    limit = cfg["buttons"]["max_chars"]
+    for page in cfg["buttons"]["pages"]:
+        assert len(page["texts"]) >= 4
+        for t in page["texts"]:
+            assert len(t) <= limit, (t, len(t))
