@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-01T17:13:09+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 239,
+ "new": 231,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Gamification in the Age of Agentic AI: My Talk at AI & Digital Bridge 2026 in Astana",
+  "url": "https://yukaichou.com/authority/ai-digital-bridge-2026-astana-agentic-ai-gamification/",
+  "venue": "Yu-kai Chou Octalysis",
+  "headline": "🤖 وقتی هوش مصنوعی و گیمیفیکیشن به هم می‌رسند",
+  "post_chars": 729,
+  "evidence_type": "case study",
+  "full_text": true
+ },
+ "score": 82.5,
+ "reason": "Directly addresses why motivation is the scarce input in the age of agentic AI.",
+ "image": "source",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 11,
+ "button": {
+  "text": "🎓 آموزش گیمیفیکیشن",
+  "url": "https://moarek.ir/gamification-training/"
+ },
+ "finished": "2026-11-01T17:14:42+00:00",
+ "seconds": 92,
+ "llm_calls": 5
+}
