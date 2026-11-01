@@ -1,5 +1,5 @@
 {
- "started": "2026-11-01T18:48:44+00:00",
+ "started": "2026-11-01T18:53:07+00:00",
  "mode": "dry",
  "sources": {
   "OpenAlex": {
@@ -40,16 +40,16 @@
  "scored": 40,
  "rejected": [],
  "selected": {
-  "title": "Beyond nudging: affective paternalism and affect architecture for impactful behavioral public policy",
-  "url": "https://doi.org/10.3389/frbhe.2026.1866819",
-  "venue": "Frontiers in Behavioral Economics",
-  "headline": "🎯 چرا تغییر رفتار کاربر با نادج همیشه جواب نمی‌ده؟",
-  "post_chars": 892,
-  "evidence_type": "theoretical framework",
+  "title": "Nudging Inclusion: Nudges That Reduce Effort Increase Pronoun Sharing",
+  "url": "https://doi.org/10.1111/jasp.70090",
+  "venue": "Journal of Applied Social Psychology",
+  "headline": "✍️ چطور مشارکت در رفتارهای داوطلبانه رو بیشتر کنیم؟",
+  "post_chars": 903,
+  "evidence_type": "experimental design across two studies",
   "full_text": false
  },
- "score": 94.5,
- "reason": "Extremely relevant piece moving beyond cognitive nudging to target affect and feelings in choice architecture.",
+ "score": 90.5,
+ "reason": "Examines how reducing friction through choice architecture nudges pronoun sharing among majorities.",
  "image": "card",
  "status": "dry_run_ok",
  "errors": [],
@@ -57,7 +57,7 @@
   "text": "💡 تحلیل‌های بیشتر",
   "url": "https://moarek.ir/blog/"
  },
- "finished": "2026-11-01T18:49:52+00:00",
- "seconds": 67,
- "llm_calls": 8
+ "finished": "2026-11-01T18:54:25+00:00",
+ "seconds": 78,
+ "llm_calls": 11
 }
