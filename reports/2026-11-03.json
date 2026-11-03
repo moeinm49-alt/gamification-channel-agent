@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-03T11:43:12+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 238,
+ "new": 229,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Gamification Elements in Physical Activity Interventions: Scoping Review and Taxonomy Based on the Octalysis Framework.",
+  "url": "https://doi.org/10.2196/85804",
+  "venue": "",
+  "headline": "📊 چرا بیشتر اپ‌های ورزشی روی دو انگیزه تکراری گیر کردن؟",
+  "post_chars": 664,
+  "evidence_type": "scoping review of randomized controlled trials",
+  "full_text": true
+ },
+ "score": 87.0,
+ "reason": "Examines gamification elements through the Octalysis framework to boost long-term habit formation.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 14,
+ "button": {
+  "text": "💡 تحلیل‌های بیشتر",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-03T11:47:57+00:00",
+ "seconds": 284,
+ "llm_calls": 17
+}
