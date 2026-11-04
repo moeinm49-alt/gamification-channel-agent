@@ -103,7 +103,7 @@ class FakeTG:
 def env(tmp_path):
     cfg = load_config()
     cfg["_root"] = str(pathlib.Path(__file__).resolve().parent.parent)
-    cfg["schedule"] = dict(cfg["schedule"], start_date="")
+    cfg["schedule"] = dict(cfg["schedule"], start_date="", post_time="18:30", prepare_lead_min=90)
     cfg["paths"] = dict(cfg["paths"], reports=str(tmp_path / "rep"), settings=str(tmp_path / "settings.json"),
                         ready_dir=str(tmp_path / "ready"))
     db = DB(str(tmp_path / "t.db"))
@@ -441,3 +441,14 @@ def test_absolute_words_are_flagged(env):
     w = good_writer()
     w["paragraphs"][0] += " این روش همیشه جواب میده."
     assert any("قطعی" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
+
+
+def test_real_config_midday_tick_posts_even_if_github_is_late(env):
+    """با ساعت واقعی تنظیمات (۱۲:۰۰): اجرای دیرهنگام گیت‌هاب ساعت ۱۴:۱۵ هم همان روز پست را منتشر می‌کند."""
+    cfg, db, tmp = env
+    cfg["schedule"] = dict(load_config()["schedule"], start_date="")
+    assert cfg["schedule"]["post_time"] == "12:00"
+    tg = FakeTG()
+    assert tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 17)), workdir=str(tmp))["status"] == "too_early"
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(14, 15)), workdir=str(tmp))
+    assert r["status"] == "published" and len(tg.sent) == 1
