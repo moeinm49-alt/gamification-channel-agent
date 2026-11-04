@@ -1,0 +1,72 @@
+{
+ "started": "2026-11-04T07:16:47+00:00",
+ "mode": "live",
+ "sources": {
+  "OpenAlex": {
+   "n": 95,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 238,
+ "new": 230,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Talking the talk, not walking the walk: The coevolution of overconfidence and loss aversion.",
+   "reason": "کلمه‌ی قطعی‌کننده (همیشه) بیشتر از شواهد منبع است؛ با عبارت محتاطانه‌تر (معمولاً، در این پژوهش…) عوض کن"
+  },
+  {
+   "title": "A Scoping Review of Auditory Interventions in Games and Gamification",
+   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 1169; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+  }
+ ],
+ "selected": {
+  "title": "eXtended Interactive Education (XIE): A Gamified, Psychology-Informed Pedagogical Framework for Next-Generation Learners",
+  "url": "https://doi.org/10.5281/zenodo.20899728",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "headline": "📊 جدول امتیازات زنده چطور یادگیری را تغییر می‌دهد؟",
+  "post_chars": 761,
+  "evidence_type": "field study",
+  "full_text": false
+ },
+ "score": 78.0,
+ "reason": "Directly links educational framework design with gamification mechanics and reward loops.",
+ "image": "card",
+ "status": "published",
+ "errors": [],
+ "button": {
+  "text": "🎯 طراحی اختصاصی",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-11-04T07:21:17+00:00",
+ "seconds": 270,
+ "llm_calls": 35
+}
