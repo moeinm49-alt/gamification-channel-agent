@@ -1,0 +1,60 @@
+{
+ "started": "2026-11-05T11:23:11+00:00",
+ "mode": "live",
+ "sources": {
+  "OpenAlex": {
+   "n": 32,
+   "errors": [
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429",
+    "RuntimeError: HTTP 429"
+   ]
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 176,
+ "new": 166,
+ "scored": 40,
+ "rejected": [],
+ "selected": null,
+ "score": null,
+ "reason": "مدل زبانی در دسترس نبود: سقف زمان فراخوانی مدل تمام شد (HTTP 503)",
+ "image": "none",
+ "status": "llm_unavailable",
+ "errors": [],
+ "finished": "2026-11-05T11:39:00+00:00",
+ "seconds": 949,
+ "llm_calls": 30
+}
