@@ -9,13 +9,13 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from . import prompts
-from .images import pick_image
+from .images import download_image, make_card, pick_image
 from .llm import LLMError
-from .textutil import EMOJI_BASE, fa_fix, numbers_in
-from .qc import deterministic_qc
+from .textutil import EMOJI_BASE, fa_fix, numbers_in, plain_len, strip_html
+from .qc import ABSOLUTES, FORMAL, WEAK_RE, deterministic_qc
 from .sources import Candidate
 from .telegram import TelegramError
-from .textutil import norm_title, plain_len
+from .textutil import norm_title
 
 
 @dataclass
@@ -439,3 +439,52 @@ def publish_ready(d, row):
     rep = {"status": "published", "headline": row["headline"], "message_id": mid, "published_at": now}
     (root / f"{d.now().date().isoformat()}-publish.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
     return rep
+
+
+def reserve_ok(html_text, cfg):
+    """بررسی مجدد ماشینی پیش‌نویس ذخیره‌شده با قواعد امروز (کلمه‌ی قطعی، لحن رسمی، طول)."""
+    body = strip_html(re.sub(r"<a [^>]*>.*?</a>", " ", html_text, flags=re.S))
+    if any(a in body for a in ABSOLUTES) or any(f in body for f in FORMAL):
+        return False
+    if len(re.findall(WEAK_RE, body)) >= 3:
+        return False
+    return plain_len(html_text) <= cfg["post_max_chars"]
+
+
+def publish_reserve(d):
+    """وقتی مدل زبانی در دسترس نیست: یکی از پیش‌نویس‌های قبلاً تأییدشده‌ی کنترل کیفیت را منتشر می‌کند."""
+    cfg, db = d.cfg, d.db
+    for row in db.reserve_posts():
+        text = apply_glossary(row["text_html"], cfg)
+        if not reserve_ok(text, cfg):
+            continue
+        info = json.loads(row["image_json"] or "{}")
+        out = pathlib.Path(tempfile.mkdtemp()) / "post_image.jpg"
+        path = None
+        if info.get("kind") == "source" and info.get("url") and download_image(info["url"], str(out), cfg.get("max_image_mb", 5)):
+            path = str(out)
+        if not path:
+            try:
+                headline = re.sub(r"^[^\w]+", "", strip_html(row["headline"])).strip()
+                make_card(info.get("text") or headline, row["venue"] or "", str(out),
+                          str(pathlib.Path(cfg["_root"]) / cfg["paths"]["font"]))
+                path = str(out)
+            except Exception as e:
+                d.log(f"[ذخیره] ساخت کارت تصویری ناموفق؛ بدون عکس: {e}")
+        button = None
+        page = next((p for p in cfg["buttons"]["pages"] if p["url"] == row["button_url"]), None)
+        if page:
+            texts = page["texts"]
+            button = {"text": texts[db.count_button_uses(page["url"]) % len(texts)], "url": page["url"]}
+        try:
+            mid, how = publish(d, text, path, all_buttons(cfg, button))
+        except TelegramError as e:
+            d.log(f"[ذخیره] انتشار پست ذخیره ناموفق: {e}")
+            return {"status": "publish_failed", "error": str(e)}
+        now = d.now().isoformat(timespec="seconds")
+        db.set_post(row["id"], status="published", tg_message_id=mid, published_at=now, button_url=(button or {}).get("url", ""))
+        db.set_article(row["article_id"], status="published")
+        d.log(f"[تلگرام] پست ذخیره منتشر شد (post={row['id']}, message_id={mid}, {how})")
+        d.tg.alert(f"چون مدل زبانی در دسترس نبود، یکی از پست‌های قبلاً تأییدشده منتشر شد:\n{row['headline']}")
+        return {"status": "published", "reserve": True, "headline": row["headline"], "message_id": mid}
+    return {"status": "no_reserve"}

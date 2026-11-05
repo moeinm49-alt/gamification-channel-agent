@@ -3,7 +3,7 @@ import datetime as dt
 from zoneinfo import ZoneInfo
 
 from . import control
-from .pipeline import publish_ready, run
+from .pipeline import publish_ready, publish_reserve, run
 
 
 def status_text(d, st):
@@ -82,6 +82,10 @@ def _tick(d, st, workdir):
         prep["n"] += 1
         rep = run(d, "ready", workdir=workdir)
         if rep["status"] != "prepared":
+            grace = dt.timedelta(minutes=int(cfg["schedule"].get("reserve_after_min", 90)))
+            if rep["status"] in ("llm_unavailable", "no_post") and local >= post_dt + grace:
+                d.log("[زمان‌بندی] تولید پست ممکن نشد؛ استفاده از پست ذخیره")
+                return publish_reserve(d)
             return rep  # علت و هشدار در run ثبت شده؛ اجرای بعدی دوباره تلاش می‌کند
         row = db.ready_post()
         d.tg.alert(f"پست امروز آماده شد و ساعت {st['post_time']} منتشر می‌شود:\n{row['headline']}")

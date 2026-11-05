@@ -99,6 +99,12 @@ class DB:
     def published_count(self):
         return self.con.execute("SELECT COUNT(*) c FROM posts WHERE status='published'").fetchone()["c"]
 
+    def reserve_posts(self, n=15):
+        rows = self.con.execute(
+            "SELECT p.*, a.venue AS venue FROM posts p JOIN articles a ON a.id=p.article_id "
+            "WHERE p.status IN ('dry_run','expired') AND a.status!='published' ORDER BY p.id DESC LIMIT ?", (n,)).fetchall()
+        return rows
+
     def ready_post(self):
         return self.con.execute("SELECT * FROM posts WHERE status='ready' ORDER BY id DESC LIMIT 1").fetchone()
 

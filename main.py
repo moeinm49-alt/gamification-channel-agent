@@ -17,7 +17,7 @@ from agent.telegram import Telegram
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest"])
+    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest", "reserve"])
     ap.add_argument("--force", action="store_true", help="حتی اگر امروز پست منتشر شده، دوباره اجرا کن")
     args = ap.parse_args()
 
@@ -86,7 +86,10 @@ def main():
         llm = Gemini(env("GEMINI_API_KEY"), cfg["models"], log=log)
         llm.deadline = time.time() + 22 * 60  # کل اجرا حداکثر ۲۲ دقیقه؛ بعدش تمیز تمام می‌شود و اجرای بعدی تلاش می‌کند
         d = Deps(cfg=cfg, db=db, collector=Collector(cfg, now(), log=log), llm=llm, tg=tg, now=now, log=log)
-        if args.task == "tick":
+        if args.task == "reserve":
+            from agent.pipeline import publish_reserve
+            report = publish_reserve(d)
+        elif args.task == "tick":
             report = tick(d)
         else:
             report = run(d, mode="live" if args.task == "run" else "dry", force=args.force)

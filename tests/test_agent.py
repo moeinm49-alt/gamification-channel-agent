@@ -498,3 +498,46 @@ def test_gemini_gives_up_when_budget_is_over():
     except LLMError:
         pass
     assert g.calls == 0
+
+
+# ---------------- پست ذخیره وقتی مدل زبانی خراب است ----------------
+from agent.pipeline import publish_reserve
+
+
+class DownLLM:
+    calls = 0
+
+    def generate_json(self, *a, **k):
+        raise LLMError("همه‌ی مدل‌ها ناموفق بودند (HTTP 503)")
+
+
+def test_publish_reserve_uses_a_stored_draft(env):
+    cfg, db, tmp = env
+    cfg["buttons"] = dict(cfg["buttons"], pages=CATALOG)
+    run(deps(cfg, db, FakeLLM(), FakeTG(), [CAND]), "dry", workdir=str(tmp))  # یک پیش‌نویس تأییدشده می‌سازد
+    tg = FakeTG()
+    r = publish_reserve(deps(cfg, db, DownLLM(), tg, []))
+    assert r["status"] == "published" and r.get("reserve") and len(tg.sent) == 1
+    assert [b["url"] for b in tg.sent[0][2]] == ["https://moarek.ir/b/"]
+    assert db.published_today(cfg["timezone"], NOW)
+    assert publish_reserve(deps(cfg, db, DownLLM(), FakeTG(), []))["status"] == "no_reserve"  # دوباره منتشر نمی‌شود
+
+
+def test_reserve_skips_drafts_that_fail_todays_rules(env):
+    cfg, db, tmp = env
+    w = good_writer()
+    w["paragraphs"][0] += " این روش همیشه جواب میده."
+    run(deps(cfg, db, FakeLLM(writer=w, verdict="pass"), FakeTG(), [CAND]), "dry", workdir=str(tmp))
+    # QC ماشینی «همیشه» را قبل از ذخیره رد می‌کند؛ پس پیش‌نویسی در ذخیره نیست
+    assert publish_reserve(deps(cfg, db, DownLLM(), FakeTG(), []))["status"] == "no_reserve"
+
+
+def test_tick_falls_back_to_reserve_after_grace_when_llm_is_down(env):
+    cfg, db, tmp = env
+    run(deps(cfg, db, FakeLLM(), FakeTG(), [CAND]), "dry", workdir=str(tmp))
+    tg = FakeTG()
+    d = lambda h, m: deps(cfg, db, DownLLM(), tg, [CAND], at(h, m))
+    assert tick(d(19, 2), workdir=str(tmp))["status"] == "llm_unavailable"      # هنوز زود برای ذخیره (۹۰ دقیقه بعد از ۱۸:۳۰)
+    assert tg.sent == []
+    r = tick(d(20, 5), workdir=str(tmp))
+    assert r["status"] == "published" and r.get("reserve") and len(tg.sent) == 1

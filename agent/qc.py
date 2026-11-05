@@ -5,6 +5,7 @@ from .textutil import EMOJI_BASE, SourceIndex, numbers_in, plain_len, repeated_w
 CLICHES = ["نکته جالب اینجاست", "در دنیای امروز", "با ما همراه باشید", "برای مطالب بیشتر", "عضو شوید",
            "کلیک کنید", "انقلابی", "باورنکردنی", "راز موفقیت", "شگفت‌انگیز", "شگفت انگیز", "امروزه"]
 ABSOLUTES = ["همیشه", "هرگز", "قطعاً", "قطعا", "حتماً", "حتما", "تضمین", "بدون شک", "صد در صد", "صددرصد"]
+WEAK_RE = r"\S+‌اند\b|می‌(?:شود|کند|دهد|تواند|گردد)\b|\bدارد\b|\bنیازمند\b|\bصرفاً\b"
 FORMAL = ["می‌باشد", "می باشد", "گردد", "نمایند", "در راستای", "پیشنهاد می‌شود", "بدین منظور", "لازم به ذکر"]
 
 
@@ -47,7 +48,7 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
     for c in CLICHES:
         if c in plain:
             issues.append(f"عبارت کلیشه‌ای/اغراق‌آمیز «{c}» حذف شود")
-    weak = re.findall(r"\S+‌اند\b|می‌(?:شود|کند|دهد|تواند|گردد)\b|\bدارد\b|\bنیازمند\b|\bصرفاً\b", body)
+    weak = re.findall(WEAK_RE, body)
     if len(weak) >= 3:
         issues.append(f"لحن ترکیبی/رسمی (مثلاً {'، '.join(sorted(set(weak))[:4])}): همه‌ی متن را یک‌دست خودمونی کن")
     paras_text = " ".join(str(p) for p in writer.get("paragraphs", []))
