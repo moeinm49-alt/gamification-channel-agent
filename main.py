@@ -3,6 +3,7 @@ import datetime as dt
 import json
 import pathlib
 import sys
+import time
 import traceback
 
 from agent.config import ROOT, env, load_config
@@ -82,8 +83,9 @@ def main():
 
     db = DB(str(pathlib.Path(ROOT) / cfg["paths"]["db"]))
     try:
-        d = Deps(cfg=cfg, db=db, collector=Collector(cfg, now(), log=log),
-                 llm=Gemini(env("GEMINI_API_KEY"), cfg["models"], log=log), tg=tg, now=now, log=log)
+        llm = Gemini(env("GEMINI_API_KEY"), cfg["models"], log=log)
+        llm.deadline = time.time() + 22 * 60  # کل اجرا حداکثر ۲۲ دقیقه؛ بعدش تمیز تمام می‌شود و اجرای بعدی تلاش می‌کند
+        d = Deps(cfg=cfg, db=db, collector=Collector(cfg, now(), log=log), llm=llm, tg=tg, now=now, log=log)
         if args.task == "tick":
             report = tick(d)
         else:

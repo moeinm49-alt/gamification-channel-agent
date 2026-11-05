@@ -452,3 +452,49 @@ def test_real_config_midday_tick_posts_even_if_github_is_late(env):
     assert tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 17)), workdir=str(tmp))["status"] == "too_early"
     r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(14, 15)), workdir=str(tmp))
     assert r["status"] == "published" and len(tg.sent) == 1
+
+
+# ---------------- Gemini: رفتار در شلوغی و سهمیه ----------------
+from agent.llm import Gemini, LLMError
+
+
+class ScriptedGemini(Gemini):
+    def __init__(self, script, models=("a", "b")):
+        super().__init__("k", list(models), log=lambda *_: None, sleep=lambda s: self.slept.append(s))
+        self.script, self.slept, self.seen = list(script), [], []
+        self.discovered = True
+
+    def _call(self, model, prompt, system, temperature):
+        self.calls += 1
+        self.seen.append(model)
+        status, body = self.script.pop(0)
+        return status, body
+
+
+OK = (200, {"candidates": [{"content": {"parts": [{"text": '{"x": 1}'}]}}]})
+BUSY = (503, {"error": {"message": "high demand"}})
+DAILY = (429, {"error": {"message": "quota", "details": [{"violations": [{"quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier"}]}]}})
+
+
+def test_gemini_waits_and_retries_when_overloaded():
+    g = ScriptedGemini([BUSY, BUSY, BUSY, BUSY, OK])
+    assert g.generate_json("p") == {"x": 1}
+    assert g.slept == [20, 20][:len(g.slept)] or g.slept[0] == 20  # بعد از دور اول صبر می‌کند
+    assert g.calls == 5  # هر مدل در هر دور فقط یک بار صدا زده شد
+
+
+def test_gemini_skips_model_with_daily_quota_exhausted():
+    g = ScriptedGemini([DAILY, OK])
+    assert g.generate_json("p") == {"x": 1}
+    assert "a" in g.dead and g.seen == ["a", "b"]
+
+
+def test_gemini_gives_up_when_budget_is_over():
+    g = ScriptedGemini([BUSY] * 40)
+    g.budget_s = 0.0
+    try:
+        g.generate_json("p")
+        assert False
+    except LLMError:
+        pass
+    assert g.calls == 0

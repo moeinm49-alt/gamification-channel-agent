@@ -23,6 +23,8 @@ class Gemini:
         self.sleep = sleep
         self.discovered = False
         self.calls = 0
+        self.budget_s = 600       # حداکثر زمان هر فراخوانی (شامل صبر و تلاش مجدد)
+        self.deadline = None      # زمان پایان کل اجرا (epoch)
 
     def _headers(self):
         return {"x-goog-api-key": self.key, "Content-Type": "application/json"}
@@ -101,25 +103,40 @@ class Gemini:
                     return None
         return None
 
+    def _remaining(self, t0):
+        left = self.budget_s - (time.time() - t0)
+        if self.deadline:
+            left = min(left, self.deadline - time.time())
+        return left
+
     def generate_json(self, prompt, system="", temperature=0.3, models=None):
-        """models: ترتیب ترجیحی مدل‌ها برای همین فراخوانی؛ بقیه‌ی مدل‌ها به‌عنوان جایگزین بعدش می‌آیند."""
-        last = ""
+        """هر مدل در هر دور فقط یک بار صدا زده می‌شود؛ اگر همه شلوغ بودند صبر می‌کنیم (backoff) و دور بعد تلاش می‌کنیم.
+        مدل‌هایی که سهمیه‌ی روزانه‌شان تمام شده کنار گذاشته می‌شوند. زمان کل محدود است (budget_s و deadline)."""
         t0 = time.time()
         pref = list(models or [])
-        for _round in range(2):
+        backoff = [20, 45, 90, 120]
+        rnd, last, not_found = 0, "", 0
+        while True:
             order = pref + [m for m in self.models if m not in pref]
-            for model in [m for m in order if m not in self.dead]:
+            alive = [m for m in order if m not in self.dead]
+            if not alive:
+                if not_found and not self.discovered:
+                    self._discover()  # مدل‌ها بازنشسته شده‌اند؛ فقط در این حالت مدل‌های جدید را پیدا می‌کنیم
+                    not_found = 0
+                    continue
+                break
+            overloaded = False
+            dead_before = set(self.dead)
+            for model in alive:
+                if self._remaining(t0) <= 0:
+                    raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
                 p = prompt
-                attempt = 0
-                flaky = 0
-                while attempt < 3:
-                    if time.time() - t0 > 300:
-                        raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
+                for attempt in range(2):  # دومی: فقط برای JSON نامعتبر یا حذف thinkingBudget
                     t1 = time.time()
                     status, body = self._call(model, p, system, temperature)
                     msg = self._errmsg(body) if status != 200 else ""
-                    self.log(f"[مدل] {model} → HTTP {status} ({time.time() - t1:.1f}s) {msg}")
-                    attempt += 1
+                    self.log(f"[مدل] {model} → HTTP {status} ({time.time() - t1:.1f}s) {msg[:160]}")
+                    low = msg.lower()
                     if status == 200:
                         obj = self._parse(self._text(body))
                         if obj is not None:
@@ -127,39 +144,37 @@ class Gemini:
                         last = "invalid json"
                         p = prompt + "\n\nReturn ONLY one valid JSON object, nothing else."
                         continue
-                    low = msg.lower()
-                    if status == 400 and "api key" not in low and model not in self.no_think:
-                        self.no_think.add(model)  # شاید thinkingBudget را نمی‌پذیرد؛ یک بار بدون آن تلاش می‌کنیم
-                        attempt -= 1
-                        continue
                     if status in (400, 403) and "api key" in low:
                         raise LLMError("کلید Gemini نامعتبر است یا دسترسی ندارد")
-                    if status == 429:
+                    if status == 400 and model not in self.no_think:
+                        self.no_think.add(model)
+                        continue
+                    if status == 404:
+                        self.dead.add(model)
+                        not_found += 1
+                    elif status == 429:
                         last = "rate limit"
                         flat = low.replace(" ", "").replace("_", "")
                         if "perday" in flat or "daily" in low:
-                            self.log(f"[مدل] سهمیه‌ی روزانه‌ی {model} تمام شده؛ مدل بعدی")
+                            self.log(f"[مدل] سهمیه‌ی روزانه‌ی {model} تمام شده؛ امروز کنار گذاشته شد")
                             self.dead.add(model)
-                            break
-                        m = re.search(r"retrydelay=([\d.]+)s", flat) or re.search(r"retry in ([\d.]+)s", low)
-                        wait = float(m.group(1)) + 2 if m else 25 * attempt
-                        if wait > 70:
-                            self.log(f"[مدل] {model}: انتظار {wait:.0f}s لازم است؛ مدل بعدی")
-                            break
-                        self.sleep(wait)
-                        continue
-                    if status >= 500 or status == 599:
+                        else:
+                            overloaded = True
+                    elif status >= 500 or status == 599:
                         last = f"HTTP {status}"
-                        flaky += 1
-                        if flaky >= 2:  # دو بار پشت‌سرهم کند/خراب بود؛ سراغ مدل بعدی
-                            break
-                        self.sleep(5 * attempt)
-                        continue
-                    last = f"HTTP {status} {model}"
-                    self.dead.add(model)
+                        overloaded = True
+                    else:
+                        last = f"HTTP {status} {model}"
+                        self.dead.add(model)
                     break
-            if not self.discovered:
-                self._discover()
-                continue
-            break
+            if not overloaded:
+                if self.dead == dead_before:
+                    break  # هیچ پیشرفتی نبود (مثلاً همه JSON نامعتبر دادند)؛ بی‌نهایت تلاش نمی‌کنیم
+                continue  # مدلی کنار رفت؛ حلقه‌ی بیرونی تصمیم می‌گیرد
+            wait = backoff[min(rnd, len(backoff) - 1)]
+            rnd += 1
+            if self._remaining(t0) <= wait:
+                raise LLMError(f"سقف زمان فراخوانی مدل تمام شد ({last})")
+            self.log(f"[مدل] همه‌ی مدل‌ها شلوغ‌اند؛ {wait} ثانیه صبر و دور {rnd + 1}")
+            self.sleep(wait)
         raise LLMError(f"همه‌ی مدل‌ها ناموفق بودند ({last})")
