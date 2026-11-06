@@ -331,7 +331,7 @@ def run(d, mode="live", force=False, workdir=None):
         img_path, img_info = pick_image(c, w.get("card_text") or w["headline"], cfg, workdir, cfg["_root"], db.image_used)
         report["image"] = img_info.get("kind", "none")
         pid = db.add_post(aid, w["headline"], w.get("core_finding", ""), post, qc,
-                          {"dry": "dry_run", "live": "pending", "ready": "ready"}[mode], started, img_info,
+                          {"dry": "dry_run", "live": "pending", "ready": "ready", "reserve": "dry_run"}[mode], started, img_info,
                           (button or {}).get("url", ""))
         report["selected"] = {"title": c.title, "url": c.url, "venue": c.venue, "headline": w["headline"],
                               "post_chars": plain_len(post), "evidence_type": w.get("evidence_type"),
@@ -360,6 +360,8 @@ def run(d, mode="live", force=False, workdir=None):
             db.set_post(pid, status="ready", button_json=json.dumps(button or {}, ensure_ascii=False), image_path=rel)
             report["status"] = "prepared"
             report["post_id"] = pid
+        elif mode == "reserve":
+            report["status"] = "reserve_ok"  # پیش‌نویس تأییدشده برای روزهای خرابی مدل؛ بدون پیش‌نمایش و هشدار
         else:
             report["status"] = "dry_run_ok"
             if d.tg.alert_chat:
@@ -386,11 +388,11 @@ def finish(d, report, started):
     root = pathlib.Path(d.cfg["_root"]) / d.cfg["paths"]["reports"]
     root.mkdir(parents=True, exist_ok=True)
     day = started.astimezone().date().isoformat() if False else started.date().isoformat()
-    suffix = "-dry" if report["mode"] == "dry" else ""
+    suffix = {"dry": "-dry", "reserve": "-reserve"}.get(report["mode"], "")
     (root / f"{day}{suffix}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = summarize(report)
     d.log(summary)
-    if report["status"] in ("published", "no_post", "publish_failed", "dry_run_ok", "llm_unavailable"):
+    if report["mode"] != "reserve" and report["status"] in ("published", "no_post", "publish_failed", "dry_run_ok", "llm_unavailable"):
         d.tg.alert(summary)
     return report
 

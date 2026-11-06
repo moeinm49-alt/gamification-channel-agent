@@ -3,7 +3,7 @@ import datetime as dt
 from zoneinfo import ZoneInfo
 
 from . import control
-from .pipeline import publish_ready, publish_reserve, run
+from .pipeline import apply_glossary, publish_ready, publish_reserve, reserve_ok, run
 
 
 def status_text(d, st):
@@ -19,6 +19,20 @@ def status_text(d, st):
 def _hm(s):
     h, m = s.split(":")
     return int(h), int(m)
+
+
+def top_up_reserve(d, workdir=None):
+    """بعد از انتشار موفق، اگر ذخیره‌ی پیش‌نویس‌های تأییدشده کم است، یک پیش‌نویس تازه می‌سازد."""
+    cfg = d.cfg
+    good = [r for r in d.db.reserve_posts() if reserve_ok(apply_glossary(r["text_html"], cfg), cfg)]
+    target = int(cfg["schedule"].get("reserve_target", 3))
+    if len(good) >= target:
+        return
+    d.log(f"[ذخیره] {len(good)} پیش‌نویس تأییدشده موجود است؛ ساخت یکی دیگر")
+    try:
+        run(d, "reserve", workdir=workdir)
+    except Exception as e:  # ساخت ذخیره نباید انتشار موفق امروز را خراب کند
+        d.log(f"[ذخیره] ساخت پیش‌نویس ناموفق: {type(e).__name__}: {e}")
 
 
 def tick(d, workdir=None):
@@ -91,5 +105,8 @@ def _tick(d, st, workdir):
         d.tg.alert(f"پست امروز آماده شد و ساعت {st['post_time']} منتشر می‌شود:\n{row['headline']}")
 
     if local >= post_dt or post_now:
-        return publish_ready(d, row)
+        res = publish_ready(d, row)
+        if res.get("status") == "published":
+            top_up_reserve(d, workdir)
+        return res
     return {"status": "prepared_waiting"}

@@ -541,3 +541,17 @@ def test_tick_falls_back_to_reserve_after_grace_when_llm_is_down(env):
     assert tg.sent == []
     r = tick(d(20, 5), workdir=str(tmp))
     assert r["status"] == "published" and r.get("reserve") and len(tg.sent) == 1
+
+
+def test_reserve_is_topped_up_after_a_successful_post(env):
+    cfg, db, tmp = env
+    other = Candidate(url="https://doi.org/10.2/y", title="A second study on persistence", source_name="OpenAlex",
+                      source_type="paper", abstract=SRC, published="2026-09-02", doi="10.2/y", venue="J Other")
+    tg = FakeTG()
+    scores = {"items": [{"id": i, "source_type": "primary_research", "mechanism": "reward timing", "relevance": 9, "credibility": 9,
+                         "depth_rarity": 9, "practical": 9, "shareability": 9, "overlap_with_previous": 1, "enough_text": True,
+                         "reason": "ok"} for i in (0, 1)]}
+    r = tick(deps(cfg, db, FakeLLM(scores=scores), tg, [CAND, other], at(19, 2)), workdir=str(tmp))
+    assert r["status"] == "published" and len(tg.sent) == 1          # فقط یک پست در کانال
+    reserve = db.reserve_posts()
+    assert len(reserve) == 1 and reserve[0]["status"] == "dry_run"   # و یک پیش‌نویس تازه در ذخیره
