@@ -1,0 +1,73 @@
+{
+ "started": "2026-11-08T06:30:41+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 23,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 239,
+ "new": 222,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Behavioural engagement in district heating systems: An exploratory comparison of providerand end-user perspectives on motivational tariffs and gamification",
+   "reason": "جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 80, 85, 95"
+  },
+  {
+   "title": "Social comparison and coping under pressure: technostress in gamified digital learning environments",
+   "reason": "کلمه‌ی تکراری زیاد: منفی؛ با کلمه‌های دیگر جایگزین کن; کلمه‌ی قطعی‌کننده (همیشه) بیشتر از شواهد منبع است؛ با عبارت محتاطانه‌تر (معمولاً، در این پژوهش…) عوض کن"
+  }
+ ],
+ "selected": {
+  "title": "Nudging Inclusion: Nudges That Reduce Effort Increase Pronoun Sharing",
+  "url": "https://doi.org/10.1111/jasp.70090",
+  "venue": "Journal of Applied Social Psychology",
+  "headline": "🏷 چطور ضمیرهای جنسیتی رو در محیط کار بیشتر به اشتراک بذاریم؟",
+  "post_chars": 718,
+  "evidence_type": "randomized experiment",
+  "full_text": false
+ },
+ "score": 82.5,
+ "reason": "Directly examines how reducing effort through choice architecture increases pronoun sharing and allyship.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 18,
+ "button": {
+  "text": "🔍 مقاله‌های مرتبط",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-08T06:43:27+00:00",
+ "seconds": 765,
+ "llm_calls": 24
+}
