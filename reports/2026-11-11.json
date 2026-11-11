@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-11T06:30:45+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 240,
+ "new": 216,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Beyond nudging: affective paternalism and affect architecture for impactful behavioral public policy",
+  "url": "https://doi.org/10.3389/frbhe.2026.1866819",
+  "venue": "Frontiers in Behavioral Economics",
+  "headline": "🧠 خیلی وقت‌ها مشکل رفتار آدم‌ها شناختی نیست، احساسیه!",
+  "post_chars": 750,
+  "evidence_type": "theoretical framework and case study",
+  "full_text": false
+ },
+ "score": 94.0,
+ "reason": "Advances beyond traditional cognitive nudges into affective architecture and emotional triggers.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 21,
+ "button": {
+  "text": "💼 درخواست مشاوره",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-11-11T06:35:00+00:00",
+ "seconds": 255,
+ "llm_calls": 7
+}
