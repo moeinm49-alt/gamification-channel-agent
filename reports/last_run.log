@@ -1,1 +1,56 @@
-01:41:35 [زمان‌بندی] هنوز زود است (انتشار 12:00)
+06:30:47 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:30:48 [منبع] Europe PMC: 8 مطلب (0.7s)
+06:30:49 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:50 [منبع] Europe PMC: 8 مطلب (0.6s)
+06:30:50 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:51 [منبع] Europe PMC: 0 مطلب (0.5s)
+06:30:52 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:53 [منبع] Europe PMC: 0 مطلب (0.6s)
+06:30:53 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:54 [منبع] Europe PMC: 0 مطلب (0.8s)
+06:30:55 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:56 [منبع] Europe PMC: 1 مطلب (1.1s)
+06:30:57 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:57 [منبع] Europe PMC: 1 مطلب (0.4s)
+06:30:58 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:30:59 [منبع] Europe PMC: 0 مطلب (0.4s)
+06:30:59 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:31:00 [منبع] Europe PMC: 5 مطلب (0.5s)
+06:31:00 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:31:01 [منبع] Europe PMC: 0 مطلب (0.6s)
+06:31:02 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:31:03 [منبع] Europe PMC: 1 مطلب (0.8s)
+06:31:03 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:31:04 [منبع] Europe PMC: 0 مطلب (0.5s)
+06:31:05 [منبع] Crossref: 7 مطلب (0.7s)
+06:31:08 [منبع] Crossref: 8 مطلب (2.6s)
+06:31:09 [منبع] Crossref: 8 مطلب (0.5s)
+06:31:10 [منبع] Crossref: 8 مطلب (0.3s)
+06:31:10 [منبع] Behavioral Scientist: 10 مطلب (0.4s)
+06:31:11 [منبع] Nielsen Norman Group: 20 مطلب (0.3s)
+06:31:11 [منبع] Yu-kai Chou Octalysis: 25 مطلب (0.1s)
+06:31:12 [منبع] MIT Sloan Management Review: 20 مطلب (0.2s)
+06:31:12 [منبع] Duolingo Blog: 15 مطلب (0.2s)
+06:31:18 [مدل] gemini-flash-lite-latest → HTTP 503 (5.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:31:36 [مدل] gemini-3.5-flash-lite → HTTP 200 (18.2s) 
+06:31:44 [مدل] gemini-3.5-flash-lite → HTTP 503 (7.8s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:32:59 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
+06:33:04 [مدل] gemini-3.5-flash → HTTP 503 (4.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:04 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 20 ثانیه صبر و دور 2
+06:33:29 [مدل] gemini-flash-lite-latest → HTTP 200 (5.5s) 
+06:33:36 [مدل] gemini-flash-lite-latest → HTTP 200 (6.2s) 
+06:33:36 [مدل] gemini-3.5-flash → HTTP 429 (0.1s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerDayPerProjec
+06:33:36 [مدل] سهمیه‌ی روزانه‌ی gemini-3.5-flash تمام شده؛ امروز کنار گذاشته شد
+06:33:42 [مدل] gemini-flash-latest → HTTP 503 (6.0s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:45 [مدل] gemini-flash-lite-latest → HTTP 200 (3.2s) 
+06:33:46 [مدل] gemini-flash-latest → HTTP 503 (0.9s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:50 [مدل] gemini-flash-lite-latest → HTTP 200 (3.9s) 
+06:33:50 [ویرایش] 3 اصلاح: اصلاح «لیدربرد» به «جدول رتبه‌بندی» و «جدول عمومی» در پاراگراف اول برای روانی و سادگی متن.; اصلاح «لیدربرد عمومی» به «جدول عمومی» در پاراگراف اول.; یکنواخت‌سازی لحن عامیانه و اصلاح نیم‌فاصله‌ها.
+06:33:51 [مدل] gemini-flash-latest → HTTP 503 (1.1s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:57 [مدل] gemini-flash-lite-latest → HTTP 200 (6.0s) 
+06:33:57 گزارش اجرا (ready): prepared
+منابع: 8 | یافت‌شده: 240 | جدید: 216 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🏆 چرا جدول رتبه‌بندی همیشه انگیزه نمی‌آره؟ (امتیاز 86.5)
+https://ojs.smkmerahputih.com/index.php/juperan/article/view/2651
+تصویر: card | متن کامل: False
+دلیل: Directly compares how public leaderboards vs progress bars impact anxiety and motivation in gamified writing.

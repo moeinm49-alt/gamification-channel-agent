@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-12T06:30:47+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 31,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 240,
+ "new": 216,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "The FOMO Effect in Gamified L2 Writing: Learner Reactance and Motivation Under Leaderboard Pressure",
+  "url": "https://ojs.smkmerahputih.com/index.php/juperan/article/view/2651",
+  "venue": "Jurnal Pendidikan dan Pembelajaran",
+  "headline": "🏆 چرا جدول رتبه‌بندی همیشه انگیزه نمی‌آره؟",
+  "post_chars": 743,
+  "evidence_type": "quasi-experimental survey design",
+  "full_text": false
+ },
+ "score": 86.5,
+ "reason": "Directly compares how public leaderboards vs progress bars impact anxiety and motivation in gamified writing.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 22,
+ "button": {
+  "text": "📰 تازه‌ترین مقاله‌ها",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-12T06:33:57+00:00",
+ "seconds": 189,
+ "llm_calls": 14
+}
