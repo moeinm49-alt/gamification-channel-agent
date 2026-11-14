@@ -1,0 +1,69 @@
+{
+ "started": "2026-11-14T06:30:45+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 241,
+ "new": 217,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Why Does Gamification Fail? The Impact Mechanisms of Gamification Design Flaws on Consumers' Continuous Purchase Intention",
+   "reason": "unsupported_application: the sentence 'پس اگر ابزار بازی‌سازی شما حس شفافیت و ارزش واقعی نده، کاربر احساس می‌کنه داره بازیچه میشه' presents a suggested application/advice that is not a direct finding of the source"
+  }
+ ],
+ "selected": {
+  "title": "The psychological mechanisms of fitness app gamification in promoting college students' exercise engagement: Multiple mediating roles of basic psychological needs and self-efficacy.",
+  "url": "https://doi.org/10.1016/j.actpsy.2026.107999",
+  "venue": "",
+  "headline": "📱 گیمیفیکیشن چطور ورزش کردن دانشجوها رو بیشتر می‌کنه؟",
+  "post_chars": 623,
+  "evidence_type": "structural equation modeling survey study",
+  "full_text": false
+ },
+ "score": 81.0,
+ "reason": "Provides empirical backing on how gamification affordances mediate psychological needs for app engagement.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 24,
+ "button": {
+  "text": "📚 کتاب‌های پیشنهادی",
+  "url": "https://moarek.ir/product-category/library/"
+ },
+ "finished": "2026-11-14T06:36:28+00:00",
+ "seconds": 342,
+ "llm_calls": 20
+}
