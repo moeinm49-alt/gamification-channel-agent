@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-16T06:30:45+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 241,
+ "new": 214,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "How Intrinsic Motivation is Affected by Extrinsic Motivators in Colleges: A Mixed-Methods Study",
+  "url": "https://doi.org/10.38124/ijisrt/26aug1383",
+  "venue": "International Journal of Innovative Science and Research Technology (IJISRT)",
+  "headline": "🎓 جایزه نقدی حواس کاربر رو از اصل بازی پرت می‌کنه؟",
+  "post_chars": 781,
+  "evidence_type": "mixed-methods survey and interviews",
+  "full_text": false
+ },
+ "score": 82.5,
+ "reason": "Mixed-methods study on how grades, rewards, and monetary incentives crowd out or influence intrinsic motivation.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 26,
+ "button": {
+  "text": "✍️ مقاله‌های کاربردی",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-16T06:31:59+00:00",
+ "seconds": 74,
+ "llm_calls": 5
+}
