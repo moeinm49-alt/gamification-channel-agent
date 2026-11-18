@@ -1,0 +1,64 @@
+{
+ "started": "2026-11-18T06:30:44+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 241,
+ "new": 213,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Nudging by design: calibrating climate and health interventions",
+  "url": "https://doi.org/10.1016/j.joclim.2026.100724",
+  "venue": "The Journal of Climate Change and Health",
+  "headline": "🎯 همه تلنگرها مثل هم نیستن: از مداخلات ملایم تا سخت",
+  "post_chars": 915,
+  "evidence_type": "conceptual framework",
+  "full_text": false
+ },
+ "score": 87.5,
+ "reason": "Introduces a novel nudge intensity model for choice architecture across health and climate domains.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 28,
+ "button": {
+  "text": "📚 کتابخانه‌ی معرک",
+  "url": "https://moarek.ir/product-category/library/"
+ },
+ "finished": "2026-11-18T06:32:26+00:00",
+ "seconds": 102,
+ "llm_calls": 6
+}
