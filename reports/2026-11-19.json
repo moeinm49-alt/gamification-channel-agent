@@ -1,0 +1,93 @@
+{
+ "started": "2026-11-19T06:30:54+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 56,
+   "errors": [
+    "RuntimeError: HTTP 429",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Europe PMC": {
+   "n": 18,
+   "errors": [
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Crossref": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Behavioral Scientist": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Nielsen Norman Group": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "MIT Sloan Management Review": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Duolingo Blog": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  }
+ },
+ "collected": 74,
+ "new": 57,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Do Customers Behave Differently After Joining a Paid Loyalty Program? Evidence from a Longitudinal Within-Customer Analysis in Czech E-Commerce",
+  "url": "https://doi.org/10.22598/mt/2026.38.1.9",
+  "venue": "Market-Tržište",
+  "headline": "💳 وقتی کاربر برای عضویت پول می‌ده، رفتار خریدش چه تغییری می‌کنه؟",
+  "post_chars": 581,
+  "evidence_type": "quantitative analysis",
+  "full_text": false
+ },
+ "score": 81.5,
+ "reason": "Longitudinal analysis of paid loyalty programs showing precise changes in customer behavior post-enrolment.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 29,
+ "button": {
+  "text": "🤝 مشاوره‌ی گیمیفیکیشن",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-11-19T06:37:01+00:00",
+ "seconds": 367,
+ "llm_calls": 9
+}

@@ -1,1 +1,50 @@
-21:26:22 [زمان‌بندی] هنوز زود است (انتشار 12:00)
+06:30:57 [منبع] OpenAlex خطا: HTTP 429
+06:30:58 [منبع] Europe PMC: 8 مطلب (1.1s)
+06:30:59 [منبع] OpenAlex: 8 مطلب (0.8s)
+06:31:00 [منبع] Europe PMC: 8 مطلب (0.6s)
+06:31:01 [منبع] OpenAlex: 8 مطلب (0.8s)
+06:31:27 [منبع] Europe PMC: 0 مطلب (25.1s)
+06:31:28 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:32:02 [منبع] Europe PMC خطا: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)
+06:32:03 [منبع] OpenAlex: 8 مطلب (0.7s)
+06:32:37 [منبع] Europe PMC خطا: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)
+06:32:39 [منبع] OpenAlex: 8 مطلب (1.4s)
+06:32:48 [منبع] Europe PMC: 1 مطلب (9.2s)
+06:32:50 [منبع] OpenAlex: 8 مطلب (1.2s)
+06:33:12 [منبع] Europe PMC: 1 مطلب (22.2s)
+06:33:13 [منبع] OpenAlex: 8 مطلب (0.7s)
+06:33:47 [منبع] Europe PMC خطا: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)
+06:33:48 [منبع] OpenAlex: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Europe PMC: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] OpenAlex: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Europe PMC: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] OpenAlex: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Europe PMC: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] OpenAlex: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Europe PMC: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Crossref: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Crossref: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Crossref: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Crossref: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Behavioral Scientist: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Nielsen Norman Group: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Yu-kai Chou Octalysis: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] MIT Sloan Management Review: رد شد (سقف زمان جمع‌آوری)
+06:33:48 [منبع] Duolingo Blog: رد شد (سقف زمان جمع‌آوری)
+06:33:56 [مدل] gemini-flash-lite-latest → HTTP 200 (8.6s) 
+06:34:02 [مدل] gemini-flash-lite-latest → HTTP 200 (6.0s) 
+06:34:07 [مدل] gemini-3.5-flash → HTTP 503 (5.0s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:35:22 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
+06:35:31 [مدل] gemini-flash-lite-latest → HTTP 200 (8.3s) 
+06:35:32 [مدل] gemini-3.5-flash → HTTP 503 (1.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:36:47 [مدل] gemini-flash-latest → HTTP 599 (75.1s) ReadTimeout
+06:36:51 [مدل] gemini-flash-lite-latest → HTTP 200 (4.3s) 
+06:36:51 [ویرایش] 3 اصلاح: تبدیل «می‌دهد» به «می‌دهد» -> «می‌ده» و «می‌کند» به «می‌کنه» برای هماهنگی لحن عامیانه; اصلاح «می‌شود» و «نمی‌کنه» به فرم‌های یکدست گفتاری در سراسر متن; تنظیم دقیق نیم‌فاصله‌ها و علائم نگارشی
+06:37:01 [مدل] gemini-3.5-flash → HTTP 200 (9.4s) 
+06:37:01 گزارش اجرا (ready): prepared
+منابع: 8 | یافت‌شده: 74 | جدید: 57 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 💳 وقتی کاربر برای عضویت پول می‌ده، رفتار خریدش چه تغییری می‌کنه؟ (امتیاز 81.5)
+https://doi.org/10.22598/mt/2026.38.1.9
+تصویر: card | متن کامل: False
+دلیل: Longitudinal analysis of paid loyalty programs showing precise changes in customer behavior post-enrolment.
+منابع دارای خطا: Crossref, Behavioral Scientist, Nielsen Norman Group, Yu-kai Chou Octalysis, MIT Sloan Management Review, Duolingo Blog
