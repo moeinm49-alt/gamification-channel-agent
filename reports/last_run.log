@@ -1,1 +1,46 @@
-21:35:36 [زمان‌بندی] هنوز زود است (انتشار 12:00)
+06:30:53 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:31:13 [منبع] Europe PMC خطا: HTTP 503
+06:31:13 [منبع] OpenAlex: 8 مطلب (0.4s)
+06:31:18 [منبع] Europe PMC خطا: HTTP 503
+06:31:19 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:31:23 [منبع] Europe PMC خطا: HTTP 503
+06:31:24 [منبع] OpenAlex: 8 مطلب (0.4s)
+06:31:29 [منبع] Europe PMC خطا: HTTP 503
+06:31:29 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:31:30 [منبع] Europe PMC: 0 مطلب (0.7s)
+06:31:31 [منبع] OpenAlex: 8 مطلب (0.4s)
+06:31:45 [منبع] Europe PMC: 1 مطلب (14.1s)
+06:31:46 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:31:53 [منبع] Europe PMC: 1 مطلب (6.7s)
+06:31:54 [منبع] OpenAlex: 8 مطلب (0.4s)
+06:32:22 [منبع] Europe PMC: 0 مطلب (27.9s)
+06:32:23 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:32:37 [منبع] Europe PMC: 5 مطلب (14.2s)
+06:32:38 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:33:12 [منبع] Europe PMC خطا: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)
+06:33:13 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:33:18 [منبع] Europe PMC خطا: HTTP 503
+06:33:19 [منبع] OpenAlex: 8 مطلب (0.4s)
+06:33:23 [منبع] Europe PMC خطا: HTTP 503
+06:33:24 [منبع] Crossref: 8 مطلب (0.5s)
+06:33:25 [منبع] Crossref: 8 مطلب (0.3s)
+06:33:25 [منبع] Crossref: 8 مطلب (0.3s)
+06:33:26 [منبع] Crossref: 8 مطلب (0.3s)
+06:33:27 [منبع] Behavioral Scientist: 10 مطلب (0.6s)
+06:33:27 [منبع] Nielsen Norman Group: 20 مطلب (0.4s)
+06:33:28 [منبع] Yu-kai Chou Octalysis: 25 مطلب (0.2s)
+06:33:28 [منبع] MIT Sloan Management Review: 20 مطلب (0.2s)
+06:33:29 [منبع] Duolingo Blog: 15 مطلب (0.2s)
+06:33:35 [مدل] gemini-flash-lite-latest → HTTP 200 (5.6s) 
+06:33:35 [مدل] gemini-flash-lite-latest → HTTP 503 (0.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:42 [مدل] gemini-3.5-flash-lite → HTTP 200 (6.1s) 
+06:34:33 [مدل] gemini-3.5-flash → HTTP 200 (51.5s) 
+06:35:16 [مدل] gemini-3.5-flash → HTTP 200 (42.9s) 
+06:35:16 [ویرایش] 4 اصلاح: تغییر «یک» به «یه» در بخش اول برای یکدست‌سازی لحن محاوره‌ای.; افزودن نیم‌فاصله صحیح به «گزینه‌ی» در پاراگراف دوم و سوم.; جایگزینی عبارت گرته‌برداری‌شده و نادرست «اقدام و عمل» با تعبیر روان و طبیعی «دست‌به‌کار شدن».; اصلاح «می‌شه» به «میشه» برای یکدستی ساختار افعال محاوره‌ای در کل متن.
+06:35:57 [مدل] gemini-3.5-flash → HTTP 200 (41.0s) 
+06:35:57 گزارش اجرا (ready): prepared
+منابع: 8 | یافت‌شده: 224 | جدید: 200 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🎯 ما واقعاً از باختن می‌ترسیم یا فقط تنبلیم؟ (امتیاز 89.5)
+https://doi.org/10.1017/jdm.2026.10041
+تصویر: card | متن کامل: False
+دلیل: Examines how reframing omission as action reduces apparent loss aversion, offering a high-utility behavioral insight.

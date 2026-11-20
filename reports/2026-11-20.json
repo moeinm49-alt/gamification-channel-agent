@@ -1,0 +1,72 @@
+{
+ "started": "2026-11-20T06:30:52+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 7,
+   "errors": [
+    "RuntimeError: HTTP 503",
+    "RuntimeError: HTTP 503",
+    "RuntimeError: HTTP 503",
+    "RuntimeError: HTTP 503",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTP 503",
+    "RuntimeError: HTTP 503"
+   ]
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Behavioral Scientist": {
+   "n": 10,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 224,
+ "new": 200,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Omission matters: Reframing omission as action reduces apparent loss aversion",
+  "url": "https://doi.org/10.1017/jdm.2026.10041",
+  "venue": "Judgment and Decision Making",
+  "headline": "🎯 ما واقعاً از باختن می‌ترسیم یا فقط تنبلیم؟",
+  "post_chars": 777,
+  "evidence_type": "randomized experiment",
+  "full_text": false
+ },
+ "score": 89.5,
+ "reason": "Examines how reframing omission as action reduces apparent loss aversion, offering a high-utility behavioral insight.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 30,
+ "button": {
+  "text": "💡 تحلیل‌های بیشتر",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-20T06:35:57+00:00",
+ "seconds": 304,
+ "llm_calls": 6
+}
