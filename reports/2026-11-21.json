@@ -1,0 +1,90 @@
+{
+ "started": "2026-11-21T06:30:46+00:00",
+ "mode": "ready",
+ "sources": {
+  "OpenAlex": {
+   "n": 72,
+   "errors": [
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Europe PMC": {
+   "n": 9,
+   "errors": [
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Crossref": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Behavioral Scientist": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Nielsen Norman Group": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "MIT Sloan Management Review": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Duolingo Blog": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  }
+ },
+ "collected": 81,
+ "new": 62,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "How Blind Boxes Affect Consumer Decision-Making from the Perspective of Behavioral Economics",
+  "url": "https://doi.org/10.56028/aemr.17.1.734.2026",
+  "venue": "Advances in Economics and Management Research",
+  "headline": "🎁 چرا مشتری‌ها برای جعبه‌های شانس دوباره پول میدن؟",
+  "post_chars": 758,
+  "evidence_type": "review / literature synthesis",
+  "full_text": false
+ },
+ "score": 81.5,
+ "reason": "Analyzes blind box consumption through IP and Skinner's variable reward schedules, highly relevant for product growth.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 31,
+ "button": {
+  "text": "📘 یادگیری قدم‌به‌قدم",
+  "url": "https://moarek.ir/gamification-training/"
+ },
+ "finished": "2026-11-21T06:36:04+00:00",
+ "seconds": 318,
+ "llm_calls": 5
+}
