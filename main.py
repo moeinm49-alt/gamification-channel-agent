@@ -17,7 +17,7 @@ from agent.telegram import Telegram
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest", "reserve"])
+    ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest", "reserve", "feedcheck"])
     ap.add_argument("--force", action="store_true", help="حتی اگر امروز پست منتشر شده، دوباره اجرا کن")
     args = ap.parse_args()
 
@@ -28,6 +28,39 @@ def main():
         print("alert_chat set:", bool(tg.alert_chat))
         mid = tg.send_message(tg.alert_chat, "تست اتصال: اگر این پیام را می‌بینی، پیش‌نمایش‌ها هم به همین چت می‌رسند.")
         print("sent message id:", mid)
+        return 0
+
+    if args.task == "feedcheck":  # بررسی فید منابع خبری پیشنهادی (کدام کار می‌کند و چقدر تازه است)
+        import datetime as _dt, feedparser, requests as _rq
+        cands = [
+            "https://www.loyaltymagazine.com/feed/", "https://customerthink.com/feed/", "https://www.marketingdive.com/feeds/news/",
+            "https://digiday.com/feed/", "https://www.retaildive.com/feeds/news/", "https://www.gamedeveloper.com/rss.xml",
+            "https://www.gamesindustry.biz/feed", "https://uxdesign.cc/feed", "https://www.smashingmagazine.com/feed/",
+            "https://www.mindtheproduct.com/feed/", "https://www.lennysnewsletter.com/feed", "https://blog.duolingo.com/feed/",
+            "https://behavioralscientist.org/feed/", "https://www.adweek.com/feed/", "https://feeds.hbr.org/harvardbusiness",
+            "https://www.fastcompany.com/latest/rss", "https://www.growthengineering.co.uk/feed/", "https://elearningindustry.com/feed",
+            "https://mambo.io/blog/rss.xml", "https://www.behavioraleconomics.com/feed/", "https://www.nngroup.com/feed/rss/",
+            "https://yukaichou.com/feed/", "https://sloanreview.mit.edu/feed/", "https://www.bi.team/feed/",
+            "https://www.retailtouchpoints.com/feed", "https://www.marketingweek.com/feed/", "https://www.thedrum.com/rss",
+            "https://www.bondbrandloyalty.com/feed/", "https://techcrunch.com/feed/", "https://www.theverge.com/rss/index.xml",
+        ]
+        out = []
+        for u in cands:
+            row = {"url": u}
+            try:
+                r = _rq.get(u, headers={"User-Agent": "Mozilla/5.0 GamificationClubAgent/1.0"}, timeout=15)
+                row["status"] = r.status_code
+                fp = feedparser.parse(r.content)
+                row["entries"] = len(fp.entries)
+                dates = [_dt.datetime(*e.published_parsed[:6]) for e in fp.entries if e.get("published_parsed")]
+                row["newest"] = max(dates).date().isoformat() if dates else ""
+                row["recent_14d"] = sum(1 for x in dates if (_dt.datetime.utcnow() - x).days <= 14)
+                row["sample"] = fp.entries[0].get("title", "")[:80] if fp.entries else ""
+            except Exception as e:
+                row["error"] = f"{type(e).__name__}: {str(e)[:80]}"
+            out.append(row)
+        import json as _j
+        pathlib.Path(ROOT, cfg["paths"]["reports"], "feedcheck.json").write_text(_j.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
         return 0
 
     if args.task == "langtest":  # سنجش ویراستاری روی دو نمونه‌ی ضعیف
