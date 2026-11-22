@@ -1,0 +1,238 @@
+[
+ {
+  "url": "https://www.loyaltymagazine.com/feed/",
+  "status": 200,
+  "entries": 30,
+  "newest": "2026-10-30",
+  "recent_14d": 0,
+  "sample": "What does a loyalty card do between visits?"
+ },
+ {
+  "url": "https://customerthink.com/feed/",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-21",
+  "recent_14d": 20,
+  "sample": "Observe.AI Introduces Agent Overwatch, Bringing Real-Time Supervision to Any AI "
+ },
+ {
+  "url": "https://www.marketingdive.com/feeds/news/",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-11-20",
+  "recent_14d": 10,
+  "sample": "Campaign Trail: Tiffany tells human holiday story with Hollywood talent"
+ },
+ {
+  "url": "https://digiday.com/feed/",
+  "status": 200,
+  "entries": 15,
+  "newest": "2026-11-20",
+  "recent_14d": 15,
+  "sample": "Future of Marketing Briefing: Consulting firms revive their marketing ambitions "
+ },
+ {
+  "url": "https://www.retaildive.com/feeds/news/",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-11-20",
+  "recent_14d": 10,
+  "sample": "The Container Store is back online after cybersecurity incident"
+ },
+ {
+  "url": "https://www.gamedeveloper.com/rss.xml",
+  "status": 200,
+  "entries": 50,
+  "newest": "2026-11-20",
+  "recent_14d": 33,
+  "sample": "Grand Theft Auto VI is now the biggest video game launch in history"
+ },
+ {
+  "url": "https://www.gamesindustry.biz/feed",
+  "status": 200,
+  "entries": 100,
+  "newest": "2026-11-20",
+  "recent_14d": 74,
+  "sample": "GTA 6 hits $3.79 billion in its first day on sale, becoming \"the biggest enterta"
+ },
+ {
+  "url": "https://uxdesign.cc/feed",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-11-22",
+  "recent_14d": 10,
+  "sample": "The attack of the giant AI design slop monster: a survivor’s guide"
+ },
+ {
+  "url": "https://www.smashingmagazine.com/feed/",
+  "status": 200,
+  "entries": 40,
+  "newest": "2026-11-17",
+  "recent_14d": 3,
+  "sample": "Meet AI 2027 Conference (Dec 1)"
+ },
+ {
+  "url": "https://www.mindtheproduct.com/feed/",
+  "status": 200,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.lennysnewsletter.com/feed",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-21",
+  "recent_14d": 12,
+  "sample": "🧠 Community Wisdom: Handling context switching with multiple agents, giving feed"
+ },
+ {
+  "url": "https://blog.duolingo.com/feed/",
+  "status": 200,
+  "entries": 15,
+  "newest": "2026-11-19",
+  "recent_14d": 4,
+  "sample": "What are batteries in chess?"
+ },
+ {
+  "url": "https://behavioralscientist.org/feed/",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-10-15",
+  "recent_14d": 0,
+  "sample": "View the I-Frame vs. S-Frame Roundtable Discussion"
+ },
+ {
+  "url": "https://www.adweek.com/feed/",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-11-20",
+  "recent_14d": 10,
+  "sample": "The Media RFP Is Quietly Becoming Obsolete ft. Bruce Williams"
+ },
+ {
+  "url": "https://feeds.hbr.org/harvardbusiness",
+  "error": "SSLError: HTTPSConnectionPool(host='feeds.hbr.org', port=443): Max retries exceeded with u"
+ },
+ {
+  "url": "https://www.fastcompany.com/latest/rss",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-22",
+  "recent_14d": 20,
+  "sample": "Why the NFL is making players disguise their Caddix cleats"
+ },
+ {
+  "url": "https://www.growthengineering.co.uk/feed/",
+  "status": 200,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://elearningindustry.com/feed",
+  "status": 200,
+  "entries": 25,
+  "newest": "2026-11-22",
+  "recent_14d": 25,
+  "sample": "Anti-Bribery Training: How To Design For The Gray Areas"
+ },
+ {
+  "url": "https://mambo.io/blog/rss.xml",
+  "status": 200,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.behavioraleconomics.com/feed/",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-09-14",
+  "recent_14d": 0,
+  "sample": "Before You Change Perceptions, Check the Reality"
+ },
+ {
+  "url": "https://www.nngroup.com/feed/rss/",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-20",
+  "recent_14d": 6,
+  "sample": "Can AI Generate Good Designs from Raw User Data?"
+ },
+ {
+  "url": "https://yukaichou.com/feed/",
+  "status": 200,
+  "entries": 50,
+  "newest": "2026-11-20",
+  "recent_14d": 15,
+  "sample": "Nationcraft Analysis: Iraq Two-Armies Trap 2026"
+ },
+ {
+  "url": "https://sloanreview.mit.edu/feed/",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-17",
+  "recent_14d": 4,
+  "sample": "Designing Customization Journeys to Build More Valuable Customer Relationships"
+ },
+ {
+  "url": "https://www.bi.team/feed/",
+  "status": 200,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.retailtouchpoints.com/feed",
+  "status": 403,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.marketingweek.com/feed/",
+  "status": 403,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.thedrum.com/rss",
+  "status": 403,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://www.bondbrandloyalty.com/feed/",
+  "status": 403,
+  "entries": 0,
+  "newest": "",
+  "recent_14d": 0,
+  "sample": ""
+ },
+ {
+  "url": "https://techcrunch.com/feed/",
+  "status": 200,
+  "entries": 20,
+  "newest": "2026-11-21",
+  "recent_14d": 20,
+  "sample": "Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI s"
+ },
+ {
+  "url": "https://www.theverge.com/rss/index.xml",
+  "status": 200,
+  "entries": 10,
+  "newest": "2026-11-21",
+  "recent_14d": 10,
+  "sample": "Amazon is complaining about NYC Council on shipping labels, too"
+ }
+]
