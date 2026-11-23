@@ -12,9 +12,9 @@ glossary:
 # اسلات خبر و آپدیت (پست دوم روز)
 news:
   lookback_days: 5            # فقط مطالب ۵ روز اخیر
-  min_score: 68
+  min_score: 72
   weights: {relevance: 25, credibility: 15, depth_rarity: 20, practical: 15, shareability: 10, difference: 10, image: 5}
-  gates: {min_relevance: 7, min_credibility: 5, max_overlap_with_previous: 6}
+  gates: {min_relevance: 7, min_credibility: 5, min_newsworthiness: 6, max_overlap_with_previous: 6}
   feeds:
     - {name: Marketing Dive, url: "https://www.marketingdive.com/feeds/news/"}
     - {name: Digiday, url: "https://digiday.com/feed/"}
@@ -27,7 +27,6 @@ news:
     - {name: UX Collective, url: "https://uxdesign.cc/feed"}
     - {name: Lenny's Newsletter, url: "https://www.lennysnewsletter.com/feed"}
     - {name: Duolingo Blog, url: "https://blog.duolingo.com/feed/"}
-    - {name: eLearning Industry, url: "https://elearningindustry.com/feed"}
     - {name: Nielsen Norman Group, url: "https://www.nngroup.com/feed/rss/"}
     - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
 

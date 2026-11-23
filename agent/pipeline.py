@@ -311,7 +311,8 @@ def run(d, mode="live", force=False, workdir=None, slot="insight"):
             total += cfg.get("switch_type_bonus", 6)
         total = round(total, 1)
         gate_fail = (it["relevance"] < g["min_relevance"] or it["credibility"] < g["min_credibility"]
-                     or it["overlap_with_previous"] > g["max_overlap_with_previous"] or not it.get("enough_text", True))
+                     or it["overlap_with_previous"] > g["max_overlap_with_previous"] or not it.get("enough_text", True)
+                     or it["depth_rarity"] < g.get("min_newsworthiness", 0))
         aid = db.upsert_article(c.to_dict(), started)
         it["raw_score"] = raw
         db.set_article(aid, score=total, score_json=json.dumps(it, ensure_ascii=False), status="scored")
