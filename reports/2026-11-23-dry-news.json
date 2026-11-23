@@ -1,5 +1,5 @@
 {
- "started": "2026-11-23T05:49:16+00:00",
+ "started": "2026-11-23T05:52:26+00:00",
  "mode": "dry",
  "slot": "news",
  "sources": {
@@ -47,10 +47,6 @@
    "n": 1,
    "errors": []
   },
-  "eLearning Industry": {
-   "n": 11,
-   "errors": []
-  },
   "Nielsen Norman Group": {
    "n": 4,
    "errors": []
@@ -60,29 +56,30 @@
    "errors": []
   }
  },
- "collected": 144,
- "new": 144,
+ "collected": 133,
+ "new": 133,
  "scored": 40,
- "rejected": [],
- "selected": {
-  "title": "AI-Driven Upskilling: How Artificial Intelligence Is Transforming Tax Software Training",
-  "url": "https://elearningindustry.com/ai-driven-upskilling-how-artificial-intelligence-is-transforming-tax-software-training",
-  "venue": "eLearning Industry",
-  "headline": "🤖 آموزش نرم‌افزار با ویدیوهای قدیمی دیگه جواب نمیده",
-  "post_chars": 800,
-  "evidence_type": "expert opinion",
-  "full_text": true
- },
- "score": 77.5,
- "reason": "Explores how adaptive learning paths and interactive sandboxes improve technical software onboarding and upskilling.",
- "image": "card",
- "status": "dry_run_ok",
+ "rejected": [
+  {
+   "title": "Can AI Generate Good Designs from Raw User Data?",
+   "reason": "لینک منبع در پست نیست; کلمه‌ی تکراری زیاد: خام؛ با کلمه‌های دیگر جایگزین کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+  },
+  {
+   "title": "The Worst Customer Service Mistakes Are Ones AI Agents Almost Get Right",
+   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 5; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+  },
+  {
+   "title": "Canva added an AI ‘kill switch’ to its tools",
+   "reason": "کلمه‌ی تکراری زیاد: هوش؛ با کلمه‌های دیگر جایگزین کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; عبارت کلیشه‌ای/اغراق‌آمیز «نکته جالب اینجاست» حذف شود"
+  }
+ ],
+ "selected": null,
+ "score": null,
+ "reason": "مطالب برتر در کنترل کیفیت یا کفایت متن رد شدند",
+ "image": "none",
+ "status": "no_post",
  "errors": [],
- "button": {
-  "text": "🎯 طراحی اختصاصی",
-  "url": "https://moarek.ir/consulting/"
- },
- "finished": "2026-11-23T05:49:49+00:00",
- "seconds": 32,
- "llm_calls": 7
+ "finished": "2026-11-23T05:57:25+00:00",
+ "seconds": 298,
+ "llm_calls": 33
 }
