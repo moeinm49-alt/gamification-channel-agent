@@ -1,0 +1,72 @@
+{
+ "started": "2026-11-23T15:00:54+00:00",
+ "mode": "ready",
+ "slot": "news",
+ "sources": {
+  "Marketing Dive": {
+   "n": 10,
+   "errors": []
+  },
+  "Digiday": {
+   "n": 15,
+   "errors": []
+  },
+  "Retail Dive": {
+   "n": 10,
+   "errors": []
+  },
+  "Adweek": {
+   "n": 10,
+   "errors": []
+  },
+  "Fast Company": {
+   "n": 19,
+   "errors": []
+  },
+  "CustomerThink": {
+   "n": 20,
+   "errors": []
+  },
+  "Game Developer": {
+   "n": 7,
+   "errors": []
+  },
+  "GamesIndustry.biz": {
+   "n": 23,
+   "errors": []
+  },
+  "UX Collective": {
+   "n": 10,
+   "errors": []
+  },
+  "Lenny's Newsletter": {
+   "n": 3,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 1,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 4,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 1,
+   "errors": []
+  }
+ },
+ "collected": 133,
+ "new": 129,
+ "scored": 0,
+ "rejected": [],
+ "selected": null,
+ "score": null,
+ "reason": "مدل زبانی در دسترس نبود: سقف زمان فراخوانی مدل تمام شد (HTTP 503)",
+ "image": "none",
+ "status": "llm_unavailable",
+ "errors": [],
+ "finished": "2026-11-23T15:09:50+00:00",
+ "seconds": 536,
+ "llm_calls": 20
+}

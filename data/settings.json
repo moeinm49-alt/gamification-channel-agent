@@ -10,7 +10,8 @@
  "prep": {
   "date": "2026-11-23",
   "n": {
-   "insight": 1
+   "insight": 1,
+   "news": 1
   }
  },
  "commands_version": 2

@@ -1,2 +1,41 @@
-14:39:40 [زمان‌بندی] پست پژوهشی/تحلیلی: امروز منتشر شده است
-14:39:40 [زمان‌بندی] خبر و آپدیت: هنوز زود است (انتشار 20:30)
+15:00:54 [زمان‌بندی] پست پژوهشی/تحلیلی: امروز منتشر شده است
+15:00:54 [منبع] Marketing Dive: 10 مطلب (0.1s)
+15:00:54 [منبع] Digiday: 15 مطلب (0.1s)
+15:00:55 [منبع] Retail Dive: 10 مطلب (0.1s)
+15:00:55 [منبع] Adweek: 10 مطلب (0.2s)
+15:00:56 [منبع] Fast Company: 19 مطلب (0.1s)
+15:00:56 [منبع] CustomerThink: 20 مطلب (0.5s)
+15:00:57 [منبع] Game Developer: 7 مطلب (0.6s)
+15:00:58 [منبع] GamesIndustry.biz: 23 مطلب (0.2s)
+15:00:58 [منبع] UX Collective: 10 مطلب (0.4s)
+15:00:59 [منبع] Lenny's Newsletter: 3 مطلب (0.3s)
+15:01:00 [منبع] Duolingo Blog: 1 مطلب (0.7s)
+15:01:01 [منبع] Nielsen Norman Group: 4 مطلب (0.4s)
+15:01:01 [منبع] MIT Sloan Management Review: 1 مطلب (0.2s)
+15:01:49 [مدل] gemini-flash-lite-latest → HTTP 503 (47.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:02:14 [مدل] gemini-3.5-flash-lite → HTTP 503 (24.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:02:14 [مدل] gemini-flash-latest → HTTP 503 (0.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:02:15 [مدل] gemini-3.5-flash → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:02:15 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 20 ثانیه صبر و دور 2
+15:03:50 [مدل] gemini-flash-lite-latest → HTTP 599 (75.0s) ReadTimeout
+15:04:46 [مدل] gemini-3.5-flash-lite → HTTP 503 (56.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:04:47 [مدل] gemini-flash-latest → HTTP 503 (0.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:04:48 [مدل] gemini-3.5-flash → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:04:48 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 45 ثانیه صبر و دور 3
+15:05:34 [مدل] gemini-flash-lite-latest → HTTP 503 (1.2s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:05:44 [مدل] gemini-3.5-flash-lite → HTTP 503 (10.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:05:45 [مدل] gemini-flash-latest → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:05:45 [مدل] gemini-3.5-flash → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:05:45 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 90 ثانیه صبر و دور 4
+15:07:17 [مدل] gemini-flash-lite-latest → HTTP 503 (1.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:07:43 [مدل] gemini-3.5-flash-lite → HTTP 503 (26.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:07:44 [مدل] gemini-flash-latest → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:07:44 [مدل] gemini-3.5-flash → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:07:44 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 120 ثانیه صبر و دور 5
+15:09:47 [مدل] gemini-flash-lite-latest → HTTP 503 (2.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:09:49 [مدل] gemini-3.5-flash-lite → HTTP 503 (1.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:09:49 [مدل] gemini-flash-latest → HTTP 503 (0.8s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:09:50 [مدل] gemini-3.5-flash → HTTP 503 (0.4s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+15:09:50 گزارش اجرا (ready): llm_unavailable
+منابع: 13 | یافت‌شده: 133 | جدید: 129 | امتیازدهی‌شده: 0 | ردشده: 0
+دلیل: مدل زبانی در دسترس نبود: سقف زمان فراخوانی مدل تمام شد (HTTP 503)
