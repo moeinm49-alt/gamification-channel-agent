@@ -1,5 +1,5 @@
 {
- "started": "2026-11-23T05:58:31+00:00",
+ "started": "2026-11-23T06:02:32+00:00",
  "mode": "dry",
  "slot": "news",
  "sources": {
@@ -57,25 +57,28 @@
   }
  },
  "collected": 133,
- "new": 130,
+ "new": 128,
  "scored": 40,
- "rejected": [
-  {
-   "title": "Sociable: Instagram adds Amazon affiliate links",
-   "reason": "متن ناکافی"
-  },
-  {
-   "title": "Mall of America debuts AI-backed concierge, Mallie",
-   "reason": "متن ناکافی"
-  }
- ],
- "selected": null,
- "score": null,
- "reason": "مطالب برتر در کنترل کیفیت یا کفایت متن رد شدند",
- "image": "none",
- "status": "no_post",
+ "rejected": [],
+ "selected": {
+  "title": "How the EU's Digital Fairness Act will impact game design, and why it hits European indies particularly hard",
+  "url": "https://www.gamesindustry.biz/how-the-eus-digital-fairness-act-will-impact-game-design-and-why-it-hits-european-indies-particularly-hard",
+  "venue": "GamesIndustry.biz",
+  "headline": "📜 دردسر جدید اتحادیه اروپا برای طراحان بازی",
+  "post_chars": 758,
+  "evidence_type": "expert opinion",
+  "full_text": true
+ },
+ "score": 87.5,
+ "reason": "The EU draft Digital Fairness Act targets engagement mechanics like loot boxes and pay-to-win, directly impacting game design and monetisation.",
+ "image": "source",
+ "status": "dry_run_ok",
  "errors": [],
- "finished": "2026-11-23T05:58:57+00:00",
- "seconds": 26,
- "llm_calls": 2
+ "button": {
+  "text": "✨ ورود به سایت معرک",
+  "url": "https://moarek.ir/"
+ },
+ "finished": "2026-11-23T06:03:20+00:00",
+ "seconds": 47,
+ "llm_calls": 12
 }
