@@ -1,0 +1,66 @@
+{
+ "started": "2026-11-23T06:30:45+00:00",
+ "mode": "ready",
+ "slot": "insight",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 231,
+ "new": 201,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "Synthetic Users vs. Human Respondents: Same Conclusion, Less Variation",
+   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 12"
+  }
+ ],
+ "selected": {
+  "title": "Taming the Groove: An Experienced Professional Drummer’s Use of Goal Setting for the Enhancement of Neglected Performance Skills",
+  "url": "https://doi.org/10.1177/10298649261498653",
+  "venue": "Musicae Scientiae",
+  "headline": "🥁 چطور یک نوازنده حرفه‌ای بعد از سال‌ها ضعف‌های قدیمی‌شو برطرف کرد؟",
+  "post_chars": 644,
+  "evidence_type": "case study",
+  "full_text": false
+ },
+ "score": 74.0,
+ "reason": "Case study investigating the role of goal setting in professional skill development.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 35,
+ "button": {
+  "text": "✨ ورود به سایت معرک",
+  "url": "https://moarek.ir/"
+ },
+ "finished": "2026-11-23T06:34:39+00:00",
+ "seconds": 233,
+ "llm_calls": 16
+}
