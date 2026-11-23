@@ -9,6 +9,28 @@ glossary:
   - {en: "Yu-kai Chou", fa: "یوکای چو", wrong: ["یوکای چاو", "یوکای چائو", "یو کای چو", "یوکای چوو", "یوکای شو"]}
   - {en: "Octalysis", fa: "Octalysis", wrong: []}
 
+# اسلات خبر و آپدیت (پست دوم روز)
+news:
+  lookback_days: 5            # فقط مطالب ۵ روز اخیر
+  min_score: 68
+  weights: {relevance: 25, credibility: 15, depth_rarity: 20, practical: 15, shareability: 10, difference: 10, image: 5}
+  gates: {min_relevance: 7, min_credibility: 5, max_overlap_with_previous: 6}
+  feeds:
+    - {name: Marketing Dive, url: "https://www.marketingdive.com/feeds/news/"}
+    - {name: Digiday, url: "https://digiday.com/feed/"}
+    - {name: Retail Dive, url: "https://www.retaildive.com/feeds/news/"}
+    - {name: Adweek, url: "https://www.adweek.com/feed/"}
+    - {name: Fast Company, url: "https://www.fastcompany.com/latest/rss"}
+    - {name: CustomerThink, url: "https://customerthink.com/feed/"}
+    - {name: Game Developer, url: "https://www.gamedeveloper.com/rss.xml"}
+    - {name: GamesIndustry.biz, url: "https://www.gamesindustry.biz/feed"}
+    - {name: UX Collective, url: "https://uxdesign.cc/feed"}
+    - {name: Lenny's Newsletter, url: "https://www.lennysnewsletter.com/feed"}
+    - {name: Duolingo Blog, url: "https://blog.duolingo.com/feed/"}
+    - {name: eLearning Industry, url: "https://elearningindustry.com/feed"}
+    - {name: Nielsen Norman Group, url: "https://www.nngroup.com/feed/rss/"}
+    - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
+
 # تنوع منبع
 repeat_source_penalty: 20   # جریمه‌ی هر بار تکرار همان منبع در ۳ پست آخر
 switch_type_bonus: 6        # امتیاز اضافه برای عوض شدن نوع منبع (مقاله ↔ وبلاگ)
@@ -73,7 +95,6 @@ per_term_results: 8
 
 # منابع تخصصی (RSS). اگر فیدی خراب باشد در گزارش ثبت و رد می‌شود.
 rss_feeds:
-  - {name: Behavioral Scientist, url: "https://behavioralscientist.org/feed/"}
   - {name: Nielsen Norman Group, url: "https://www.nngroup.com/feed/rss/"}
   - {name: Yu-kai Chou Octalysis, url: "https://yukaichou.com/feed/"}
   - {name: MIT Sloan Management Review, url: "https://sloanreview.mit.edu/feed/"}
@@ -123,7 +144,9 @@ cta_variants:   # کل جمله لینک کانال است
 
 # زمان‌بندی (ساعت انتشار را می‌شود با دستور /time در ربات عوض کرد)
 schedule:
-  post_time: "12:00"          # به وقت تهران؛ فقط :۰۰ یا :۳۰ (زودتر از عصر، چون اجرای گیت‌هاب گاهی ساعت‌ها دیر می‌رسد)
+  slots:                      # دو پست در روز؛ ساعت‌ها به وقت تهران و فقط :۰۰ یا :۳۰ (با /time در ربات قابل تغییر)
+    insight: {kind: insight, time: "12:00", label: "پست پژوهشی/تحلیلی"}
+    news: {kind: news, time: "20:30", label: "خبر و آپدیت"}
   start_date: "2026-10-29"    # اولین روز انتشار خودکار
   prepare_lead_min: 120       # پست از ۲ ساعت قبل آماده می‌شود تا انتشار سر وقت باشد
   late_cutoff: "23:30"        # بعد از این ساعت پست روز منتشر نمی‌شود

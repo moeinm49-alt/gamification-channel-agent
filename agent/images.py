@@ -112,7 +112,7 @@ def make_card(text, label, out_path, font_path):
 
 def pick_image(cand, card_text, cfg, workdir, root, is_used=None):
     out = pathlib.Path(workdir) / "post_image.jpg"
-    if cfg.get("use_source_images", True) and cand.source_type == "blog":
+    if cfg.get("use_source_images", True) and cand.source_type in ("blog", "news"):
         url = cand.image_url or find_page_image(cand.url)
         info = None
         if url and not (is_used and is_used(url)):  # عکس تکراری (مثلاً بنر عمومی سایت) استفاده نمی‌شود

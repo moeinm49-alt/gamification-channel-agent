@@ -19,6 +19,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("task", nargs="?", default="tick", choices=["tick", "run", "dry", "discover", "ping", "langtest", "reserve", "feedcheck"])
     ap.add_argument("--force", action="store_true", help="حتی اگر امروز پست منتشر شده، دوباره اجرا کن")
+    ap.add_argument("--slot", default="insight", help="اسلات برای run/dry: insight یا news")
     args = ap.parse_args()
 
     cfg = load_config()
@@ -125,7 +126,7 @@ def main():
         elif args.task == "tick":
             report = tick(d)
         else:
-            report = run(d, mode="live" if args.task == "run" else "dry", force=args.force)
+            report = run(d, mode="live" if args.task == "run" else "dry", force=args.force, slot=args.slot)
         return 1 if report.get("status") == "publish_failed" else 0
     except Exception as e:
         msg = f"خطای اجرا: {type(e).__name__}: {e}"

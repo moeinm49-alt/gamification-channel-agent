@@ -44,7 +44,7 @@ class FakeLLM:
     def generate_json(self, prompt, system="", temperature=0.3, models=None):
         self.calls += 1
         self.seen.append(prompt)
-        if "Score candidate sources" in prompt:
+        if "Score candidate" in prompt:
             return self.scores or {"items": [{"id": 0, "source_type": "primary_research", "mechanism": "reward timing", "relevance": 9, "credibility": 8,
                                               "depth_rarity": 8, "practical": 7, "shareability": 8,
                                               "overlap_with_previous": 1, "enough_text": True, "reason": "ok"}]}
@@ -59,11 +59,11 @@ class FakeLLM:
 
 
 class FakeCollector:
-    def __init__(self, cands):
-        self.cands, self.health = cands, {"OpenAlex": {"n": len(cands), "errors": []}}
+    def __init__(self, cands, news=None):
+        self.cands, self.news, self.health = cands, news, {"OpenAlex": {"n": len(cands), "errors": []}}
 
-    def collect(self):
-        return list(self.cands)
+    def collect(self, kind=None):
+        return list(self.news if (kind == "news" and self.news is not None) else self.cands)
 
     def fetch_text(self, c, limit=14000):
         return c.abstract, False
@@ -103,7 +103,8 @@ class FakeTG:
 def env(tmp_path):
     cfg = load_config()
     cfg["_root"] = str(pathlib.Path(__file__).resolve().parent.parent)
-    cfg["schedule"] = dict(cfg["schedule"], start_date="", post_time="18:30", prepare_lead_min=90)
+    cfg["schedule"] = dict(cfg["schedule"], start_date="", prepare_lead_min=90,
+                           slots={"insight": {"kind": "insight", "time": "18:30", "label": "پژوهشی"}})
     cfg["paths"] = dict(cfg["paths"], reports=str(tmp_path / "rep"), settings=str(tmp_path / "settings.json"),
                         ready_dir=str(tmp_path / "ready"))
     db = DB(str(tmp_path / "t.db"))
@@ -114,8 +115,8 @@ CATALOG = [{"url": "https://moarek.ir/a/", "title": "A", "desc": "a", "texts": [
            {"url": "https://moarek.ir/b/", "title": "B", "desc": "b", "texts": ["b1", "b2"]}]
 
 
-def deps(cfg, db, llm, tg, cands, now=NOW):
-    return Deps(cfg=cfg, db=db, collector=FakeCollector(cands), llm=llm, tg=tg, now=lambda: now,
+def deps(cfg, db, llm, tg, cands, now=NOW, news=None):
+    return Deps(cfg=cfg, db=db, collector=FakeCollector(cands, news), llm=llm, tg=tg, now=lambda: now,
                 log=lambda *_: None, catalog=CATALOG)
 
 
@@ -316,7 +317,7 @@ def test_commands_change_time_and_pause(env):
     tg.say("/time 20:00", 3, chat="999")  # از چت غیرمجاز: نادیده گرفته می‌شود
     r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
     st = control.load(cfg)
-    assert st["post_time"] == "19:00" and st["paused"] is True and r["status"] == "paused"
+    assert st["slots"]["insight"] == "19:00" and st["paused"] is True and r["status"] == "paused"
     assert any("19:00" in a for a in tg.alerts) and tg.sent == []
     tg.say("/resume", 4)
     r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(19, 2)), workdir=str(tmp))
@@ -447,7 +448,7 @@ def test_real_config_midday_tick_posts_even_if_github_is_late(env):
     """با ساعت واقعی تنظیمات (۱۲:۰۰): اجرای دیرهنگام گیت‌هاب ساعت ۱۴:۱۵ هم همان روز پست را منتشر می‌کند."""
     cfg, db, tmp = env
     cfg["schedule"] = dict(load_config()["schedule"], start_date="")
-    assert cfg["schedule"]["post_time"] == "12:00"
+    assert cfg["schedule"]["slots"]["insight"]["time"] == "12:00" and cfg["schedule"]["slots"]["news"]["time"] == "20:30"
     tg = FakeTG()
     assert tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 17)), workdir=str(tmp))["status"] == "too_early"
     r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(14, 15)), workdir=str(tmp))
@@ -555,3 +556,74 @@ def test_reserve_is_topped_up_after_a_successful_post(env):
     assert r["status"] == "published" and len(tg.sent) == 1          # فقط یک پست در کانال
     reserve = db.reserve_posts()
     assert len(reserve) == 1 and reserve[0]["status"] == "dry_run"   # و یک پیش‌نویس تازه در ذخیره
+
+
+# ---------------- دو پست در روز: پژوهشی (۱۲:۰۰) و خبری (۲۰:۳۰) ----------------
+NEWS = Candidate(url="https://www.marketingdive.com/news/loyalty-update/1/", title="A retailer rebuilt its loyalty streaks",
+                 source_name="Marketing Dive", source_type="news", abstract=SRC, published="2026-11-20", venue="Marketing Dive")
+
+
+def two_slot_cfg(env):
+    cfg, db, tmp = env
+    cfg["schedule"] = dict(load_config()["schedule"], start_date="")
+    cfg["buttons"] = dict(cfg["buttons"], pages=CATALOG)
+    return cfg, db, tmp
+
+
+def test_two_slots_post_independently_the_same_day(env):
+    cfg, db, tmp = two_slot_cfg(env)
+    tg, llm = FakeTG(), FakeLLM()
+    go = lambda h, m: tick(deps(cfg, db, llm, tg, [CAND], at(h, m), news=[NEWS]), workdir=str(tmp))
+    r = go(12, 2)
+    assert r["status"] == "published" and r["slot"] == "insight" and len(tg.sent) == 1
+    assert db.published_today(cfg["timezone"], at(12, 2), "insight") and not db.published_today(cfg["timezone"], at(12, 2), "news")
+    assert go(15, 0)["slot"] == "news" and len(tg.sent) == 1                        # خبر هنوز زود است
+    assert [x for x in [go(18, 40)]][0]["status"] == "prepared_waiting"             # ۲ ساعت قبل: آماده می‌شود
+    n_calls = llm.calls
+    assert go(20, 5)["status"] == "prepared_waiting" and llm.calls == n_calls       # دوباره تولید نمی‌شود
+    r = go(20, 32)
+    assert r["status"] == "published" and r["slot"] == "news" and len(tg.sent) == 2
+    assert go(21, 2)["status"] == "already_posted" and len(tg.sent) == 2
+
+
+def test_news_slot_uses_news_prompts_and_news_pool(env):
+    cfg, db, tmp = two_slot_cfg(env)
+    tg, llm = FakeTG(), FakeLLM()
+    r = run(deps(cfg, db, llm, tg, [CAND], at(20, 32), news=[NEWS]), "live", workdir=str(tmp), slot="news")
+    assert r["status"] == "published" and r["selected"]["url"] == NEWS.url
+    assert any("Score candidate NEWS items" in p for p in llm.seen)
+    assert any("EVENING NEWS" in p for p in llm.seen)            # سبک نگارش خبری
+    assert not any("Score candidate sources" in p for p in llm.seen)
+    assert db.con.execute("SELECT slot FROM posts WHERE status='published'").fetchone()["slot"] == "news"
+
+
+def test_time_commands_for_two_slots(env):
+    cfg, db, tmp = two_slot_cfg(env)
+    st = control.load(cfg)
+    assert "تنظیم شد" in control.apply_time_command(st, "12:30 21:00", cfg)
+    assert st["slots"] == {"insight": "12:30", "news": "21:00"}
+    control.apply_time_command(st, "news 20:00", cfg)
+    assert st["slots"]["news"] == "20:00" and st["slots"]["insight"] == "12:30"
+    control.apply_time_command(st, "11:00", cfg)
+    assert st["slots"]["insight"] == "11:00" and st["slots"]["news"] == "20:00"
+    control.apply_time_command(st, "20:45", cfg, "/time2")
+    assert st["slots"]["news"] == "21:00"
+    assert control.apply_time_command(st, "news 03:00", cfg).startswith("ساعت باید")
+
+
+def test_legacy_single_post_time_setting_is_migrated(env):
+    cfg, _, tmp = two_slot_cfg(env)
+    pathlib.Path(cfg["paths"]["settings"]).write_text(json.dumps({"post_time": "13:00", "paused": False, "post_now": False}), encoding="utf-8")
+    st = control.load(cfg)
+    assert st["slots"] == {"insight": "13:00", "news": "20:30"} and st["post_now"] == ""
+
+
+def test_now_news_command_and_status_text(env):
+    cfg, db, tmp = two_slot_cfg(env)
+    tg = FakeTG()
+    tg.say("/now news", 1)
+    r = tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 2), news=[NEWS]), workdir=str(tmp))
+    assert r["status"] == "published" and r["slot"] == "news"
+    tg.say("/status", 2)
+    tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 32), news=[NEWS]), workdir=str(tmp))
+    assert any("12:00" in a and "20:30" in a for a in tg.alerts)

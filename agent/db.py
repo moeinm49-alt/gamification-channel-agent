@@ -32,7 +32,7 @@ class DB:
         self.con.row_factory = sqlite3.Row
         self.con.executescript(SCHEMA)
         cols = {r["name"] for r in self.con.execute("PRAGMA table_info(posts)")}
-        for col in ("button_url", "button_json", "image_path"):
+        for col in ("button_url", "button_json", "image_path", "slot"):
             if col not in cols:
                 self.con.execute(f"ALTER TABLE posts ADD COLUMN {col} TEXT DEFAULT ''")
         self.con.commit()
@@ -68,12 +68,12 @@ class DB:
         self.con.commit()
 
     # ---- پست‌ها
-    def add_post(self, article_id, headline, core_finding, text_html, qc, status, now, image=None, button_url=""):
+    def add_post(self, article_id, headline, core_finding, text_html, qc, status, now, image=None, button_url="", slot="insight"):
         cur = self.con.execute(
-            "INSERT INTO posts(article_id,headline,core_finding,text_html,qc_json,status,created_at,image_json,button_url)"
-            " VALUES(?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO posts(article_id,headline,core_finding,text_html,qc_json,status,created_at,image_json,button_url,slot)"
+            " VALUES(?,?,?,?,?,?,?,?,?,?)",
             (article_id, headline, core_finding, text_html, json.dumps(qc, ensure_ascii=False),
-             status, iso(now), json.dumps(image or {}, ensure_ascii=False), button_url))
+             status, iso(now), json.dumps(image or {}, ensure_ascii=False), button_url, slot))
         self.con.commit()
         return cur.lastrowid
 
@@ -102,11 +102,14 @@ class DB:
     def reserve_posts(self, n=15):
         rows = self.con.execute(
             "SELECT p.*, a.venue AS venue FROM posts p JOIN articles a ON a.id=p.article_id "
-            "WHERE p.status IN ('dry_run','expired') AND a.status!='published' ORDER BY p.id DESC LIMIT ?", (n,)).fetchall()
+            "WHERE p.status IN ('dry_run','expired') AND a.status!='published' AND COALESCE(NULLIF(p.slot,''),'insight')='insight' "
+            "ORDER BY p.id DESC LIMIT ?", (n,)).fetchall()
         return rows
 
-    def ready_post(self):
-        return self.con.execute("SELECT * FROM posts WHERE status='ready' ORDER BY id DESC LIMIT 1").fetchone()
+    def ready_post(self, slot="insight"):
+        return self.con.execute(
+            "SELECT * FROM posts WHERE status='ready' AND COALESCE(NULLIF(slot,''),'insight')=? ORDER BY id DESC LIMIT 1",
+            (slot,)).fetchone()
 
     def last_published(self):
         return self.con.execute("SELECT headline, published_at FROM posts WHERE status='published' ORDER BY id DESC LIMIT 1").fetchone()
@@ -121,11 +124,13 @@ class DB:
         rows = self.con.execute("SELECT button_url FROM posts WHERE status='published' ORDER BY id DESC LIMIT ?", (n,)).fetchall()
         return [r["button_url"] for r in rows if r["button_url"]]
 
-    def published_today(self, tz, now):
+    def published_today(self, tz, now, slot=None):
         zone = ZoneInfo(tz)
         today = now.astimezone(zone).date()
-        rows = self.con.execute("SELECT published_at FROM posts WHERE status='published' ORDER BY id DESC LIMIT 5").fetchall()
-        for r in rows:
+        q = "SELECT published_at, slot FROM posts WHERE status='published' ORDER BY id DESC LIMIT 12"
+        for r in self.con.execute(q).fetchall():
+            if slot and (r["slot"] or "insight") != slot:
+                continue
             if r["published_at"] and dt.datetime.fromisoformat(r["published_at"]).astimezone(zone).date() == today:
                 return True
         return False

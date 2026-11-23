@@ -6,6 +6,9 @@ on:
       task:
         description: "tick (اجرای عادی زمان‌بندی) | run (آماده‌سازی و انتشار فوری) | dry (پیش‌نمایش در چت خصوصی) | discover | ping"
         default: "tick"
+      slot:
+        description: "اسلات برای run/dry: insight (پژوهشی) یا news (خبری)"
+        default: "insight"
       force:
         description: "اجرای دوباره حتی اگر امروز پست منتشر شده (true/false)"
         default: "false"
@@ -39,8 +42,9 @@ jobs:
           ALERT_CHAT_ID: ${{ secrets.ALERT_CHAT_ID }}
           TASK: ${{ github.event.inputs.task || 'tick' }}
           FORCE: ${{ github.event.inputs.force || 'false' }}
+          SLOT: ${{ github.event.inputs.slot || 'insight' }}
         run: |
-          if [ "$FORCE" = "true" ]; then python main.py "$TASK" --force; else python main.py "$TASK"; fi
+          if [ "$FORCE" = "true" ]; then python main.py "$TASK" --slot "$SLOT" --force; else python main.py "$TASK" --slot "$SLOT"; fi
       - name: Save state
         if: always()
         run: |

@@ -51,6 +51,7 @@ class Collector:
         self.log = log
         self.sleep = sleep
         self.health = {}
+        self.lookback = int(cfg.get("lookback_days", 150))
 
     # ---------- شبکه
     def _get(self, url, params=None, as_json=True):
@@ -67,7 +68,7 @@ class Collector:
         raise RuntimeError(last)
 
     def _since(self):
-        d = self.now - dt.timedelta(days=int(self.cfg.get("lookback_days", 150)))
+        d = self.now - dt.timedelta(days=self.lookback)
         return d.date().isoformat()
 
     def _record(self, name, items, err=None):
@@ -154,10 +155,10 @@ class Collector:
         return out
 
     # ---------- RSS
-    def rss(self, feed):
+    def rss(self, feed, source_type="blog"):
         raw = self._get(feed["url"], as_json=False)
         parsed = feedparser.parse(raw)
-        cutoff = self.now - dt.timedelta(days=int(self.cfg.get("lookback_days", 150)))
+        cutoff = self.now - dt.timedelta(days=self.lookback)
         out = []
         for e in parsed.entries[:25]:
             link = e.get("link") or ""
@@ -181,13 +182,18 @@ class Collector:
                         img = enc.get("href", "")
                         break
             summary = strip_html(e.get("summary") or "")
-            out.append(Candidate(url=link, title=title, source_name=feed["name"], source_type="blog",
+            out.append(Candidate(url=link, title=title, source_name=feed["name"], source_type=source_type,
                                  abstract=summary, published=pub, authors=e.get("author", ""),
                                  venue=feed["name"], image_url=img))
         return out
 
     # ---------- اجرا
-    def collect(self):
+    def collect(self, kind="insight"):
+        if kind == "news":  # اسلات خبر: فقط فیدهای خبری، مطالب چند روز اخیر
+            self.lookback = int(self.cfg["news"]["lookback_days"])
+            jobs = [(f["name"], lambda f=f: self.rss(f, "news"), None) for f in self.cfg["news"]["feeds"]]
+            return self._run_jobs(jobs, news=True)
+        self.lookback = int(self.cfg.get("lookback_days", 150))
         terms = self.cfg.get("search_terms", [])
         jobs = []
         for t in terms:
@@ -197,6 +203,9 @@ class Collector:
             jobs.append(("Crossref", self.crossref, t))
         for f in self.cfg.get("rss_feeds", []):
             jobs.append((f["name"], self.rss, f))
+        return self._run_jobs(jobs)
+
+    def _run_jobs(self, jobs, news=False):
         items = []
         t0 = time.time()
         deadline = float(self.cfg.get("collect_deadline_s", 170))
@@ -207,7 +216,7 @@ class Collector:
                 continue
             try:
                 t1 = time.time()
-                got = fn(arg)
+                got = fn() if news else fn(arg)
                 self.log(f"[منبع] {name}: {len(got)} مطلب ({time.time() - t1:.1f}s)")
                 self._record(name, got)
                 items += got
@@ -231,7 +240,7 @@ class Collector:
         """برمی‌گرداند: (متن، آیا متن کامل داریم؟)"""
         text, full = c.abstract, False
         try:
-            if c.source_type == "blog":
+            if c.source_type in ("blog", "news"):
                 import trafilatura
                 raw = self._get(c.url, as_json=False)
                 got = trafilatura.extract(raw, include_comments=False, include_tables=False) or ""

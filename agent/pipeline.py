@@ -30,6 +30,18 @@ class Deps:
     catalog: Any = None
 
 
+def slot_kind(cfg, slot):
+    return cfg["schedule"]["slots"][slot]["kind"]
+
+
+def kind_cfg(cfg, kind):
+    """وزن‌ها، شرط‌ها و حداقل امتیاز هر نوع پست (پژوهشی یا خبری)."""
+    if kind == "news":
+        n = cfg["news"]
+        return {"weights": n["weights"], "gates": n["gates"], "min_score": n["min_score"]}
+    return {"weights": cfg["weights"], "gates": cfg["gates"], "min_score": cfg["min_score"]}
+
+
 def esc(s):
     return html.escape(str(s), quote=True)
 
@@ -72,7 +84,7 @@ def diversify(cands, cap):
     return out
 
 
-def score_candidates(d, cands):
+def score_candidates(d, cands, kind="insight"):
     recent = d.db.recent_posts(40)
     recent_txt = "\n".join(f"- {r['headline']} | {r['core_finding']}" for r in recent) or "(none yet)"
     need = ("relevance", "credibility", "depth_rarity", "practical", "shareability", "overlap_with_previous")
@@ -83,7 +95,11 @@ def score_candidates(d, cands):
         items = [f"[{i}] ({c.source_type}) {c.title}\nVenue: {c.venue or c.source_name} | Date: {c.published}\n"
                  f"Text: {(c.abstract or '')[:450]}" for i, c in enumerate(chunk)]
         try:
-            out = d.llm.generate_json(prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items)), temperature=0.2, models=d.cfg.get("models_fast"))
+            if kind == "news":
+                prompt = prompts.SCORE_NEWS.format(today=d.now().date().isoformat(), recent=recent_txt, items="\n\n".join(items))
+            else:
+                prompt = prompts.SCORE.format(recent=recent_txt, items="\n\n".join(items))
+            out = d.llm.generate_json(prompt, temperature=0.2, models=d.cfg.get("models_fast"))
         except LLMError:
             if scored:  # دسته‌ی اول موفق بوده؛ با همان ادامه می‌دهیم
                 d.log("[امتیاز] دسته‌ی بعدی ناموفق بود؛ با نتایج موجود ادامه می‌دهیم")
@@ -192,14 +208,14 @@ def polish(d, w):
     return autofix(w, d.cfg)
 
 
-def write_and_check(d, cand, text, full, avail):
+def write_and_check(d, cand, text, full, avail, kind="insight"):
     cfg = d.cfg
     pages = "\n".join(f"[{i}] {p['title']} — {p.get('desc', '')[:90]}" for i, p in enumerate(avail))
     coverage = "full text" if full else "abstract/summary only (do not claim anything beyond it)"
     feedback, last_issues = "", []
     for _ in range(int(cfg.get("writes_per_article", 2))):
         prompt = prompts.WRITE.format(
-            style=prompts.STYLE.format(max_chars=cfg["post_max_chars"], glossary="\n".join(f"- {g['en']} → {g['fa']}" for g in cfg.get("glossary", []))), title=cand.title,
+            style=(prompts.STYLE_NEWS if kind == "news" else prompts.STYLE).format(max_chars=cfg["post_max_chars"], glossary="\n".join(f"- {g['en']} → {g['fa']}" for g in cfg.get("glossary", []))), title=cand.title,
             venue=cand.venue or cand.source_name, published=cand.published, authors=cand.authors,
             coverage=coverage, text=text, feedback=feedback, samples=prompts.SAMPLES, pages=pages)
         w = d.llm.generate_json(prompt, temperature=0.4, models=cfg.get("models_quality"))
@@ -248,20 +264,22 @@ def publish(d, post_html, image_path, buttons=None, chat=None):
     return d.tg.send_message(chat, post_html, button=buttons), "text"
 
 
-def run(d, mode="live", force=False, workdir=None):
+def run(d, mode="live", force=False, workdir=None, slot="insight"):
     cfg, db = d.cfg, d.db
+    kind = slot_kind(cfg, slot)
+    kc = kind_cfg(cfg, kind)
     started = d.now()
-    report = {"started": started.isoformat(timespec="seconds"), "mode": mode, "sources": {}, "collected": 0,
+    report = {"started": started.isoformat(timespec="seconds"), "mode": mode, "slot": slot, "sources": {}, "collected": 0,
               "new": 0, "scored": 0, "rejected": [], "selected": None, "score": None, "reason": "",
               "image": "none", "status": "", "errors": []}
     workdir = workdir or tempfile.mkdtemp()
 
-    if mode in ("live", "ready") and not force and db.published_today(cfg["timezone"], started):
+    if mode in ("live", "ready") and not force and db.published_today(cfg["timezone"], started, slot):
         report["status"] = "skipped_already_posted"
         report["reason"] = "امروز قبلاً پست منتشر شده است"
         return finish(d, report, started)
 
-    cands = d.collector.collect()
+    cands = d.collector.collect(kind)
     report["sources"] = d.collector.health
     for name, h in d.collector.health.items():
         db.source_health(name, not h["errors"] or h["n"] > 0, h["n"], "; ".join(h["errors"])[:300], started)
@@ -274,17 +292,17 @@ def run(d, mode="live", force=False, workdir=None):
 
     pool = diversify(fresh, int(cfg["max_candidates_to_score"]))
     try:
-        scored = score_candidates(d, pool)
+        scored = score_candidates(d, pool, kind)
     except LLMError as e:
         report["status"], report["reason"] = "llm_unavailable", f"مدل زبانی در دسترس نبود: {e}"
         return finish(d, report, started)
     report["scored"] = len(scored)
-    g = cfg["gates"]
+    g = kc["gates"]
     ranked = []
     recent_src = db.recent_sources(3)
     for i, it in scored.items():
         c = pool[i]
-        raw = weighted_total(it, cfg["weights"], 10 if c.image_url else 6)
+        raw = weighted_total(it, kc["weights"], 10 if c.image_url else 6)
         # تنوع منبع: تکرار منبع در ۳ پست آخر جریمه دارد و عوض شدن نوع منبع (مقاله ↔ وبلاگ) امتیاز می‌گیرد
         key = src_key(c.source_type, c.source_name, c.venue)
         recent_keys = [src_key(r["source_type"], r["source_name"], r["venue"]) for r in recent_src]
@@ -297,13 +315,13 @@ def run(d, mode="live", force=False, workdir=None):
         aid = db.upsert_article(c.to_dict(), started)
         it["raw_score"] = raw
         db.set_article(aid, score=total, score_json=json.dumps(it, ensure_ascii=False), status="scored")
-        if total >= cfg["min_score"] and not gate_fail:
+        if total >= kc["min_score"] and not gate_fail:
             ranked.append((total, i, aid, it))
     ranked.sort(key=lambda x: -x[0])
     if not ranked:
         best = max((it.get("raw_score", 0) for it in scored.values()), default=0)
         report["status"] = "no_post"
-        report["reason"] = f"هیچ مطلبی به حد نصاب {cfg['min_score']} نرسید (بهترین امتیاز: {best})"
+        report["reason"] = f"هیچ مطلبی به حد نصاب {kc['min_score']} نرسید (بهترین امتیاز: {best})"
         return finish(d, report, started)
 
     catalog = d.catalog if d.catalog is not None else cfg["buttons"]["pages"]
@@ -319,7 +337,7 @@ def run(d, mode="live", force=False, workdir=None):
             continue
         db.set_article(aid, has_full_text=int(full))
         try:
-            w, post, qc, button = write_and_check(d, c, text, full, avail)
+            w, post, qc, button = write_and_check(d, c, text, full, avail, kind)
         except LLMError as e:
             report["status"], report["reason"] = "llm_unavailable", f"مدل زبانی در دسترس نبود: {e}"
             return finish(d, report, started)
@@ -332,7 +350,7 @@ def run(d, mode="live", force=False, workdir=None):
         report["image"] = img_info.get("kind", "none")
         pid = db.add_post(aid, w["headline"], w.get("core_finding", ""), post, qc,
                           {"dry": "dry_run", "live": "pending", "ready": "ready", "reserve": "dry_run"}[mode], started, img_info,
-                          (button or {}).get("url", ""))
+                          (button or {}).get("url", ""), slot)
         report["selected"] = {"title": c.title, "url": c.url, "venue": c.venue, "headline": w["headline"],
                               "post_chars": plain_len(post), "evidence_type": w.get("evidence_type"),
                               "full_text": full}
@@ -388,7 +406,7 @@ def finish(d, report, started):
     root = pathlib.Path(d.cfg["_root"]) / d.cfg["paths"]["reports"]
     root.mkdir(parents=True, exist_ok=True)
     day = started.astimezone().date().isoformat() if False else started.date().isoformat()
-    suffix = {"dry": "-dry", "reserve": "-reserve"}.get(report["mode"], "")
+    suffix = {"dry": "-dry", "reserve": "-reserve"}.get(report["mode"], "") + ("" if report.get("slot", "insight") == "insight" else "-" + report["slot"])
     (root / f"{day}{suffix}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = summarize(report)
     d.log(summary)
@@ -439,7 +457,7 @@ def publish_ready(d, row):
     root = pathlib.Path(cfg["_root"]) / cfg["paths"]["reports"]
     root.mkdir(parents=True, exist_ok=True)
     rep = {"status": "published", "headline": row["headline"], "message_id": mid, "published_at": now}
-    (root / f"{d.now().date().isoformat()}-publish.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
+    (root / f"{d.now().date().isoformat()}-publish-{(row['slot'] if 'slot' in row.keys() and row['slot'] else 'insight')}.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
     return rep
 
 
