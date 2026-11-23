@@ -182,6 +182,10 @@ class Collector:
                         img = enc.get("href", "")
                         break
             summary = strip_html(e.get("summary") or "")
+            for ct in e.get("content", []) or []:  # بعضی فیدها متن کامل را در content می‌گذارند
+                body = strip_html(ct.get("value") or "")
+                if len(body) > len(summary):
+                    summary = body
             out.append(Candidate(url=link, title=title, source_name=feed["name"], source_type=source_type,
                                  abstract=summary, published=pub, authors=e.get("author", ""),
                                  venue=feed["name"], image_url=img))
@@ -236,14 +240,41 @@ class Collector:
         return uniq
 
     # ---------- متن کامل
+    BROWSER = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                             "Chrome/124.0 Safari/537.36",
+               "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+               "Accept-Language": "en-US,en;q=0.9"}
+
+    def _page_text(self, url):
+        """متن اصلی صفحه: اول با سرآیند مرورگر؛ اگر سایت ربات را رد کرد (۴۰۳) از سرویس خواننده‌ی r.jina.ai."""
+        import trafilatura
+        try:
+            r = requests.get(url, headers=self.BROWSER, timeout=20)
+            if r.status_code == 200:
+                got = trafilatura.extract(r.content, include_comments=False, include_tables=False) or ""
+                if len(got) > 500:
+                    return got
+        except requests.RequestException:
+            pass
+        try:
+            r = requests.get("https://r.jina.ai/" + url, headers={"Accept": "text/plain", "User-Agent": UA}, timeout=40)
+            if r.status_code == 200:
+                txt = r.text
+                if "Markdown Content:" in txt:
+                    txt = txt.split("Markdown Content:", 1)[1]
+                txt = re.sub(r"!?\[([^\]]*)\]\([^)]*\)", r"\1", txt)  # لینک‌ها و تصویرهای مارک‌داون
+                self.log("[متن] از سرویس خواننده‌ی r.jina.ai استفاده شد")
+                return re.sub(r"\n{3,}", "\n\n", txt).strip()
+        except requests.RequestException:
+            pass
+        return ""
+
     def fetch_text(self, c, limit=14000):
         """برمی‌گرداند: (متن، آیا متن کامل داریم؟)"""
         text, full = c.abstract, False
         try:
             if c.source_type in ("blog", "news"):
-                import trafilatura
-                raw = self._get(c.url, as_json=False)
-                got = trafilatura.extract(raw, include_comments=False, include_tables=False) or ""
+                got = self._page_text(c.url)
                 if len(got) > 500:
                     text, full = got, True
             elif c.pmcid:
