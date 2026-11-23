@@ -1,10 +1,10 @@
 {
- "started": "2026-11-23T15:00:54+00:00",
+ "started": "2026-11-23T15:30:51+00:00",
  "mode": "ready",
  "slot": "news",
  "sources": {
   "Marketing Dive": {
-   "n": 10,
+   "n": 9,
    "errors": []
   },
   "Digiday": {
@@ -28,11 +28,11 @@
    "errors": []
   },
   "Game Developer": {
-   "n": 7,
+   "n": 8,
    "errors": []
   },
   "GamesIndustry.biz": {
-   "n": 23,
+   "n": 25,
    "errors": []
   },
   "UX Collective": {
@@ -56,17 +56,22 @@
    "errors": []
   }
  },
- "collected": 133,
- "new": 129,
- "scored": 0,
- "rejected": [],
+ "collected": 135,
+ "new": 131,
+ "scored": 20,
+ "rejected": [
+  {
+   "title": "OpenAI rewrites ChatGPT Business Hub terms after legal language raises concerns",
+   "reason": "unsupported_application: The suggested application/takeaway about product and strategy teams ('به نظرم برای بچه‌های محصول و استراتژی این یعنی...') is presented as an unsupported finding or general advice not derived directly from the source's reporting on publisher legal terms."
+  }
+ ],
  "selected": null,
  "score": null,
- "reason": "مدل زبانی در دسترس نبود: سقف زمان فراخوانی مدل تمام شد (HTTP 503)",
+ "reason": "مدل زبانی در دسترس نبود: سقف زمان فراخوانی مدل تمام شد ()",
  "image": "none",
  "status": "llm_unavailable",
  "errors": [],
- "finished": "2026-11-23T15:09:50+00:00",
- "seconds": 536,
- "llm_calls": 20
+ "finished": "2026-11-23T15:52:52+00:00",
+ "seconds": 1320,
+ "llm_calls": 68
 }
