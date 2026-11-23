@@ -1,0 +1,88 @@
+{
+ "started": "2026-11-23T05:49:16+00:00",
+ "mode": "dry",
+ "slot": "news",
+ "sources": {
+  "Marketing Dive": {
+   "n": 9,
+   "errors": []
+  },
+  "Digiday": {
+   "n": 15,
+   "errors": []
+  },
+  "Retail Dive": {
+   "n": 10,
+   "errors": []
+  },
+  "Adweek": {
+   "n": 10,
+   "errors": []
+  },
+  "Fast Company": {
+   "n": 20,
+   "errors": []
+  },
+  "CustomerThink": {
+   "n": 20,
+   "errors": []
+  },
+  "Game Developer": {
+   "n": 7,
+   "errors": []
+  },
+  "GamesIndustry.biz": {
+   "n": 25,
+   "errors": []
+  },
+  "UX Collective": {
+   "n": 10,
+   "errors": []
+  },
+  "Lenny's Newsletter": {
+   "n": 2,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 1,
+   "errors": []
+  },
+  "eLearning Industry": {
+   "n": 11,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 4,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 0,
+   "errors": []
+  }
+ },
+ "collected": 144,
+ "new": 144,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "AI-Driven Upskilling: How Artificial Intelligence Is Transforming Tax Software Training",
+  "url": "https://elearningindustry.com/ai-driven-upskilling-how-artificial-intelligence-is-transforming-tax-software-training",
+  "venue": "eLearning Industry",
+  "headline": "🤖 آموزش نرم‌افزار با ویدیوهای قدیمی دیگه جواب نمیده",
+  "post_chars": 800,
+  "evidence_type": "expert opinion",
+  "full_text": true
+ },
+ "score": 77.5,
+ "reason": "Explores how adaptive learning paths and interactive sandboxes improve technical software onboarding and upskilling.",
+ "image": "card",
+ "status": "dry_run_ok",
+ "errors": [],
+ "button": {
+  "text": "🎯 طراحی اختصاصی",
+  "url": "https://moarek.ir/consulting/"
+ },
+ "finished": "2026-11-23T05:49:49+00:00",
+ "seconds": 32,
+ "llm_calls": 7
+}

@@ -1,1 +1,30 @@
-00:54:09 [زمان‌بندی] هنوز زود است (انتشار 12:00)
+05:49:16 [منبع] Marketing Dive: 9 مطلب (0.1s)
+05:49:17 [منبع] Digiday: 15 مطلب (0.1s)
+05:49:17 [منبع] Retail Dive: 10 مطلب (0.1s)
+05:49:18 [منبع] Adweek: 10 مطلب (0.1s)
+05:49:18 [منبع] Fast Company: 20 مطلب (0.2s)
+05:49:19 [منبع] CustomerThink: 20 مطلب (0.5s)
+05:49:20 [منبع] Game Developer: 7 مطلب (1.0s)
+05:49:21 [منبع] GamesIndustry.biz: 25 مطلب (0.2s)
+05:49:21 [منبع] UX Collective: 10 مطلب (0.2s)
+05:49:22 [منبع] Lenny's Newsletter: 2 مطلب (0.3s)
+05:49:22 [منبع] Duolingo Blog: 1 مطلب (0.2s)
+05:49:23 [منبع] eLearning Industry: 11 مطلب (0.1s)
+05:49:23 [منبع] Nielsen Norman Group: 4 مطلب (0.2s)
+05:49:24 [منبع] MIT Sloan Management Review: 0 مطلب (0.2s)
+05:49:30 [مدل] gemini-flash-lite-latest → HTTP 200 (5.6s) 
+05:49:35 [مدل] gemini-flash-lite-latest → HTTP 200 (5.3s) 
+05:49:40 [مدل] gemini-3.5-flash → HTTP 200 (4.5s) 
+05:49:42 [مدل] gemini-3.5-flash → HTTP 200 (2.0s) 
+05:49:42 [ویرایش] 4 اصلاح: اصلاح جمع «ویدیوی» به «ویدیوهای» جهت هماهنگی با سایر اجزای جمله (فایل‌های PDF، اسلایدهای).; جایگزینی ترکیب نامأنوس «محیط تست» با معادل روان و استاندارد «محیط آزمایشی».; توضیح و روان‌سازی واژه انگلیسی «آنبوردینگ» به صورت «توجیه و آشناسازی نیروها (آنبوردینگ)» جهت درک سریع‌تر مدیران.; بررسی و حفظ لحن م
+05:49:45 [مدل] gemini-3.5-flash → HTTP 200 (3.1s) 
+05:49:47 [مدل] gemini-3.5-flash → HTTP 200 (2.3s) 
+05:49:47 [ویرایش] 5 اصلاح: حفظ لحن محاوره‌ای و ساختار درست نیم‌فاصله‌ها در کل متن; جایگزینی اصطلاح مخفف انگلیسی «تیم‌های L&D» با معادل شفاف و روان فارسی «تیم‌های یادگیری و توسعه» برای درک بهتر مدیران; بازنویسی ترکیب گنگ «مسابقه خطی» به «مسیر یکنواخت و پشت‌سرهم» برای اصلاح ترجمه تحت‌اللفظی و نامفهوم (Linear process/course); اص
+05:49:48 [مدل] gemini-3.5-flash → HTTP 200 (0.5s) 
+05:49:49 [تلگرام] پیش‌نمایش ارسال شد (message_id=105, photo)
+05:49:49 گزارش اجرا (dry): dry_run_ok
+منابع: 14 | یافت‌شده: 144 | جدید: 144 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🤖 آموزش نرم‌افزار با ویدیوهای قدیمی دیگه جواب نمیده (امتیاز 77.5)
+https://elearningindustry.com/ai-driven-upskilling-how-artificial-intelligence-is-transforming-tax-software-training
+تصویر: card | متن کامل: True
+دلیل: Explores how adaptive learning paths and interactive sandboxes improve technical software onboarding and upskilling.
