@@ -1,5 +1,5 @@
 {
- "started": "2026-11-23T05:52:26+00:00",
+ "started": "2026-11-23T05:58:31+00:00",
  "mode": "dry",
  "slot": "news",
  "sources": {
@@ -57,20 +57,16 @@
   }
  },
  "collected": 133,
- "new": 133,
+ "new": 130,
  "scored": 40,
  "rejected": [
   {
-   "title": "Can AI Generate Good Designs from Raw User Data?",
-   "reason": "لینک منبع در پست نیست; کلمه‌ی تکراری زیاد: خام؛ با کلمه‌های دیگر جایگزین کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
+   "title": "Sociable: Instagram adds Amazon affiliate links",
+   "reason": "متن ناکافی"
   },
   {
-   "title": "The Worst Customer Service Mistakes Are Ones AI Agents Almost Get Right",
-   "reason": "این عددها در متن منبع وجود ندارند و باید حذف یا اصلاح شوند: 5; حداقل دو ادعا همراه با نقل‌قول دقیق از منبع لازم است"
-  },
-  {
-   "title": "Canva added an AI ‘kill switch’ to its tools",
-   "reason": "کلمه‌ی تکراری زیاد: هوش؛ با کلمه‌های دیگر جایگزین کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن; عبارت کلیشه‌ای/اغراق‌آمیز «نکته جالب اینجاست» حذف شود"
+   "title": "Mall of America debuts AI-backed concierge, Mallie",
+   "reason": "متن ناکافی"
   }
  ],
  "selected": null,
@@ -79,7 +75,7 @@
  "image": "none",
  "status": "no_post",
  "errors": [],
- "finished": "2026-11-23T05:57:25+00:00",
- "seconds": 298,
- "llm_calls": 33
+ "finished": "2026-11-23T05:58:57+00:00",
+ "seconds": 26,
+ "llm_calls": 2
 }
