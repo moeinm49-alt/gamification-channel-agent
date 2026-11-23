@@ -1,3 +1,4 @@
+import html
 import re
 
 from .textutil import EMOJI_BASE, SourceIndex, numbers_in, plain_len, repeated_words, strip_html
@@ -18,7 +19,7 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
         issues.append(f"طول پست {n} کاراکتر است و از سقف {cfg['post_max_chars']} بیشتر است؛ کوتاه‌تر بنویس")
     if n < cfg["post_min_chars"]:
         issues.append("پست خیلی کوتاه است و محتوای کافی ندارد")
-    if cand.url not in post_html:
+    if cand.url not in post_html and html.escape(cand.url, quote=True) not in post_html:
         issues.append("لینک منبع در پست نیست")
     if cfg["channel_link"] not in post_html:
         issues.append("لینک کانال در پست نیست")
@@ -38,7 +39,7 @@ def deterministic_qc(post_html, writer, cand, source_text, cfg):
         issues.append(f"کلمه‌ی تکراری زیاد: {', '.join(rep)}؛ با کلمه‌های دیگر جایگزین کن")
     for para in writer.get("paragraphs", []):
         for sent in re.split(r"[.؟!؛\n]", str(para)):
-            if len(sent.split()) > 32:
+            if len(sent.split()) > 40:
                 issues.append("جمله‌ی خیلی بلند هست؛ به دو جمله‌ی کوتاه تقسیمش کن")
                 break
     if re.search(r"[A-Za-z]{3,}[ء-غف-يپچژکگی]|[ء-غف-يپچژکگی][A-Za-z]{3,}", body):

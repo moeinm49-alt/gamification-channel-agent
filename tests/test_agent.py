@@ -364,10 +364,10 @@ def test_fa_fix_typography():
 def test_repetition_and_long_sentence_qc(env):
     cfg, _, _ = env
     w = good_writer()
-    w["paragraphs"][0] += " نشون نشون نشون نشون"
+    w["paragraphs"][0] += " نشون نشون نشون نشون نشون"
     assert any("تکراری" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
     w = good_writer()
-    w["paragraphs"] = [" ".join(["کلمه"] * 40) + "."]
+    w["paragraphs"] = [" ".join(["کلمه"] * 45) + "."]
     assert any("بلند" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))
 
 
@@ -627,3 +627,17 @@ def test_now_news_command_and_status_text(env):
     tg.say("/status", 2)
     tick(deps(cfg, db, FakeLLM(), tg, [CAND], at(9, 32), news=[NEWS]), workdir=str(tmp))
     assert any("12:00" in a and "20:30" in a for a in tg.alerts)
+
+
+def test_url_with_ampersand_counts_as_present(env):
+    cfg, _, _ = env
+    c = Candidate(url="https://example.com/a?x=1&y=2", title="T", source_name="S", source_type="news", abstract=SRC, published="2026-11-20", venue="S")
+    w = good_writer()
+    assert not any("لینک منبع" in x for x in deterministic_qc(assemble(w, c, cfg), w, c, SRC, cfg))
+
+
+def test_domain_words_may_repeat(env):
+    cfg, _, _ = env
+    w = good_writer()
+    w["paragraphs"][0] += " هوش هوش هوش هوش هوش مصنوعی مصنوعی مصنوعی مصنوعی مصنوعی"
+    assert not any("تکراری" in x for x in deterministic_qc(assemble(w, CAND, cfg), w, CAND, SRC, cfg))

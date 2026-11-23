@@ -86,8 +86,9 @@ def fa_fix(s):
     return s
 
 
-def repeated_words(s, min_len=3, limit=4):
+def repeated_words(s, min_len=3, limit=5):
     from collections import Counter
     words = re.findall(r"[ء-غف-يپچژکگی\u200c]{%d,}" % min_len, s or "")
-    stop = {"این", "برای", "کرد", "رو", "که", "توی", "یعنی", "اما", "ولی", "هم", "باید", "خیلی", "یک"}
+    stop = {"این", "برای", "کرد", "رو", "که", "توی", "یعنی", "اما", "ولی", "هم", "باید", "خیلی", "یک",
+            "هوش", "مصنوعی", "کاربر", "کاربران", "مشتری", "مشتری\u200cها", "انگیزه", "گیمیفیکیشن", "رفتار", "بازی", "آموزش"}
     return sorted(w for w, c in Counter(words).items() if c >= limit and w not in stop)
