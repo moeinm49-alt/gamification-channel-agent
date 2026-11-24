@@ -18,8 +18,12 @@ HELP = ("دستورها:\n/status — وضعیت\n"
         "توجه: دستورها در اجرای بعدی سیستم (حداکثر ۳۰ دقیقه بعد) اعمال می‌شوند.")
 
 
+def enabled_slots(cfg):
+    return {k: v for k, v in cfg["schedule"]["slots"].items() if v.get("enabled", True)}
+
+
 def slot_ids(cfg):
-    return list(cfg["schedule"]["slots"].keys())
+    return list(enabled_slots(cfg).keys())
 
 
 def path(cfg):
@@ -27,7 +31,7 @@ def path(cfg):
 
 
 def load(cfg):
-    base = {"slots": {k: v["time"] for k, v in cfg["schedule"]["slots"].items()}, "paused": False, "post_now": "",
+    base = {"slots": {k: v["time"] for k, v in enabled_slots(cfg).items()}, "paused": False, "post_now": "",
             "update_offset": 0, "commands_registered": False, "prep": {"date": "", "n": {}}}
     p = path(cfg)
     if p.exists():
