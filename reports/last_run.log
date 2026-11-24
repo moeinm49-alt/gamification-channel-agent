@@ -1,2 +1,61 @@
-01:54:50 [زمان‌بندی] پست پژوهشی/تحلیلی: هنوز زود است (انتشار 12:00)
-01:54:50 [زمان‌بندی] خبر و آپدیت: هنوز زود است (انتشار 20:30)
+06:30:45 [منبع] OpenAlex: 8 مطلب (0.5s)
+06:31:10 [منبع] Europe PMC: 8 مطلب (24.7s)
+06:31:10 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:31:24 [منبع] Europe PMC: 8 مطلب (13.2s)
+06:31:24 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:31:30 [منبع] Europe PMC: 0 مطلب (5.6s)
+06:31:31 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:31:38 [منبع] Europe PMC: 0 مطلب (7.1s)
+06:31:39 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:32:03 [منبع] Europe PMC: 0 مطلب (24.3s)
+06:32:04 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:32:13 [منبع] Europe PMC: 1 مطلب (8.6s)
+06:32:13 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:32:25 [منبع] Europe PMC: 1 مطلب (11.6s)
+06:32:26 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:32:48 [منبع] Europe PMC: 0 مطلب (22.4s)
+06:32:49 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:32:50 [منبع] Europe PMC: 5 مطلب (0.5s)
+06:32:50 [منبع] OpenAlex: 8 مطلب (0.2s)
+06:33:04 [منبع] Europe PMC: 0 مطلب (13.6s)
+06:33:05 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:33:10 [منبع] Europe PMC: 1 مطلب (4.7s)
+06:33:10 [منبع] OpenAlex: 8 مطلب (0.3s)
+06:33:15 [منبع] Europe PMC: 0 مطلب (3.8s)
+06:33:20 [منبع] Crossref: 8 مطلب (4.9s)
+06:33:25 [منبع] Crossref: 8 مطلب (5.1s)
+06:33:29 [منبع] Crossref: 8 مطلب (3.1s)
+06:33:34 [منبع] Crossref: 8 مطلب (4.7s)
+06:33:34 [منبع] Nielsen Norman Group: 20 مطلب (0.1s)
+06:33:34 [منبع] Yu-kai Chou Octalysis: رد شد (سقف زمان جمع‌آوری)
+06:33:34 [منبع] MIT Sloan Management Review: رد شد (سقف زمان جمع‌آوری)
+06:33:34 [منبع] Duolingo Blog: رد شد (سقف زمان جمع‌آوری)
+06:33:35 [مدل] gemini-flash-lite-latest → HTTP 503 (1.1s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:37 [مدل] gemini-3.5-flash-lite → HTTP 503 (1.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:54 [مدل] gemini-flash-latest → HTTP 503 (16.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:56 [مدل] gemini-3.5-flash → HTTP 503 (2.6s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:33:56 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 20 ثانیه صبر و دور 2
+06:34:24 [مدل] gemini-flash-lite-latest → HTTP 200 (7.6s) 
+06:34:26 [مدل] gemini-flash-lite-latest → HTTP 503 (2.3s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:34:27 [مدل] gemini-3.5-flash-lite → HTTP 503 (1.2s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:34:28 [مدل] gemini-flash-latest → HTTP 503 (0.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+06:34:28 [مدل] gemini-3.5-flash → HTTP 429 (0.1s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerDayPerProjec
+06:34:28 [مدل] سهمیه‌ی روزانه‌ی gemini-3.5-flash تمام شده؛ امروز کنار گذاشته شد
+06:34:28 [مدل] همه‌ی مدل‌ها شلوغ‌اند؛ 20 ثانیه صبر و دور 2
+06:34:54 [مدل] gemini-flash-lite-latest → HTTP 200 (6.2s) 
+06:34:54 [مدل] gemini-flash-latest → HTTP 429 (0.1s) You exceeded your current quota, please check your plan and billing details. For more information on this error, head to | quota=GenerateRequestsPerDayPerProjec
+06:34:54 [مدل] سهمیه‌ی روزانه‌ی gemini-flash-latest تمام شده؛ امروز کنار گذاشته شد
+06:34:56 [مدل] gemini-flash-lite-latest → HTTP 200 (1.8s) 
+06:34:58 [مدل] gemini-flash-lite-latest → HTTP 200 (1.3s) 
+06:34:58 [ویرایش] 1 اصلاح: اصلاح نیم‌فاصله‌ها و یکدست‌سازی لحن عامیانه در سراسر متن.
+06:34:59 [مدل] gemini-flash-lite-latest → HTTP 200 (1.7s) 
+06:35:01 [مدل] gemini-flash-lite-latest → HTTP 200 (2.1s) 
+06:35:01 [ویرایش] 2 اصلاح: تبدیل «می‌کند» به «می‌کنه» برای هماهنگی لحن عامیانه در تیتر.; تغییر «است» به بدون فعل یا روان‌سازی در پاراگراف آخر برای یکدست شدن لحن عامیانه.
+06:35:02 [مدل] gemini-flash-lite-latest → HTTP 200 (0.4s) 
+06:35:02 گزارش اجرا (ready): prepared
+منابع: 7 | یافت‌شده: 171 | جدید: 141 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🤖 آیا هوش مصنوعی واقعاً به ساخت عادت کمک می‌کنه؟ (امتیاز 79.0)
+https://doi.org/10.56975/ijvra.v4i10.712073
+تصویر: card | متن کامل: False
+دلیل: Proposes a robust RCT framework testing AI-tailored prompts against core psychological habit formation techniques.
+منابع دارای خطا: Yu-kai Chou Octalysis, MIT Sloan Management Review, Duolingo Blog

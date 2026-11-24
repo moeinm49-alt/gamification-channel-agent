@@ -1,17 +1,15 @@
 {
  "slots": {
-  "insight": "12:00",
-  "news": "20:30"
+  "insight": "12:00"
  },
  "paused": false,
  "post_now": "",
  "update_offset": 797518065,
  "commands_registered": true,
  "prep": {
-  "date": "2026-11-23",
+  "date": "2026-11-24",
   "n": {
-   "insight": 1,
-   "news": 5
+   "insight": 1
   }
  },
  "commands_version": 2

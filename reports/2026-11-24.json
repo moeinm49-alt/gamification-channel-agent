@@ -1,0 +1,67 @@
+{
+ "started": "2026-11-24T06:30:44+00:00",
+ "mode": "ready",
+ "slot": "insight",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "MIT Sloan Management Review": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Duolingo Blog": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  }
+ },
+ "collected": 171,
+ "new": 141,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "AIAssisted Behaviour Change: A Randomized Controlled Trial of Habit Formation SelfRegulation and PersonalityRelated Outcomes",
+  "url": "https://doi.org/10.56975/ijvra.v4i10.712073",
+  "venue": "International Journal of Versatile Research and Analysis",
+  "headline": "🤖 آیا هوش مصنوعی واقعاً به ساخت عادت کمک می‌کنه؟",
+  "post_chars": 654,
+  "evidence_type": "randomized experiment",
+  "full_text": false
+ },
+ "score": 79.0,
+ "reason": "Proposes a robust RCT framework testing AI-tailored prompts against core psychological habit formation techniques.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 36,
+ "button": {
+  "text": "🔍 مقاله‌های مرتبط",
+  "url": "https://moarek.ir/blog/"
+ },
+ "finished": "2026-11-24T06:35:02+00:00",
+ "seconds": 257,
+ "llm_calls": 16
+}
