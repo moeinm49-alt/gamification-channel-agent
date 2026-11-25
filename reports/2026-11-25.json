@@ -1,0 +1,61 @@
+{
+ "started": "2026-11-25T06:30:47+00:00",
+ "mode": "ready",
+ "slot": "insight",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 231,
+ "new": 198,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "Autonomous functioning, perceived behavioural control, and recycling intention: Evidence from a persona-ranked gamified activity",
+  "url": "https://doi.org/10.1016/j.chbr.2026.101402",
+  "venue": "Computers in Human Behavior Reports",
+  "headline": "♻️ چرا بعضی گیمیفیکیشن‌ها توی تغییر رفتار کاربران جواب نمی‌دن؟",
+  "post_chars": 690,
+  "evidence_type": "field study",
+  "full_text": false
+ },
+ "score": 81.0,
+ "reason": "Combines gamified personas with SDT and TPB to drive recycling outcomes, providing a strong actionable design framework.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 37,
+ "button": {
+  "text": "🚀 شروع یادگیری امروز",
+  "url": "https://moarek.ir/gamification-training/"
+ },
+ "finished": "2026-11-25T06:36:14+00:00",
+ "seconds": 327,
+ "llm_calls": 13
+}
