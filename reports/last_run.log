@@ -1,1 +1,55 @@
-18:47:48 [زمان‌بندی] پست پژوهشی/تحلیلی: امروز منتشر شده است
+19:29:31 [منبع] OpenAlex: 8 مطلب (0.5s)
+19:29:33 [منبع] Europe PMC: 8 مطلب (1.6s)
+19:29:34 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:29:52 [منبع] Europe PMC: 8 مطلب (17.5s)
+19:29:52 [منبع] OpenAlex: 8 مطلب (0.2s)
+19:30:12 [منبع] Europe PMC: 0 مطلب (19.7s)
+19:30:13 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:16 [منبع] Europe PMC: 0 مطلب (2.7s)
+19:30:16 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:22 [منبع] Europe PMC: 0 مطلب (4.8s)
+19:30:22 [منبع] OpenAlex: 8 مطلب (0.2s)
+19:30:29 [منبع] Europe PMC: 1 مطلب (6.8s)
+19:30:30 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:39 [منبع] Europe PMC: 1 مطلب (9.2s)
+19:30:40 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:46 [منبع] Europe PMC: 0 مطلب (6.4s)
+19:30:47 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:53 [منبع] Europe PMC: 5 مطلب (5.2s)
+19:30:53 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:30:54 [منبع] Europe PMC: 0 مطلب (0.5s)
+19:30:55 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:31:04 [منبع] Europe PMC: 1 مطلب (8.8s)
+19:31:04 [منبع] OpenAlex: 8 مطلب (0.3s)
+19:31:05 [منبع] Europe PMC: 0 مطلب (0.5s)
+19:31:06 [منبع] Crossref: 8 مطلب (0.3s)
+19:31:06 [منبع] Crossref: 8 مطلب (0.2s)
+19:31:09 [منبع] Crossref: 8 مطلب (2.0s)
+19:31:09 [منبع] Crossref: 8 مطلب (0.2s)
+19:31:09 [منبع] Nielsen Norman Group: 20 مطلب (0.2s)
+19:31:10 [منبع] Yu-kai Chou Octalysis: 25 مطلب (0.2s)
+19:31:11 [منبع] MIT Sloan Management Review: 20 مطلب (0.3s)
+19:31:11 [منبع] Duolingo Blog: 15 مطلب (0.2s)
+19:31:20 [مدل] gemini-flash-lite-latest → HTTP 200 (8.7s) 
+19:31:29 [مدل] gemini-flash-lite-latest → HTTP 200 (9.0s) 
+19:32:44 [مدل] gemini-3.5-flash → HTTP 599 (75.1s) ReadTimeout
+19:32:54 [مدل] gemini-flash-latest → HTTP 503 (9.3s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+19:32:56 [مدل] gemini-flash-lite-latest → HTTP 200 (2.0s) 
+19:33:04 [مدل] gemini-3.5-flash → HTTP 200 (8.1s) 
+19:33:04 [ویرایش] 6 اصلاح: Corrected the transliteration of 'جورج' to the accurate Spanish pronunciation 'خورخه'.; Replaced the unnatural phrasing 'صدمه نزدیک به مرگ' with the natural Persian expression 'آسیب‌دیدگی شدید که تا پای مرگ پیش رفت'.; Fixed spelling and colloquialized 'توانایی نوشتن‌اش را' to 'توانایی نوشتن‌شو' and 
+19:33:30 [مدل] gemini-3.5-flash → HTTP 200 (26.4s) 
+19:34:45 [مدل] gemini-3.5-flash → HTTP 599 (75.0s) ReadTimeout
+19:34:49 [مدل] gemini-flash-latest → HTTP 503 (3.8s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+19:34:50 [مدل] gemini-flash-lite-latest → HTTP 503 (0.5s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+19:34:51 [مدل] gemini-3.5-flash-lite → HTTP 200 (1.2s) 
+19:34:51 [ویرایش] 3 اصلاح: اصلاح نیم‌فاصله‌ها و یکدست‌سازی لحن محاوره‌ای در سراسر متن.; تبدیل واژه تخصصی «گیمیفیکیشن» به معادل ملموس‌تر «بازی‌سازی» برای درک بهتر مدیران.; اصلاح «ذهن‌اش» به «ذهنش» جهت روان‌تر شدن متن.
+19:34:54 [مدل] gemini-3.5-flash → HTTP 503 (2.7s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+19:35:00 [مدل] gemini-flash-latest → HTTP 503 (6.9s) This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+19:35:01 [مدل] gemini-flash-lite-latest → HTTP 200 (0.5s) 
+19:35:01 گزارش اجرا (ready): prepared
+منابع: 7 | یافت‌شده: 230 | جدید: 198 | امتیازدهی‌شده: 40 | ردشده: 0
+منتخب: 🎮 چطور با یک آزمایش کوچک از افتادن توی تله شکست نجات پیدا کنیم؟ (امتیاز 81.5)
+https://yukaichou.com/10000-hours-of-play/jorge-luis-borges-op-hero-10k-hp/
+تصویر: source | متن کامل: True
+دلیل: Applies Yu-kai Chou's Octalysis framework to analyze Jorge Luis Borges' life and work as an OP Hero build.
+19:35:03 [تلگرام] پست در کانال منتشر شد (message_id=391, photo)

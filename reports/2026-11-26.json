@@ -1,0 +1,61 @@
+{
+ "started": "2026-11-26T19:29:31+00:00",
+ "mode": "ready",
+ "slot": "insight",
+ "sources": {
+  "OpenAlex": {
+   "n": 96,
+   "errors": []
+  },
+  "Europe PMC": {
+   "n": 24,
+   "errors": []
+  },
+  "Crossref": {
+   "n": 32,
+   "errors": []
+  },
+  "Nielsen Norman Group": {
+   "n": 20,
+   "errors": []
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 25,
+   "errors": []
+  },
+  "MIT Sloan Management Review": {
+   "n": 20,
+   "errors": []
+  },
+  "Duolingo Blog": {
+   "n": 15,
+   "errors": []
+  }
+ },
+ "collected": 230,
+ "new": 198,
+ "scored": 40,
+ "rejected": [],
+ "selected": {
+  "title": "10,000 Hours of Play by OP Hero: Jorge Luis Borges",
+  "url": "https://yukaichou.com/10000-hours-of-play/jorge-luis-borges-op-hero-10k-hp/",
+  "venue": "Yu-kai Chou Octalysis",
+  "headline": "🎮 چطور با یک آزمایش کوچک از افتادن توی تله شکست نجات پیدا کنیم؟",
+  "post_chars": 950,
+  "evidence_type": "case study",
+  "full_text": true
+ },
+ "score": 81.5,
+ "reason": "Applies Yu-kai Chou's Octalysis framework to analyze Jorge Luis Borges' life and work as an OP Hero build.",
+ "image": "source",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 38,
+ "button": {
+  "text": "🔖 کتاب‌های گیمیفیکیشن",
+  "url": "https://moarek.ir/product-category/library/"
+ },
+ "finished": "2026-11-26T19:35:01+00:00",
+ "seconds": 330,
+ "llm_calls": 14
+}
