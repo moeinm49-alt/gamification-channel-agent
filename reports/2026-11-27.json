@@ -1,0 +1,88 @@
+{
+ "started": "2026-11-27T06:30:47+00:00",
+ "mode": "ready",
+ "slot": "insight",
+ "sources": {
+  "OpenAlex": {
+   "n": 80,
+   "errors": [
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Europe PMC": {
+   "n": 22,
+   "errors": [
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "RuntimeError: HTTPSConnectionPool(host='www.ebi.ac.uk', port=443): Read timed out. (read timeout=15)",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Crossref": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد",
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Nielsen Norman Group": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Yu-kai Chou Octalysis": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "MIT Sloan Management Review": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  },
+  "Duolingo Blog": {
+   "n": 0,
+   "errors": [
+    "زمان جمع‌آوری تمام شد"
+   ]
+  }
+ },
+ "collected": 101,
+ "new": 78,
+ "scored": 40,
+ "rejected": [
+  {
+   "title": "To What Extent does Hyper-Nudging Undermine Human Autonomy? A Philosophical Critique of Algorithmic Choice Architecture",
+   "reason": "unsupported: The post claims Karen Yeung authored the new paper with colleagues ('کارن یانگ (Karen Yeung) و همکارانش'), whereas the source states Karen Yeung coined the term 'hypernudging' and the current paper is by an unnamed author applying Joris Graff's framework."
+  }
+ ],
+ "selected": {
+  "title": "Gamification is not just fun: the effect of gamification design elements on shaping intrinsic motivation and learning persistence",
+  "url": "https://doi.org/10.1186/s40359-026-05046-8",
+  "venue": "BMC Psychology",
+  "headline": "🎯 بازی‌سازی در آموزش چطور روی انگیزه بچه‌ها تأثیر می‌ذاره؟",
+  "post_chars": 630,
+  "evidence_type": "field study",
+  "full_text": false
+ },
+ "score": 82.0,
+ "reason": "Analyzes specific gamification design elements and their direct impact on shaping intrinsic motivation and persistence in e-learning.",
+ "image": "card",
+ "status": "prepared",
+ "errors": [],
+ "post_id": 39,
+ "button": {
+  "text": "🔎 آموزش و محصولات معرک",
+  "url": "https://moarek.ir/"
+ },
+ "finished": "2026-11-27T06:35:45+00:00",
+ "seconds": 298,
+ "llm_calls": 16
+}
